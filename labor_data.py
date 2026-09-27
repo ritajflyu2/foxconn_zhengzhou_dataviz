@@ -390,18 +390,18 @@ for b, r in zip(bars, dispatch_share_df.itertuples()):
     ax.text(b.get_x() + b.get_width() / 2, b.get_height() + 1.5, label,
             ha="center", fontsize=9.5, color=PAL["ink"])
 ax.axhline(LEGAL_CAP_PCT, color=PAL["red"], linewidth=1.8, linestyle="--", zorder=4)
-ax.text(len(xs) - 0.55, LEGAL_CAP_PCT + 1.5, "法定上限 10%", color=PAL["red"], fontsize=9,
+ax.text(len(xs) - 0.55, LEGAL_CAP_PCT + 1.5, "Legal cap 10%", color=PAL["red"], fontsize=9,
         ha="right")
 ax.set_ylim(0, 68)
-style_ax(ax, title="派遣工占用工总量比例：CLW调查 vs. 劳动合同法上限",
-         ylabel="占比（%）")
+style_ax(ax, title="Dispatch share of total workforce: CLW surveys vs. Labor Contract Law cap",
+         ylabel="Share (%)")
 savefig(fig, "A2_dispatch_share_vs_legal_cap.png",
-        note="来源：China Labor Watch 2019、2025年报告（访谈/实地调查估计，非全厂普查）。《劳动合同法》规定劳务派遣用工不得超过用工总量的10%。")
+        note="Source: China Labor Watch 2019 and 2025 reports (interview/fieldwork estimates, not a full-plant census). China's Labor Contract Law caps dispatch (agency) labor at 10% of total workforce.")
 
 # --- Chart A2b: insured workers vs. CLW total/regular/dispatch (2025 snapshot)
 fig, ax = plt.subplots(figsize=(7.6, 4.8))
-cats = ["工伤保险参保人数\n（四家合计, 2025）", "CLW正式工估计\n（2025旺季）",
-        "CLW派遣工估计\n（2025旺季）", "CLW总用工估计\n（2025旺季）"]
+cats = ["Insured workers\n(4 entities, 2025)", "CLW regular-worker est.\n(2025 peak season)",
+        "CLW dispatch-worker est.\n(2025 peak season)", "CLW total-workforce est.\n(2025 peak season)"]
 lo = [insured_annual_total.get(2025, np.nan), 60000, 80000, 150000]
 hi = [insured_annual_total.get(2025, np.nan), 80000, 110000, 200000]
 colors = [PAL["blue"], PAL["aqua"], PAL["orange"], PAL["ink2"]]
@@ -414,10 +414,10 @@ for i, (c, l, h, col) in enumerate(zip(cats, lo, hi, colors)):
         ax.text(i, h + 3000, f"{l:,.0f}–{h:,.0f}", ha="center", fontsize=9)
 ax.set_xticks(range(len(cats)))
 ax.set_xticklabels(cats, fontsize=8.6)
-style_ax(ax, title="2025年：参保人数 vs. CLW 正式工/派遣工/总用工估计（同一年份对照）",
-         ylabel="人数")
+style_ax(ax, title="2025: insured workers vs. CLW regular/dispatch/total workforce estimates (same year)",
+         ylabel="Number of workers")
 savefig(fig, "A2_insured_vs_CLW_2025_snapshot.png",
-        note="参保人数=鸿富锦+富联精密+富联裕展+河南富驰工伤保险口径合计（正式工，不含派遣工）。CLW数字来自2025年3-9月访谈调查（102人样本），是估计区间，不是普查。两者量级相近（6.1万 vs 6-8万正式工估计），可作为互相印证的弱-中等强度证据；不构成同一统计口径的验证。")
+        note="Insured workers = Hongfujin + FII Precision + FII Yuzhan + Henan Fuchi work-injury-insurance headcount combined (regular workers only, excludes dispatch). CLW figures come from a March-September 2025 interview survey (102-worker sample) - an estimated range, not a census. The two are similar in magnitude (61k vs. a 60-80k regular-worker estimate), which is weak-to-medium cross-corroborating evidence, not a validation on the same statistical basis.")
 
 # =====================================================================
 # A3. How much of the workforce does Revelio cover?
@@ -453,27 +453,27 @@ save_table(revelio_roles_2025, "A3_revelio_2025_role_composition.csv")
 # --- Chart A3a: Revelio estimated headcount (flat) vs insured workers (declining), log scale
 fig, ax = plt.subplots(figsize=(8.6, 5.0))
 ax.plot(rev_annual["年份"], rev_annual["四家实体工伤保险参保合计"], marker="o", markersize=4,
-        linewidth=2, color=PAL["blue"], label="工伤保险参保人数（四家合计）")
+        linewidth=2, color=PAL["blue"], label="Insured workers (4 entities combined)")
 ax.plot(rev_annual["年份"], rev_annual["Revelio估计人数"], marker="s", markersize=4,
-        linewidth=2, color=PAL["violet"], label="Revelio估计人数（郑州，含放大权重）")
+        linewidth=2, color=PAL["violet"], label="Revelio estimated headcount (Zhengzhou, weighted)")
 ax.plot(rev_annual["年份"], rev_annual["原始档案数"], marker="^", markersize=4,
-        linewidth=1.4, linestyle="--", color=PAL["violet"], alpha=0.6, label="Revelio原始档案数（未放大）")
+        linewidth=1.4, linestyle="--", color=PAL["violet"], alpha=0.6, label="Revelio raw profile count (unweighted)")
 ax.axhspan(150000, 300000, color=PAL["muted"], alpha=0.12, zorder=0)
-ax.text(2008.3, 200000, "CLW总用工估计区间（旺季，示意）", fontsize=7.8, color=PAL["ink2"])
+ax.text(2008.3, 200000, "CLW total-workforce estimate range (peak season, illustrative)", fontsize=7.8, color=PAL["ink2"])
 ax.set_yscale("log")
-style_ax(ax, title="Revelio估计的郑州鸿海人数 vs. 参保人数 vs. 实际总用工规模（2008-2025）",
-         ylabel="人数（对数刻度）")
+style_ax(ax, title="Revelio's estimated Zhengzhou Hon Hai headcount vs. insured workers vs. actual total workforce (2008-2025)",
+         ylabel="Number of workers (log scale)")
 ax.legend(loc="upper right", fontsize=8.3, frameon=False)
 savefig(fig, "A3_revelio_coverage_vs_reality.png",
-        note="Revelio（LinkedIn等公开职业档案+招聘网站抽样，经权重放大）序列几乎不随年份变化，反映不出2022年疫情封控或旺季招工，说明多为插补/回填值，不是逐年真实变化；且主要覆盖白领/工程师岗位，一线普工、派遣工、学生工基本不在样本中。覆盖率≈8,100/(15-30万)≈3-5%。")
+        note="Revelio (sampled from public professional profiles such as LinkedIn plus job postings, reweighted) barely moves year to year - it shows no dip for the 2022 COVID lockdown crisis or peak-season hiring surges, suggesting the series is mostly interpolated/backfilled rather than a real annual count. It also covers mainly white-collar/engineering roles; frontline production, dispatch, and student workers are largely absent from the sample. Coverage is roughly 8,100 / (150,000-300,000) = 3-5%.")
 
 # --- Chart A3b: Revelio 2025 role composition (mostly office-adjacent categories)
 roles = revelio_roles_2025.sort_values("人数", ascending=True)
 fig, ax = plt.subplots(figsize=(7.6, 4.6))
 ax.barh(roles["role_k10"], roles["人数"], color=PAL["violet"])
-style_ax(ax, title="Revelio 2025年6月：郑州鸿海在职档案的岗位构成", xlabel="估计人数（放大后）")
+style_ax(ax, title="Revelio, June 2025: role composition of Zhengzhou Hon Hai profiles", xlabel="Estimated headcount (weighted)")
 savefig(fig, "A3_revelio_role_composition_2025.png",
-        note="岗位归类为Revelio的role_k10模型标签，'unknown'为最大类；'Technician'口径不等同工厂产线普工。整体样本仍以office/engineer/service一类的白领及技术岗位为主，用来说明该数据源能代表什么、不能代表什么，不用于估算工厂用工规模。")
+        note="Roles are Revelio's own role_k10 model labels; 'unknown' is the largest category, and 'Technician' does not equal a factory-line production worker. The sample still skews toward office/engineer/service-type white-collar and technical roles, illustrating what this data source can and cannot represent - it is not used here to estimate factory workforce size.")
 
 # =====================================================================
 # B1. Pay calculation: regular vs. dispatch (rebate-type & hourly-type)
@@ -498,25 +498,31 @@ income_scenarios = pd.concat([month_scn, week_scn], ignore_index=True)
 income_scenarios = income_scenarios.rename(columns={"情景": "scenario"})
 save_table(income_scenarios, "B1_income_calculator_scenarios.csv")
 
+SCENARIO_EN = {
+    "淡季（加班约52小时）": "Low season\n(~52h OT)",
+    "旺季一般（每周6天×10小时，加班约87小时）": "Peak season, typical\n(6d x 10h/wk, ~87h OT)",
+    "旺季高峰（加班约130小时）": "Peak season, extreme\n(~130h OT)",
+}
+
 # --- Chart B1a: pretax monthly income, regular vs. hourly-type dispatch, by season
 m = month_scn[month_scn["情景"] != "自定义"].copy()
 fig, ax = plt.subplots(figsize=(7.8, 4.8))
 xw = np.arange(len(m))
 w = 0.32
 b1 = ax.bar(xw - w / 2, m["正式工_税前（元）"].astype(float), width=w, color=PAL["blue"],
-            label="正式工·税前（元/月）", zorder=3)
+            label="Regular worker - pretax (RMB/month)", zorder=3)
 b2 = ax.bar(xw + w / 2, m["派遣工_税前（元）"].astype(float), width=w, color=PAL["orange"],
-            label="小时工型派遣工·税前（元/月）", zorder=3)
+            label="Hourly-type dispatch - pretax (RMB/month)", zorder=3)
 for bars in (b1, b2):
     for b in bars:
         ax.text(b.get_x() + b.get_width() / 2, b.get_height() + 60, f"{b.get_height():,.0f}",
                 ha="center", fontsize=8.3)
 ax.set_xticks(xw)
-ax.set_xticklabels([str(s).replace("（", "\n（") for s in m["情景"]], fontsize=8.6)
-style_ax(ax, title="正式工 vs. 小时工型派遣工：同季节税前月收入对比", ylabel="元/月")
+ax.set_xticklabels([SCENARIO_EN.get(s, str(s)) for s in m["情景"]], fontsize=8.6)
+style_ax(ax, title="Regular vs. hourly-type dispatch: pretax monthly income, same season", ylabel="RMB/month")
 ax.legend(loc="upper left", fontsize=8.6, frameon=False)
 savefig(fig, "B1_income_scenarios_regular_vs_dispatch.png",
-        note="来源：用工_媒体与NGO调查劳工数据 收入计算器（默认参数取自CLW 2025年报告p.15-18及劳动法加班规定）。派遣工税前更高是因为综合时薪无加班倍数、且不缴社保（少了一项应计成本），但\"当期到手\"更低（约13元/时的\"差价\"要推迟到下月底且须当月25日在职才发，提前离职则作废/打折），并且没有社保、带薪病假等保障，也不享受同季节工作日1.5/2/3倍加班倍数。")
+        note="Source: the income calculator in the media/NGO labor-data workbook (default parameters from CLW's 2025 report pp.15-18 and Labor Law overtime rules). Dispatch pay is higher pretax because the blended hourly rate carries no overtime multiplier and no social-insurance deduction (one fewer cost item) - but the 'take-home now' amount is lower (about RMB13/hour of the rate is a deferred 'price gap' paid at the end of the following month, contingent on still being employed on the 25th; leaving early forfeits or discounts it), and dispatch workers get no social insurance, no paid sick leave, and no 1.5x/2x/3x weekday/weekend/holiday overtime multipliers that regular workers get in the same season.")
 
 # --- Chart B1b: dispatch/regular pretax ratio + take-home vs deferred split
 fig, ax = plt.subplots(figsize=(7.4, 4.6))
@@ -526,10 +532,10 @@ for i, v in enumerate(ratio):
     ax.text(i, v + 0.02, f"{v:.2f}×", ha="center", fontsize=9)
 ax.axhline(1.0, color=PAL["axis"], linewidth=1)
 ax.set_xticks(xw)
-ax.set_xticklabels([str(s).replace("（", "\n（") for s in m["情景"]], fontsize=8.6)
-style_ax(ax, title="小时工型派遣工税前收入 / 正式工税前收入（同季节同工时）", ylabel="倍数")
+ax.set_xticklabels([SCENARIO_EN.get(s, str(s)) for s in m["情景"]], fontsize=8.6)
+style_ax(ax, title="Hourly-type dispatch pretax income / regular-worker pretax income (same season, same hours)", ylabel="Ratio")
 savefig(fig, "B1_dispatch_regular_pretax_ratio.png",
-        note="比值>1不代表派遣工总体待遇更好：正式工数字已扣除，派遣工数字未扣任何社保或住房公积金个人部分（本身也没有社保），且派遣工的\"差价\"部分（约占时薪一半）押后一个月发放、当月25号前离职即作废或打折（详见B1_pay_structure表\"离职损失\"行）。")
+        note="A ratio > 1 does not mean dispatch workers are overall better off: the regular-worker figure has social insurance already deducted, while the dispatch figure has no social insurance or housing-fund personal contribution deducted (dispatch workers have none to begin with), and the dispatch worker's 'price-gap' portion (roughly half the hourly rate) is held back a month and is forfeited or discounted if the worker leaves before the 25th (see the 'loss on leaving' row in the B1 pay-structure table).")
 
 # =====================================================================
 # B2. White-collar pay vs. factory-worker pay
@@ -579,26 +585,26 @@ save_table(comparison, "B2_whitecollar_vs_factory_comparison.csv")
 fig, ax = plt.subplots(figsize=(9.0, 5.2))
 wc_rel = wc_annual[wc_annual["reliable"]]
 ax.plot(wc_rel["年份"], wc_rel["median_monthly_rmb"], marker="o", markersize=5, linewidth=2.2,
-        color=PAL["violet"], label="白领招聘帖·发布月薪中位数（Revelio，仅非模型预测值）", zorder=4)
+        color=PAL["violet"], label="White-collar postings - median monthly pay (Revelio, non-predicted only)", zorder=4)
 wc_unrel = wc_annual[~wc_annual["reliable"]]
 ax.scatter(wc_unrel["年份"], wc_unrel["median_monthly_rmb"], marker="o", s=26,
            facecolor="none", edgecolor=PAL["violet"], linewidth=1.4, zorder=4,
-           label="同上，样本量n<10或中位数低于最低工资（数据质量存疑）")
+           label="Same, but n<10 or median below minimum wage (data quality uncertain)")
 fac = factory.dropna(subset=["modeled_monthly_from_hourly_rmb"])
 ax.plot(fac["年份"], fac["modeled_monthly_from_hourly_rmb"], marker="s", markersize=5,
         linewidth=2.2, color=PAL["orange"],
-        label=f"派遣小时工·按{STANDARD_HOURS_TYPICAL_MONTH}h/月折算（招聘帖小时价中位数×{STANDARD_HOURS_TYPICAL_MONTH}）", zorder=3)
+        label=f"Dispatch hourly workers - converted at {STANDARD_HOURS_TYPICAL_MONTH}h/month (posting median hourly rate x {STANDARD_HOURS_TYPICAL_MONTH})", zorder=3)
 bs = factory.dropna(subset=["底薪_最高"])
 ax.plot(bs["年份"], bs["底薪_最高"], marker="^", markersize=5, linewidth=1.6, linestyle="--",
-        color=PAL["blue"], label="正式工·招聘帖底薪上限（不含加班）", zorder=3)
+        color=PAL["blue"], label="Regular workers - posted base-pay ceiling (excludes overtime)", zorder=3)
 for _, r in clw_monthly_quotes.iterrows():
     ax.plot([r["年份"], r["年份"]], [r["clw_monthly_low"], r["clw_monthly_high"]],
             color=PAL["ink2"], linewidth=3, solid_capstyle="round", zorder=5)
-ax.plot([], [], color=PAL["ink2"], linewidth=3, label="CLW厂区工人月收入实测区间（淡/旺季或普工/技术工）")
-style_ax(ax, title="白领招聘薪资 vs. 工厂工人薪资：郑州（2012-2026）", ylabel="元/月")
+ax.plot([], [], color=PAL["ink2"], linewidth=3, label="CLW measured factory-worker monthly income range (low/peak season or general/skilled worker)")
+style_ax(ax, title="White-collar posted pay vs. factory-worker pay: Zhengzhou (2012-2026)", ylabel="RMB/month")
 ax.legend(loc="upper left", fontsize=7.6, frameon=False)
 savefig(fig, "B2_whitecollar_vs_factory_pay.png",
-        note="白领数据=Revelio郑州招聘帖中标注为\"非模型预测\"的实际发帖薪资（年薪/12，人民币），主要为工程师/职能岗位。空心点=样本量n<10（2024、2025）或中位数低于本地最低工资（2026年批次salary字段疑似单位错误，年薪最低仅约1,000元，予以标记不采信），均视为数据质量存疑。工厂数据：底薪为招聘帖标注的封顶底薪，不含加班；\"折算月收入\"是用招聘帖时薪中位数乘以一个假设的\"典型月工时\"（226小时，含常规加班），是建模估算，不是实测工资单；CLW区间是访谈样本的月收入实测值，两类工人不完全在同一时间点比较，不能做严格的同比。总体上白领发帖月薪（约7千-1万）显著高于工厂工人（约2千-7千），但白领数字是招聘\"要价\"、工厂数字常含大量加班，口径不对等，2022年白领中位数的异常下探（部分帖子实为保安/司机等低薪职位混入）也提示Revelio的岗位分类本身不够干净。")
+        note="White-collar data = Revelio Zhengzhou job postings flagged 'non-model-predicted' (actual posted salary, annual/12, RMB), mostly engineer/functional roles. Hollow points = n<10 (2024, 2025) or median below the local minimum wage (the 2026 batch's salary field appears to have a unit error - annual salaries as low as ~RMB1,000 - flagged as unreliable); both are treated as data-quality uncertain. Factory data: base pay is the posted ceiling base salary, excluding overtime; 'converted monthly income' multiplies the posting median hourly rate by an assumed 'typical monthly hours' figure (226 hours, including routine overtime) - a modeled estimate, not an actual payslip; the CLW range is a measured monthly-income figure from an interview sample. The two worker types are not compared at exactly the same point in time, so this is not a strict year-over-year comparison. Overall, white-collar posted monthly pay (roughly RMB7,000-10,000) is markedly higher than factory workers' (roughly RMB2,000-7,000), but the white-collar figure is a recruiting 'asking price' while the factory figure often includes substantial overtime - the two are not on equal footing. The 2022 white-collar median's odd dip (some postings turned out to be low-wage roles like security guard/driver) also suggests Revelio's own occupation classification isn't fully clean.")
 
 # =====================================================================
 # C1. Recruitment post types over time (fskzpw.com, 2010-2026)
@@ -695,12 +701,12 @@ for t in TYPE_ORDER:
     vals = type_by_year_share[t].values if t in type_by_year_share else np.zeros(len(years))
     ax.bar(years, vals, bottom=bottom, width=0.7, color=TYPE_COLOR[t], label=t, zorder=3)
     bottom += vals
-style_ax(ax, title="fskzpw.com 招聘帖类型构成的变化（按标题/摘要及未污染正文分类，2010-2026）",
-         ylabel="占当年帖子数的比例")
+style_ax(ax, title="fskzpw.com: how recruitment-post types shifted over time (classified from title/summary and uncontaminated body, 2010-2026)",
+         ylabel="Share of that year's posts")
 ax.set_ylim(0, 1.02)
 ax.legend(loc="upper left", bbox_to_anchor=(1.01, 1.0), fontsize=8.6, frameon=False)
 savefig(fig, "C1_post_type_mix_over_time.png",
-        note="分类规则：帖子标注有小时工价->\"小时工型派遣\"；否则标注有返费->\"返费型派遣\"；否则标题/摘要含学生工/暑假工等关键词->\"学生/暑期工\"；否则含日结/临时工等->\"短期工\"；否则归为\"正规/未注明\"（含真正的正式工招聘，也含未明确说明用工性质的帖子，二者在标题/摘要层面无法可靠区分）。2019年之前帖子基本没有公开价格字段，\"返费/小时工\"型分类主要从2019(返费)、2021(小时工)年才开始出现，与说明sheet的记录一致。年帖子数样本量小（多数年份<30篇），年度占比会有较大波动。")
+        note="Classification rule: a post with an hourly wage field -> 'hourly-type dispatch'; else with a rebate field -> 'rebate-type dispatch'; else title/summary contains keywords like student worker/summer job -> 'student/summer'; else contains keywords like day-pay/temp worker -> 'short-term'; else 'regular/unspecified' (this bucket mixes genuine regular-worker hiring with posts that never state the employment type - the two cannot be reliably separated at the title/summary level). Before 2019 almost no post carries a public price field; the rebate/hourly-type categories only start appearing from 2019 (rebate) and 2021 (hourly), consistent with the source workbook's own notes. Yearly post counts are small (fewer than 30 in most years), so year-to-year shares can swing widely.")
 
 # --- Chart C1b: raw counts (shows sample-size context the share chart hides)
 fig, ax = plt.subplots(figsize=(9.2, 4.6))
@@ -709,10 +715,10 @@ for t in TYPE_ORDER:
     vals = type_by_year[t].values if t in type_by_year else np.zeros(len(years))
     ax.bar(years, vals, bottom=bottom, width=0.7, color=TYPE_COLOR[t], label=t, zorder=3)
     bottom += vals
-style_ax(ax, title="fskzpw.com 招聘帖数量：按类型分层（2010-2026）", ylabel="帖子数")
+style_ax(ax, title="fskzpw.com: recruitment-post counts by type (2010-2026)", ylabel="Number of posts")
 ax.legend(loc="upper left", bbox_to_anchor=(1.01, 1.0), fontsize=8.6, frameon=False)
 savefig(fig, "C1_post_type_counts_over_time.png",
-        note="同一分类规则的绝对帖子数视图，用于判断上一张占比图中哪些年份的比例是基于很小的样本（例如2010、2024年样本量个位数，占比容易失真）。")
+        note="Same classification, shown as raw post counts rather than a share, so it's possible to tell which years in the previous chart are based on very small samples (e.g. 2010 and 2024 have single-digit counts, so their shares are easily distorted).")
 
 n_dispatch_lang = quotes_df[quotes_df["keyword_type"] == "dispatch"]["文章ID"].nunique()
 n_direct_lang = quotes_df[quotes_df["keyword_type"] == "direct_hire_language"]["文章ID"].nunique()
@@ -751,28 +757,28 @@ c2_plot["date"] = pd.to_datetime(c2_plot["年月"])
 
 ax = axes[0]
 ax.bar(c2_plot["date"], c2_plot["帖子数"], width=20, color=PAL["muted"], alpha=0.55,
-       label="月度招聘帖数（全部类型）", zorder=2)
+       label="Monthly recruitment posts (all types)", zorder=2)
 ax.plot(c2_plot["date"], c2_plot["帖子数"] * c2_plot["派遣型占比_当月"], color=PAL["orange"],
-        linewidth=2, marker="o", markersize=3.2, label="其中：返费/小时工型（派遣）帖数", zorder=3)
-style_ax(ax, title="月度招聘帖数量与派遣型占比 vs. 自动化/环评事件、参保人数下降", ylabel="帖子数/月")
+        linewidth=2, marker="o", markersize=3.2, label="Of which: rebate/hourly-type (dispatch) posts", zorder=3)
+style_ax(ax, title="Monthly recruitment-post volume and dispatch-type share vs. automation/EIA events, insured-worker decline", ylabel="Posts/month")
 ax.legend(loc="upper left", fontsize=8, frameon=False)
 
 ax = axes[1]
 ax.plot(c2_plot["date"], c2_plot["招工返费_最高（元）"], color=PAL["red"], linewidth=1.8,
-        marker="o", markersize=3, label="招工返费·当月最高（元）")
-style_ax(ax, ylabel="返费（元）")
+        marker="o", markersize=3, label="Recruitment rebate - monthly max (RMB)")
+style_ax(ax, ylabel="Rebate (RMB)")
 ax.legend(loc="upper left", fontsize=8, frameon=False)
 
 ax = axes[2]
 ax.plot(c2_plot["date"], c2_plot["小时工_最高时薪（元）"], color=PAL["aqua"], linewidth=1.8,
-        marker="o", markersize=3, label="小时工·当月最高时薪（元/时）")
-style_ax(ax, ylabel="元/时", xlabel="年月")
+        marker="o", markersize=3, label="Hourly worker - monthly max rate (RMB/hour)")
+style_ax(ax, ylabel="RMB/hour", xlabel="Year-month")
 ax.legend(loc="upper left", fontsize=8, frameon=False)
 
 for yr, row in insured_annual_total.items():
     axes[0].axvline(pd.Timestamp(f"{yr}-01-01"), color=PAL["grid"], linewidth=0.7, zorder=1)
 savefig(fig, "C2_monthly_recruitment_intensity_and_pricing.png",
-        note="数据来源：自动化_环评设备定员产能面板与月度时间线\"月度面板\"（帖子数、返费、时薪均逐帖数据按月归并，仅2019年后有公开价格）；派遣型占比=当月返费/小时工型帖子数占该月全部帖子数比例（用C1分类结果按月重算）。竖向浅灰参考线=每年1月，便于观察招工旺季（通常在年中至年末冲量前）。返费与时薪在2021-2022年（自动化升级密集期，见月度事件时间线）走高，随后随富联裕展环评定员大幅削减而在2023年回落，2024-2025年旺季再度走高，与CLW描述的\"旺季返费/时薪走高\"一致。")
+        note="Source: the 'monthly panel' in the automation/EIA-equipment-staffing-capacity workbook (post counts, rebates, and hourly rates are all per-post data aggregated by month; public prices exist only from 2019 on). Dispatch-type share = the share of that month's posts that are rebate/hourly-type (recomputed monthly from the C1 classification). Vertical light-grey reference lines = January of each year, to help spot the hiring peak season (typically ramping mid-year through year-end). Rebates and hourly rates rise in 2021-2022 (the dense automation-upgrade period, see the monthly event timeline), then fall back in 2023 as FII Yuzhan's EIA design headcount was cut sharply, then rise again in the 2024-2025 peak seasons - consistent with CLW's description of rebates/hourly rates rising in peak season.")
 
 # --- Chart C2b: annual dispatch-type post share vs insured-worker decline, indexed to
 # a common base (2019=100) on ONE shared axis - avoids a dual-axis chart entirely.
@@ -785,16 +791,16 @@ base_year = 2019
 dispatch_idx = 100 * dispatch_share_annual / dispatch_share_annual.loc[base_year]
 insured_idx = 100 * insured_series / insured_series.loc[base_year]
 ax.plot(yrs, dispatch_idx.values, marker="o", markersize=5, linewidth=2.2, color=PAL["orange"],
-        label="招聘帖\"派遣型\"（返费+小时工）占比，指数化", zorder=3)
+        label="Recruitment posts: dispatch-type (rebate+hourly) share, indexed", zorder=3)
 ax.plot(yrs, insured_idx.values, marker="s", markersize=5, linewidth=2.2, color=PAL["blue"],
-        label="工伤保险参保人数合计，指数化", zorder=3)
+        label="Insured workers (total), indexed", zorder=3)
 ax.axhline(100, color=PAL["axis"], linewidth=1)
-ax.text(yrs.min(), 103, f"{base_year}年 = 100", fontsize=8, color=PAL["muted"])
-style_ax(ax, title="招聘帖\"派遣型\"占比上升 vs. 工伤保险参保人数下降（指数化，2019=100）",
-         ylabel=f"指数（{base_year}=100）")
+ax.text(yrs.min(), 103, f"{base_year} = 100", fontsize=8, color=PAL["muted"])
+style_ax(ax, title="Recruitment posts' dispatch-type share rising vs. insured-worker count falling (indexed, 2019=100)",
+         ylabel=f"Index ({base_year}=100)")
 ax.legend(loc="upper left", fontsize=8.6, frameon=False)
 savefig(fig, "C2_dispatch_post_share_vs_insured_decline.png",
-        note="两个序列量级和单位完全不同（占比0-1 vs 人数万级），改为各自以2019年为基准=100指数化后放在同一张单轴图上比较趋势方向，不代表二者存在计量意义上的比例或因果关系。招聘帖样本量小（多数年份<30篇），派遣型占比的年度波动本身也需谨慎解读（见C1图）；insured worker 与 recruitment-ad 派遣占比走势相反，与CLW\"直招转向派遣公司输送\"的定性描述方向一致，属于中等强度的佐证。")
+        note="The two series differ completely in scale and unit (a 0-1 share vs. tens of thousands of workers), so each is indexed to its own 2019=100 base and plotted on one shared single axis to compare direction of trend - this does not imply a measured proportional or causal relationship between them. Recruitment-post samples are small (fewer than 30 posts in most years), so the dispatch-type share's year-to-year swings need cautious interpretation too (see the C1 chart); insured workers trending opposite to the recruitment-ad dispatch share is directionally consistent with CLW's qualitative account of hiring shifting from direct recruitment to dispatch agencies - medium-strength corroborating evidence.")
 
 
 

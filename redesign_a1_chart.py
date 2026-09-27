@@ -223,6 +223,8 @@ pivot = (airport.pivot_table(index="年份", columns="实体简称",
          .reindex(YEARS).fillna(0.0))
 STACK_ORDER = ["鸿富锦", "富联裕展/河南裕展", "河南富驰"]
 STACK_COLOR = {"鸿富锦": C_HFJ, "富联裕展/河南裕展": C_FLYZ, "河南富驰": C_HNFC}
+EN_NAME = {"鸿富锦": "Hongfujin", "富联裕展/河南裕展": "FII Yuzhan (Henan Yuzhan)",
+           "河南富驰": "Henan Fuchi", "富联精密/富泰华": "FII Precision (Futaihua)"}
 stack_vals = [pivot[e].values / WAN for e in STACK_ORDER]
 stack_total = pivot[STACK_ORDER].sum(axis=1) / WAN
 
@@ -249,14 +251,14 @@ ax_eia = fig.add_subplot(gs[1, 1])
 # =====================================================================
 ax = ax_main
 ax.stackplot(YEARS, *stack_vals, colors=[STACK_COLOR[e] for e in STACK_ORDER],
-             labels=STACK_ORDER, alpha=0.88, zorder=2)
+             labels=[EN_NAME[e] for e in STACK_ORDER], alpha=0.88, zorder=2)
 ax.plot(YEARS, stack_total.values, color=PAL["ink2"], linewidth=1.2, zorder=3)
 
 # endpoint labels on the stack total
-ax.annotate(f"{stack_total.loc[2016]:.1f}万", xy=(2016, stack_total.loc[2016]),
+ax.annotate(f"{stack_total.loc[2016]*10:.0f}k", xy=(2016, stack_total.loc[2016]),
             xytext=(-4, 8), textcoords="offset points", fontsize=8.6, color=PAL["ink"],
             ha="right", fontweight="bold")
-ax.annotate(f"{stack_total.loc[2025]:.1f}万", xy=(2025, stack_total.loc[2025]),
+ax.annotate(f"{stack_total.loc[2025]*10:.0f}k", xy=(2025, stack_total.loc[2025]),
             xytext=(-4, 8), textcoords="offset points", fontsize=8.6, color=PAL["ink"],
             ha="right", fontweight="bold")
 
@@ -269,7 +271,7 @@ ax.annotate("*", xy=(2020, stack_total.loc[2020]), xytext=(9, 6),
 
 BAR_DX = 0.16
 SEASON_COLOR = {"peak": C_PEAK, "trough": C_TROUGH}
-SEASON_LABEL = {"peak": "旺季估计", "trough": "淡季估计"}
+SEASON_LABEL = {"peak": "Peak-season estimate", "trough": "Low-season estimate"}
 seen_season_legend = set()
 for _, r in wf_total.iterrows():
     x = r["year"] + BAR_DX
@@ -285,20 +287,20 @@ for _, r in wf_total.iterrows():
                     arrowprops=dict(arrowstyle="-|>", color=col, linewidth=2.4,
                                      mutation_scale=14), zorder=5)
         ax.plot([x], [lo], marker="_", markersize=1, color=col)
-        ax.text(x, lo + 1.8, f">{lo:.0f}万", fontsize=8, color=PAL["ink"], ha="center")
+        ax.text(x, lo + 1.8, f">{lo*10:.0f}k", fontsize=8, color=PAL["ink"], ha="center")
         if lbl:
             ax.plot([], [], color=col, linewidth=2.4, marker="^", markersize=7, label=lbl)
     elif r["bound_type"] == "approx_point":
         hi = r["high"] / WAN
         ax.scatter([x], [hi], marker="D", s=46, color=col, zorder=5,
                    edgecolor=PAL["surface"], linewidth=1)
-        ax.text(x + 0.12, hi, f"约{hi:.0f}万", fontsize=8, color=PAL["ink"], va="center")
+        ax.text(x + 0.12, hi, f"~{hi*10:.0f}k", fontsize=8, color=PAL["ink"], va="center")
         if lbl:
             ax.scatter([], [], marker="D", s=46, color=col, label=lbl)
     else:  # range
         lo, hi = r["low"] / WAN, r["high"] / WAN
         ax.plot([x, x], [lo, hi], color=col, linewidth=5, solid_capstyle="round", zorder=5)
-        ax.text(x, hi + 0.6, f"{lo:.0f}–{hi:.0f}万", fontsize=8, color=PAL["ink"],
+        ax.text(x, hi + 0.6, f"{lo*10:.0f}–{hi*10:.0f}k", fontsize=8, color=PAL["ink"],
                 ha="center")
         if lbl:
             ax.plot([], [], color=col, linewidth=5, label=lbl)
@@ -308,13 +310,13 @@ x25 = 2025 + 0.42
 reg = wf_2025_split[wf_2025_split["kind"].str.contains("regular")].iloc[0]
 disp = wf_2025_split[wf_2025_split["kind"].str.contains("dispatch")].iloc[0]
 reg_mid, disp_mid = (reg["low"] + reg["high"]) / 2 / WAN, (disp["low"] + disp["high"]) / 2 / WAN
-ax.bar([x25], [reg_mid], width=0.18, color=C_REGULAR, zorder=4, label="2025正式工（中值，6-8万）")
+ax.bar([x25], [reg_mid], width=0.18, color=C_REGULAR, zorder=4, label="2025 regular workers (midpoint, 60-80k)")
 ax.bar([x25], [disp_mid], width=0.18, bottom=[reg_mid], color=C_DISPATCH, zorder=4,
-       label="2025派遣工（中值，8-11万）")
+       label="2025 dispatch workers (midpoint, 80-110k)")
 # Labels sit outside the bar (too narrow for inline text) rather than clipped inside it.
-ax.text(x25 + 0.13, reg_mid / 2, "正式工 6-8万", fontsize=7.4, ha="left", va="center",
+ax.text(x25 + 0.13, reg_mid / 2, "Regular 60-80k", fontsize=7.4, ha="left", va="center",
         color=PAL["ink"])
-ax.text(x25 + 0.13, reg_mid + disp_mid / 2, "派遣工 8-11万", fontsize=7.4, ha="left", va="center",
+ax.text(x25 + 0.13, reg_mid + disp_mid / 2, "Dispatch 80-110k", fontsize=7.4, ha="left", va="center",
         color=PAL["ink"])
 
 # Gap annotation (uninsured dispatch/student workers) at the best-documented year, 2025.
@@ -326,15 +328,16 @@ gap_hi = wf_total.loc[(wf_total["year"] == 2025) & (wf_total["kind"] == "CLW tot
 gx = 2025 + BAR_DX
 ax.fill_betweenx([gap_lo, gap_hi], gx - 0.075, gx + 0.075, color=PAL["muted"], alpha=0.18,
                  zorder=1, hatch="////", edgecolor=PAL["muted"], linewidth=0)
-ax.annotate("未参保的派遣工/学生工\n（推断，口径不同；2017/2019/2023同理）",
+ax.annotate("Not insured: dispatch / student workers\n(inferred, definitions differ; same logic applies to 2017/2019/2023)",
             xy=(gx, (gap_lo + gap_hi) / 2), xytext=(2019.9, 19.5),
             fontsize=7.6, color=PAL["ink2"], ha="left",
             arrowprops=dict(arrowstyle="-", color=PAL["muted"], linewidth=0.8))
 
 # 2018 footnote: trough estimate sits BELOW the insured stack
-ax.annotate("2018年淡季估计(约6万)低于当年参保合计(16.7万)：年报参保人数\n"
-            "可能是全年累计参保过的人数，不是某一时点在职人数（未证实）——\n"
-            "若是，可解释为何会超过淡季实际在岗人数。",
+ax.annotate("2018 low-season estimate (~60k) is below that year's insured total (167k):\n"
+            "the annual-report insured count may be everyone insured at any point during\n"
+            "the year, not a point-in-time headcount (unconfirmed) - which would explain\n"
+            "why it can exceed the actual low-season on-site headcount.",
             xy=(2018 + BAR_DX, wf_total.loc[wf_total["year"] == 2018, "high"].iloc[0] / WAN),
             xytext=(2019.3, 26.5), fontsize=7.3, color=PAL["ink2"], ha="left",
             arrowprops=dict(arrowstyle="-", color=PAL["muted"], linewidth=0.8))
@@ -342,13 +345,14 @@ ax.annotate("2018年淡季估计(约6万)低于当年参保合计(16.7万)：年
 ax.set_xlim(2015.5, 2026.9)
 ax.set_ylim(0, 32)
 ax.set_xticks(YEARS)
-ax.set_ylabel("万人")
-panel_title(ax, "航空港园区：参保工人 vs. 实际用工（2016-2025）",
-            "参保人数来自企业年报（直接雇佣）；总用工为CLW/媒体的季节性估计（含派遣与学生工）",
+ax.set_ylabel("Workers (thousands)")
+ax.yaxis.set_major_formatter(lambda v, _: f"{v*10:.0f}k" if v else "0")
+panel_title(ax, "Airport Zone: insured workers vs. actual workforce (2016-2025)",
+            "Insured workers from annual company filings (direct employees only); total workforce is CLW/media seasonal estimates (includes dispatch and student workers)",
             title_dy=0.135, sub_dy=0.045)
 handles, labels = ax.get_legend_handles_labels()
 ax.legend(handles, labels, loc="upper left", bbox_to_anchor=(1.005, 1.0), fontsize=8.3,
-          frameon=False, title="图例", title_fontsize=8.6)
+          frameon=False, title="Legend", title_fontsize=8.6)
 
 # =====================================================================
 # SECONDARY PANEL - 经开区 (富联精密/富泰华); own scale, own subplot (not a
@@ -358,21 +362,23 @@ ax = ax_kaifa
 kaifa = insured[insured["园区"] == "经开区"].set_index("年份").reindex(YEARS)
 kaifa_wan = kaifa["工伤保险参保人数"] / WAN
 ax.plot(YEARS, kaifa_wan.values, color=C_KAIFA, marker="o", markersize=5,
-        linewidth=2.2, label="参保人数（富联精密/富泰华）", zorder=3)
+        linewidth=2.2, label="Insured workers (FII Precision/Futaihua)", zorder=3)
 eia_kaifa_val = eia.loc[eia["园区"] == "经开区", "劳动定员（人）"].dropna().unique()
 assert len(eia_kaifa_val) == 1 and eia_kaifa_val[0] == 23000, eia_kaifa_val
 ax.hlines(23000 / WAN, YEARS[0] - 0.3, YEARS[-1] + 0.3, color=PAL["ink2"], linewidth=1.8,
-          linestyle=(0, (5, 3)), label="环评全厂劳动定员=2.3万（2013-2022历次批复不变）", zorder=2)
-ax.annotate(f"{kaifa_wan.loc[2016]:.1f}万", xy=(2016, kaifa_wan.loc[2016]),
+          linestyle=(0, (5, 3)), label="EIA whole-plant design headcount = 23k (unchanged, 2013-2022 filings)", zorder=2)
+ax.annotate(f"{kaifa_wan.loc[2016]*10:.0f}k", xy=(2016, kaifa_wan.loc[2016]),
             xytext=(-4, 8), textcoords="offset points", fontsize=8.3, ha="right",
             fontweight="bold")
-ax.annotate(f"{kaifa_wan.loc[2025]:.1f}万", xy=(2025, kaifa_wan.loc[2025]),
+ax.annotate(f"{kaifa_wan.loc[2025]*10:.0f}k", xy=(2025, kaifa_wan.loc[2025]),
             xytext=(4, -12), textcoords="offset points", fontsize=8.3, fontweight="bold")
 ax.set_xlim(2015.5, 2025.7)
 ax.set_ylim(0, 26)
 ax.set_xticks(YEARS[::2])
-ax.set_ylabel("万人")
-panel_title(ax, "经开区：富联精密/富泰华", "CLW/媒体估计不覆盖经开区，故此处不放总用工对照",
+ax.set_ylabel("Workers (thousands)")
+ax.yaxis.set_major_formatter(lambda v, _: f"{v*10:.0f}k" if v else "0")
+panel_title(ax, "Economic Development Zone: FII Precision (Futaihua)",
+            "CLW/media estimates don't cover the Economic Development Zone, so no total-workforce comparison is shown here",
             title_dy=0.18, sub_dy=0.06)
 ax.legend(loc="upper right", fontsize=7.6, frameon=False)
 
@@ -388,33 +394,38 @@ yz_whole = yz_whole.sort_values("date")
 # Colors here match the same entities' colors in the main-panel stack (C_FLYZ=orange
 # for 富联裕展, C_HFJ=blue for 鸿富锦) so identity stays consistent across panels.
 ax.step(yz_whole["date"], yz_whole["劳动定员（人）"] / WAN, where="post", color=C_FLYZ,
-        linewidth=2.2, label="富联裕展全厂定员（阶梯）", zorder=3)
+        linewidth=2.2, label="FII Yuzhan whole-plant design headcount (step)", zorder=3)
 ax.scatter(yz_whole["date"], yz_whole["劳动定员（人）"] / WAN, color=C_FLYZ, s=32, zorder=4)
-ax.annotate("自动化升级导致\n定员减少", xy=(yz_whole["date"].iloc[-1], yz_whole["劳动定员（人）"].iloc[-1] / WAN),
+ax.annotate("Automation upgrades\ncut design headcount", xy=(yz_whole["date"].iloc[-1], yz_whole["劳动定员（人）"].iloc[-1] / WAN),
             xytext=(0.05, 0.62), textcoords="axes fraction", fontsize=7.6, color=PAL["ink2"],
             arrowprops=dict(arrowstyle="-", color=PAL["muted"], linewidth=0.8))
 
 hfj_proj = eia[(eia["实体简称"] == "鸿富锦")].copy()
 hfj_proj["date"] = pd.to_datetime(hfj_proj["代表月份"].astype(str), format="%Y", errors="coerce")
 ax.scatter(hfj_proj["date"], hfj_proj["劳动定员（人）"] / WAN, color=C_HFJ, marker="^",
-           s=40, zorder=4, label="鸿富锦：单项目定员（约数，不可加总）")
+           s=40, zorder=4, label="Hongfujin: single-project headcount (approx., not additive)")
 
 ax.set_ylim(0, 7)
-ax.set_ylabel("核定劳动定员（万人）")
-panel_title(ax, "EIA环评核定定员（航空港，示意）",
-            "两条序列均为环保审批用工上限承诺，非实测在职人数；富联裕展为全厂口径阶梯，\n"
-            "鸿富锦为各年独立项目定员，不构成同一序列",
+ax.set_ylabel("Approved design headcount (thousands)")
+ax.yaxis.set_major_formatter(lambda v, _: f"{v*10:.0f}k" if v else "0")
+panel_title(ax, "EIA-approved design headcounts (Airport Zone, illustrative)",
+            "Both series are environmental-approval staffing commitments, not measured headcounts; FII Yuzhan is a\n"
+            "comparable whole-plant series, Hongfujin is separate per-year project figures that don't form one series",
             title_dy=0.20, sub_dy=0.065)
 ax.legend(loc="upper right", fontsize=7.6, frameon=False)
 
 wrap_note(fig, (
-    "数据来源：企业年报社保信息（工伤保险口径，参保人数）；China Labor Watch 2019/2023/2025年报告与"
-    "财新/新浪等新闻报道（总用工估计，含派遣与学生工，访谈/实地调查观察值，非全厂普查）；历次环评批复文件"
-    "（劳动定员，审批口径用工上限承诺）。参保人数、CLW估计、环评定员三者定义、口径、采集时点均不同，"
-    "不可直接相减或相加；图中\"未参保的派遣工/学生工\"缺口为推断性图示，不是逐项核算结果。"
-    "河南富驰2020年报参保人数=1人（视为0并入航空港堆叠面积，见图内footnote），"
-    "2017-2019年参保人数(约70-80人)与2021年跳升至10,626人（同期鸿富锦下降约2.47万人）均提示可能的壳公司"
-    "或集团内部人员划转，未经证实。样本量小、季节波动大，年度间比较需谨慎。"
+    "Sources: company annual-report social-insurance filings (work-injury-insurance basis, insured headcount); "
+    "China Labor Watch 2019/2023/2025 reports and news coverage from Caixin/Sina etc. (total-workforce estimates, "
+    "including dispatch and student workers, interview/fieldwork observations, not a full-plant census); successive "
+    "EIA approval filings (design headcount, an approval-basis staffing ceiling commitment). Insured headcount, CLW "
+    "estimates, and EIA design headcounts differ in definition, scope, and collection timing, and cannot be directly "
+    "subtracted or added; the \"not insured: dispatch/student workers\" gap shown in the chart is an inferential "
+    "illustration, not a line-item reconciliation. Henan Fuchi's 2020 annual filing reported 1 insured worker "
+    "(treated as 0 in the Airport Zone stack, see the in-chart footnote); its 2017-2019 insured counts (~70-80) and "
+    "its jump to 10,626 in 2021 (while Hongfujin fell by about 24.7k the same year) both suggest a possible shell "
+    "entity or intra-group headcount transfer, neither confirmed. Sample sizes are small and seasonal swings large, "
+    "so year-to-year comparisons need caution."
 ), y=-0.035)
 
 fig.savefig(CHARTS / "A1_insured_workers_vs_total_workforce.png", dpi=300,
