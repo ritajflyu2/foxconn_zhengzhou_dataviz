@@ -1,0 +1,9 @@
+﻿year,season,low,high,kind,note,source,园区,bound_type
+2017,peak,300000.0,,CLW total workforce,2017-18高峰>30万,CLW 2019,航空港,lower_bound
+2018,trough,,60000.0,CLW total workforce,2018淡季约6万,CLW 2019,航空港,approx_point
+2019,peak,150000.0,,CLW total workforce,2019年8月>15万,CLW 2019,航空港,lower_bound
+2022,trough,60000.0,70000.0,CLW total workforce,春季淡季约6-7万人,CLW 2023 p.48,航空港,range
+2023,peak,300000.0,,CLW total workforce,夏秋旺季超过30万人,CLW 2023 p.48,航空港,lower_bound
+2025,peak,150000.0,200000.0,CLW total workforce,高峰期用工15-20万人,CLW 2025,航空港,range
+2025,peak,60000.0,80000.0,CLW regular (insured-eligible),正式工约6-8万（CLW用工构成拆分）,CLW 2025 p.8,航空港,range
+2025,peak,80000.0,110000.0,CLW dispatch,派遣工约8-11万（CLW用工构成拆分）,CLW 2025 p.8,航空港,range
