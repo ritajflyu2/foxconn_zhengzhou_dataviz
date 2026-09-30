@@ -1,0 +1,15 @@
+﻿city,year,pm25,source,note
+Boston,2013,7.96,official,"MA DEP 2013 report (5 sites, FRM)"
+Boston,2016,10.33,official,"MA DEP 2016 report (3 sites, FRM)"
+Boston,2020,6.68,official,"MA DEP 2020 report (3 sites, FRM)"
+Boston,2023,7.08,official,"MA DEP 2023 report (4 sites, FEM)"
+Boston,2024,5.89,official,"MA DEP 2024 report (3 sites, FEM)"
+Zhengzhou,2017,70.0,iqair_secondary,IQAir historical city page
+Zhengzhou,2018,64.1,iqair_secondary,IQAir historical city page
+Zhengzhou,2019,58.0,official,郑州市环境质量状况公报 2019
+Zhengzhou,2020,51.0,official,郑州市环境质量状况公报 2020
+Zhengzhou,2021,42.0,official,郑州市环境质量状况公报 2021
+Zhengzhou,2022,45.0,official,郑州市环境质量状况公报 2022
+Zhengzhou,2023,43.0,official,郑州市环境质量状况公报 2023
+Zhengzhou,2024,45.0,official,郑州市环境质量状况公报 2024
+Zhengzhou,2025,38.0,official,郑州市环境质量状况公报 2025

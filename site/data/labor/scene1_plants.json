@@ -1,0 +1,78 @@
+{
+ "year": 2025,
+ "dispatch_share": 0.57,
+ "dispatch_share_source": "Implied by China Labor Watch's 2025 split: about 60,000-80,000 regular vs 80,000-110,000 dispatch workers at peak (CLW states the share is above 50%).",
+ "legal_cap_share": 0.1,
+ "legal_cap_source": "Interim Provisions on Labor Dispatch (2014): dispatch workers may not exceed 10% of a company's total workforce.",
+ "method": "Estimated dispatch = insured x 0.57 / 0.43. Legal-cap total = insured / 0.9. No plant-level dispatch data exists, so one campus-wide share is applied to every plant.",
+ "placement": "Loose, roughly geographic: use lat/lon for relative position only (no basemap in v1). FII Precision sits about 20 km north-west of the airport-zone cluster.",
+ "plants": [
+  {
+   "id": "hongfujin",
+   "name": "Hongfujin",
+   "zone": "airport",
+   "zone_label": "Zhengzhou Airport Economy Zone",
+   "lat": 34.552546,
+   "lon": 113.856327,
+   "location_approximate": false,
+   "insured_2025": 33498,
+   "est_dispatch": 44404,
+   "est_total": 77902,
+   "legal_cap_total": 37220,
+   "legal_cap_dispatch": 3722,
+   "note": null
+  },
+  {
+   "id": "fii_yuzhan",
+   "name": "FII Yuzhan",
+   "zone": "airport",
+   "zone_label": "Zhengzhou Airport Economy Zone",
+   "lat": 34.553607,
+   "lon": 113.842493,
+   "location_approximate": false,
+   "insured_2025": 12784,
+   "est_dispatch": 16946,
+   "est_total": 29730,
+   "legal_cap_total": 14204,
+   "legal_cap_dispatch": 1420,
+   "note": null
+  },
+  {
+   "id": "henan_fuchi",
+   "name": "Henan Fuchi",
+   "zone": "airport",
+   "zone_label": "Zhengzhou Airport Economy Zone",
+   "lat": 34.541,
+   "lon": 113.851,
+   "location_approximate": true,
+   "insured_2025": 6926,
+   "est_dispatch": 9181,
+   "est_total": 16107,
+   "legal_cap_total": 7696,
+   "legal_cap_dispatch": 770,
+   "note": null
+  },
+  {
+   "id": "fii_precision",
+   "name": "FII Precision",
+   "zone": "econ_dev",
+   "zone_label": "Zhengzhou Economic-Technological Development Zone",
+   "lat": 34.730916,
+   "lon": 113.759906,
+   "location_approximate": false,
+   "insured_2025": 8617,
+   "est_dispatch": 11423,
+   "est_total": 20040,
+   "legal_cap_total": 9574,
+   "legal_cap_dispatch": 957,
+   "note": "Outside CLW's survey area; the airport-zone dispatch share is applied as an assumption."
+  }
+ ],
+ "comparison": {
+  "label": "Harvard GSD students, Fall 2025",
+  "value": 940,
+  "source": "Harvard OIRA Fact Book, Fall 2025 enrollment (928 full-time + 12 part-time)",
+  "url": "https://oira.harvard.edu/factbook/fact-book-enrollment/"
+ },
+ "caveat": "Estimates. Insured counts likely undercount regular staff (CLW puts regular workers at 60,000-80,000 vs 53,208 insured in the airport zone), so these totals are conservative."
+}

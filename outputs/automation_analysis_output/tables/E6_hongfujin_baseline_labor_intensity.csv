@@ -1,0 +1,8 @@
+﻿zone_zh,year,design_headcount,zone,design_capacity_10k_units_per_year,capacity_flag,headcount_per_10k_units_capacity,source
+K区,2010,60000.0,Zone K,2450,,24.489795918367346,capacity: 自动化_环评文件检索记录_2010-2026.md section B; headcount: 项目面板_自动化与用工
+F区,2011,60000.0,Zone F,1950,,30.76923076923077,capacity: 自动化_环评文件检索记录_2010-2026.md section B; headcount: 项目面板_自动化与用工
+C区,2012,30000.0,Zone C,3050,,9.836065573770492,capacity: 自动化_环评文件检索记录_2010-2026.md section B; headcount: 项目面板_自动化与用工
+L区,2012,60000.0,Zone L,1950,,30.76923076923077,capacity: 自动化_环评文件检索记录_2010-2026.md section B; headcount: 项目面板_自动化与用工
+D区,2013,30000.0,Zone D,10900,"source has a typo (""10900万万件""); treat this capacity figure as unreliable",2.7522935779816513,capacity: 自动化_环评文件检索记录_2010-2026.md section B; headcount: 项目面板_自动化与用工
+B/E区,2014,64000.0,Zone B/E,3050,,20.983606557377048,capacity: 自动化_环评文件检索记录_2010-2026.md section B; headcount: 项目面板_自动化与用工
+G区,2017,30000.0,Zone G,800,,37.5,capacity: 自动化_环评文件检索记录_2010-2026.md section B; headcount: 项目面板_自动化与用工

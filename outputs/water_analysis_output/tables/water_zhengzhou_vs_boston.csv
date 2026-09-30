@@ -1,0 +1,13 @@
+﻿city,year,metric,value,n_sections,basis,source
+Zhengzhou,2019,river_good_pct,66.7,,national control sections only,郑州市环境质量状况公报 2019
+Zhengzhou,2021,river_good_pct,58.3,24.0,24 combined national/provincial/city control sections,郑州市环境质量状况公报 2021
+Zhengzhou,2023,river_good_pct,50.0,24.0,"Yellow River basin (6/8) + Huai River basin (6/16), combined",郑州市环境质量状况公报 2023
+Zhengzhou,2025,river_good_pct,44.0,25.0,"Yellow River basin (3/8) + Huai River basin (8/17), combined",郑州市环境质量状况公报 2025
+Boston,1995,swim_safe_pct,19.0,,swimming standard,EPA/CRWA Charles River Report Card
+Boston,1995,boat_safe_pct,39.0,,boating standard,EPA/CRWA Charles River Report Card
+Boston,2006,swim_safe_pct,62.0,,swimming standard,EPA/CRWA Charles River Report Card
+Boston,2006,boat_safe_pct,90.0,,boating standard,EPA/CRWA Charles River Report Card
+Boston,2016,swim_safe_pct,55.0,,swimming standard,EPA Charles River Report Card 2016
+Boston,2016,boat_safe_pct,86.0,,boating standard,EPA Charles River Report Card 2016
+Boston,2018,swim_safe_pct,56.5,,"swimming standard, avg of dry(66%)/wet(47%) weather",EPA Charles River Report Card 2018
+Boston,2018,boat_safe_pct,92.5,,"boating standard, avg of dry(94%)/wet(91%) weather",EPA Charles River Report Card 2018

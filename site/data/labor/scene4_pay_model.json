@@ -1,0 +1,179 @@
+{
+ "fx_cny_per_usd": 6.7,
+ "display": "Show USD first with the RMB source value in parentheses, e.g. \"$3.73 (¥25)\".",
+ "weeks_per_month": 4.35,
+ "defaults": {
+  "hours_per_week": 60,
+  "days_employed": 90,
+  "employed_on_25th": true,
+  "worker": "hourly_dispatch"
+ },
+ "ranges": {
+  "hours_per_week": [
+   40,
+   75
+  ],
+  "days_employed": [
+   30,
+   180
+  ]
+ },
+ "hours_rule": "First 40 hours per week are regular. Hours above 40 are split 50/50 between weekday overtime (1.5x) and rest-day overtime (2x).",
+ "workers": {
+  "full_time": {
+   "label": "Full-time (insured)",
+   "color_key": "regular",
+   "base_monthly": {
+    "cny": 2100,
+    "usd": 313.43
+   },
+   "base_hours_monthly": 174,
+   "ot_multipliers": {
+    "weekday": 1.5,
+    "rest_day": 2.0
+   },
+   "deduction_monthly": {
+    "cny": 348,
+    "usd": 51.94
+   },
+   "deduction_label": "Social insurance (worker's share)",
+   "conditional": null,
+   "benefits": [
+    "Social insurance",
+    "Work injury insurance",
+    "Partial paid sick leave (with medical record)"
+   ],
+   "contract": "Direct labor contract with Foxconn"
+  },
+  "rebate_dispatch": {
+   "label": "Rebate-type dispatch",
+   "color_key": "rebate_dispatch",
+   "base_monthly": {
+    "cny": 2100,
+    "usd": 313.43
+   },
+   "base_hours_monthly": 174,
+   "ot_multipliers": {
+    "weekday": 1.5,
+    "rest_day": 2.0
+   },
+   "ot_note": "Legal overtime rates assumed; the CLW report does not state them.",
+   "deduction_monthly": {
+    "cny": 0,
+    "usd": 0.0
+   },
+   "conditional": {
+    "type": "rebate",
+    "amount": {
+     "cny": 9800,
+     "usd": 1462.69
+    },
+    "amount_range": [
+     {
+      "cny": 4800,
+      "usd": 716.42
+     },
+     {
+      "cny": 9800,
+      "usd": 1462.69
+     }
+    ],
+    "spread_months": 3,
+    "condition": "days_employed >= 90",
+    "condition_label": "Paid only after 90 continuous days",
+    "fail": "Leaving before day 90 forfeits the whole rebate."
+   },
+   "benefits": [
+    "No social insurance",
+    "No sick leave"
+   ],
+   "contract": "Agency contract plus a Rebate Agreement"
+  },
+  "hourly_dispatch": {
+   "label": "Hourly-type dispatch",
+   "color_key": "hourly_dispatch",
+   "rate_paid_monthly": {
+    "cny": 12,
+    "usd": 1.79
+   },
+   "ot_multipliers": null,
+   "deduction_monthly": {
+    "cny": 0,
+    "usd": 0.0
+   },
+   "conditional": {
+    "type": "deferred_wage_difference",
+    "rate": {
+     "cny": 13,
+     "usd": 1.94
+    },
+    "condition": "employed_on_25th",
+    "condition_label": "Deferred to the following month; paid only if still employed on the 25th",
+    "fail": "Leaving before the payout month's 25th forfeits the deferred amount. The source estimates $780-900 (¥5,200-6,000) lost across two months."
+   },
+   "benefits": [
+    "No social insurance",
+    "No work injury insurance",
+    "No paid or unpaid sick leave",
+    "Mandatory overtime (built into the flat rate)"
+   ],
+   "contract": "Agency contract plus a Wage-Difference Confirmation"
+  },
+  "student": {
+   "label": "Student / summer",
+   "color_key": "student",
+   "rate_hourly": {
+    "cny": 12,
+    "usd": 1.79
+   },
+   "ot_multipliers": {
+    "weekday": 1.5,
+    "rest_day": 2.0
+   },
+   "deduction_monthly": {
+    "cny": 0,
+    "usd": 0.0
+   },
+   "conditional": null,
+   "benefits": [
+    "No social insurance"
+   ],
+   "contract": "School-partnership labor contract"
+  }
+ },
+ "check_values": {
+  "full_time_60h_week_gross": {
+   "cny": 905,
+   "usd": 135.07
+  },
+  "hourly_dispatch_60h_month": {
+   "paid": {
+    "cny": 3120,
+    "usd": 465.67
+   },
+   "deferred": {
+    "cny": 3380,
+    "usd": 504.48
+   },
+   "total": {
+    "cny": 6500,
+    "usd": 970.15
+   },
+   "hourly": {
+    "paid": {
+     "cny": 12,
+     "usd": 1.79
+    },
+    "conditional": {
+     "cny": 13,
+     "usd": 1.94
+    },
+    "total": {
+     "cny": 25,
+     "usd": 3.73
+    }
+   }
+  }
+ },
+ "caveat": "Modeled from CLW-reported pay rules and recruitment posts, not payslips. The overtime split and rebate amount are assumptions."
+}

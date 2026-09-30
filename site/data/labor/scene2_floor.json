@@ -1,0 +1,44 @@
+{
+ "dots_total": 300,
+ "workers_per_dot": 479,
+ "insured_dots": 130,
+ "dispatch_dots": 170,
+ "by_plant": [
+  {
+   "id": "hongfujin",
+   "name": "Hongfujin",
+   "dots": 162,
+   "insured_dots": 70,
+   "dispatch_dots": 92
+  },
+  {
+   "id": "fii_yuzhan",
+   "name": "FII Yuzhan",
+   "dots": 62,
+   "insured_dots": 27,
+   "dispatch_dots": 35
+  },
+  {
+   "id": "henan_fuchi",
+   "name": "Henan Fuchi",
+   "dots": 34,
+   "insured_dots": 15,
+   "dispatch_dots": 19
+  },
+  {
+   "id": "fii_precision",
+   "name": "FII Precision",
+   "dots": 42,
+   "insured_dots": 18,
+   "dispatch_dots": 24
+  }
+ ],
+ "space_per_worker_m2": {
+  "value": 16,
+  "placeholder": true,
+  "basis": "Campus land area per worker: NYT (2016) reported about 350,000 workers on about 2.2 square miles (5.7 km2). Not floor area.",
+  "label": "Placeholder until floor-area measurement"
+ },
+ "shift_note": "Plants run 3 x 8-hour shifts, so roughly one third of the headcount is on the floor at any moment.",
+ "floor_plan_image": "design/reference/floorplan_1F.png"
+}

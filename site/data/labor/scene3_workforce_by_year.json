@@ -1,0 +1,200 @@
+{
+ "scope": "Airport Economy Zone plants only (CLW's survey area). FII Precision is listed in insured_by_entity but excluded from airport_insured.",
+ "entities": {
+  "hongfujin": "Hongfujin",
+  "fii_yuzhan": "FII Yuzhan",
+  "henan_fuchi": "Henan Fuchi",
+  "fii_precision": "FII Precision"
+ },
+ "animation": {
+  "autoplay": true,
+  "seconds_per_year": 0.8
+ },
+ "years": [
+  {
+   "year": 2016,
+   "airport_insured": 222182,
+   "insured_by_entity": {
+    "hongfujin": 213182,
+    "fii_yuzhan": 9000,
+    "henan_fuchi": null,
+    "fii_precision": 23052
+   },
+   "clw_total": null
+  },
+  {
+   "year": 2017,
+   "airport_insured": 205938,
+   "insured_by_entity": {
+    "hongfujin": 154511,
+    "fii_yuzhan": 51348,
+    "henan_fuchi": 79,
+    "fii_precision": 25651
+   },
+   "clw_total": {
+    "low": 300000,
+    "high": 300000,
+    "season": "peak",
+    "season_label": "peak season",
+    "source": "CLW 2019",
+    "gap_low": 94062,
+    "gap_high": 94062,
+    "gap_shown": true
+   }
+  },
+  {
+   "year": 2018,
+   "airport_insured": 167156,
+   "insured_by_entity": {
+    "hongfujin": 131245,
+    "fii_yuzhan": 35839,
+    "henan_fuchi": 72,
+    "fii_precision": 23510
+   },
+   "clw_total": {
+    "low": 60000,
+    "high": 60000,
+    "season": "trough",
+    "season_label": "off-season",
+    "source": "CLW 2019",
+    "gap_low": null,
+    "gap_high": null,
+    "gap_shown": false
+   }
+  },
+  {
+   "year": 2019,
+   "airport_insured": 92319,
+   "insured_by_entity": {
+    "hongfujin": 68240,
+    "fii_yuzhan": 24001,
+    "henan_fuchi": 78,
+    "fii_precision": 14081
+   },
+   "clw_total": {
+    "low": 150000,
+    "high": 150000,
+    "season": "unspecified",
+    "season_label": "season not stated",
+    "source": "CLW 2019",
+    "gap_low": 57681,
+    "gap_high": 57681,
+    "gap_shown": true
+   }
+  },
+  {
+   "year": 2020,
+   "airport_insured": 88802,
+   "insured_by_entity": {
+    "hongfujin": 65255,
+    "fii_yuzhan": 23546,
+    "henan_fuchi": 1,
+    "fii_precision": 13403
+   },
+   "clw_total": null
+  },
+  {
+   "year": 2021,
+   "airport_insured": 70528,
+   "insured_by_entity": {
+    "hongfujin": 40525,
+    "fii_yuzhan": 19377,
+    "henan_fuchi": 10626,
+    "fii_precision": 11525
+   },
+   "clw_total": null
+  },
+  {
+   "year": 2022,
+   "airport_insured": 69526,
+   "insured_by_entity": {
+    "hongfujin": 39463,
+    "fii_yuzhan": 20240,
+    "henan_fuchi": 9823,
+    "fii_precision": 11173
+   },
+   "clw_total": {
+    "low": 60000,
+    "high": 70000,
+    "season": "trough",
+    "season_label": "off-season",
+    "source": "CLW 2023 p.48",
+    "gap_low": null,
+    "gap_high": null,
+    "gap_shown": false
+   }
+  },
+  {
+   "year": 2023,
+   "airport_insured": 64663,
+   "insured_by_entity": {
+    "hongfujin": 39222,
+    "fii_yuzhan": 16753,
+    "henan_fuchi": 8688,
+    "fii_precision": 11765
+   },
+   "clw_total": {
+    "low": 300000,
+    "high": 300000,
+    "season": "peak",
+    "season_label": "peak season",
+    "source": "CLW 2023 p.48",
+    "gap_low": 235337,
+    "gap_high": 235337,
+    "gap_shown": true
+   }
+  },
+  {
+   "year": 2024,
+   "airport_insured": 55384,
+   "insured_by_entity": {
+    "hongfujin": 33530,
+    "fii_yuzhan": 13945,
+    "henan_fuchi": 7909,
+    "fii_precision": 10437
+   },
+   "clw_total": null
+  },
+  {
+   "year": 2025,
+   "airport_insured": 53208,
+   "insured_by_entity": {
+    "hongfujin": 33498,
+    "fii_yuzhan": 12784,
+    "henan_fuchi": 6926,
+    "fii_precision": 8617
+   },
+   "clw_total": {
+    "low": 150000,
+    "high": 200000,
+    "season": "peak",
+    "season_label": "peak season",
+    "source": "CLW 2025",
+    "gap_low": 96792,
+    "gap_high": 146792,
+    "gap_shown": true
+   }
+  }
+ ],
+ "flags": {
+  "no_estimate": [
+   2016,
+   2020,
+   2021,
+   2024
+  ],
+  "off_season_no_gap": [
+   2018,
+   2022
+  ],
+  "reporting_gap": [
+   {
+    "entity": "henan_fuchi",
+    "year": 2020,
+    "value": 1,
+    "note": "Reporting gap, not a real drop"
+   }
+  ]
+ },
+ "caveat": "Gap = CLW total minus insured workers: inferred dispatch, student and other uninsured workers. CLW figures are field estimates tied to a season; insured counts are year-end filings. No gap is drawn for off-season years."
+}

@@ -1,0 +1,9 @@
+﻿worker,component,hours,rate,rmb,conditional
+Full-time (insured),Regular hours,174.0,12.1,2100.0,False
+Full-time (insured),Weekday overtime x1.5,43.5,18.1,787.5,False
+Full-time (insured),Rest-day overtime x2,43.3,24.1,1045.2,False
+Full-time (insured),Social insurance (personal),,,-348.0,False
+Dispatch - rebate type,Base + overtime (legal rates assumed),260.8,,3932.7,False
+Dispatch - rebate type,"Rebate 9,800 / 3 months",,,3266.7,True
+Dispatch - hourly type,Paid monthly 12/h x all hours,260.8,12.0,3129.6,False
+Dispatch - hourly type,Deferred wage difference 13/h,260.8,13.0,3390.4,True

@@ -1,0 +1,16 @@
+﻿group,label,岗位类别,n_posts,mean_mid,median_mid,mean_low,mean_high,x_fulltime_worker,hours_basis,implied_rmb_per_hour
+"White-collar, Revelio posted salary 2021-2023",HR / training,人力资源/培训,39,7858.97,8000.0,7858.97,12747.86,2.0,174.0,45.17
+"White-collar, Revelio posted salary 2021-2023",Other white-collar,其他,19,6614.04,6000.0,6614.04,8675.44,1.68,174.0,38.01
+"White-collar, Revelio posted salary 2021-2023",Mechanical / process eng.,机械/设备/工艺/制造,37,9578.83,6000.0,9578.83,13948.2,2.44,174.0,55.05
+"White-collar, Revelio posted salary 2021-2023",Testing / quality,测试/质量,32,10625.0,9041.67,10625.0,14638.02,2.7,174.0,61.06
+"White-collar, Revelio posted salary 2021-2023",R&D / product / design,研发/产品/设计,48,9187.5,8666.67,9187.5,13435.76,2.34,174.0,52.8
+"White-collar, Revelio posted salary 2021-2023",Hardware / electronics,硬件/电子/电气,17,8671.57,7000.0,8671.57,15921.57,2.21,174.0,49.84
+"White-collar, Revelio posted salary 2021-2023",Finance / legal / audit,财务/法务/审计,11,8727.27,6000.0,8727.27,12727.27,2.22,174.0,50.16
+"White-collar, Revelio posted salary 2021-2023",Software / IT / data,软件/IT/数据,49,10646.26,10000.0,10646.26,15921.77,2.71,174.0,61.19
+"White-collar, Revelio posted salary 2021-2023",Procurement / supply chain,采购/供应链/物流,11,9113.64,7583.33,9113.64,19045.45,2.32,174.0,52.38
+"White-collar, Revelio posted salary 2021-2023",Sales / marketing,销售/市场/客户,6,9388.89,7000.0,9388.89,14861.11,2.39,174.0,53.96
+"White-collar, Revelio posted salary 2021-2023",Project management,项目管理,16,9630.21,9375.0,9630.21,12375.0,2.45,174.0,55.35
+"White-collar, Revelio posted salary 2021-2023",All white-collar posts,,285,9274.85,8000.0,9274.85,13961.11,2.36,174.0,53.3
+"Factory, peak-season month (CLW 2025 calculator, same as B1c/B2b)",Full-time insured line worker,,,3932.67,3932.67,3584.67,3932.67,1.0,260.8,15.08
+"Factory, peak-season month (CLW 2025 calculator, same as B1c/B2b)","Dispatch, rebate type",,,7199.34,7199.34,7199.34,7199.34,1.83,260.8,27.6
+"Factory, peak-season month (CLW 2025 calculator, same as B1c/B2b)","Dispatch, hourly type",,,6520.0,6520.0,6520.0,6520.0,1.66,260.8,25.0

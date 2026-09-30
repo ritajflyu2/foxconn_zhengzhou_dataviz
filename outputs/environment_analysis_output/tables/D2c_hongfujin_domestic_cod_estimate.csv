@@ -1,0 +1,7 @@
+﻿year,insured_headcount,actual_cod_whole_plant,est_domestic_cod_low,est_domestic_cod_high,est_domestic_share_low_pct,est_domestic_share_high_pct,implied_production_cod_low,implied_production_cod_high,flag
+2020,65255,150.4,167.5,243.0,111.3,161.6,0.0,0.0,ESTIMATE IMPLAUSIBLE (domestic-only estimate >= whole-plant actual)
+2021,40525,63.613,104.0,150.9,163.5,237.2,0.0,0.0,ESTIMATE IMPLAUSIBLE (domestic-only estimate >= whole-plant actual)
+2022,39463,285.648,101.3,147.0,35.5,51.4,138.7,184.4,
+2023,39222,180.046,100.6,146.1,55.9,81.1,34.0,79.4,
+2024,33530,446.47,86.0,124.9,19.3,28.0,321.6,360.4,
+2025,33498,485.222,86.0,124.7,17.7,25.7,360.5,399.3,

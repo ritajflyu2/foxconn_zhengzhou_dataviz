@@ -1,0 +1,331 @@
+"""
+Export the Labor-page data for the website into small JSON files.
+
+Reads the analysis tables in outputs/ and the hearing workbook in data/legal/,
+writes site/data/labor/*.json. The site reads only these JSON files, never the
+Excel workbooks.
+
+Display rules (see design/LABOR_STORYBOARD.md):
+- Every string meant for display is English. No Chinese text is exported.
+- Money is stored in RMB (the source unit) together with the USD value at
+  FX_CNY_PER_USD. The site shows USD first, e.g. "$3.73 (¥25)".
+- Private individuals are never named: they are exported as "Individual".
+
+Run from the project root:  python3 scripts/export_site_data.py
+"""
+import json, re
+from pathlib import Path
+import pandas as pd
+
+BASE = Path(__file__).resolve().parent.parent  # project root
+LT = BASE / "outputs" / "labor_analysis_output" / "tables"
+COORDS = BASE / "outputs" / "map_insured_2025" / "data" / "insured_2025_coords.csv"
+LEGAL_XLSX = BASE / "data" / "legal" / "法律_郑州富士康四家公司开庭公告.xlsx"
+LEGAL_SCRIPT = BASE / "scripts" / "legal_disputes_by_year.py"
+OUT = BASE / "site" / "data" / "labor"
+OUT.mkdir(parents=True, exist_ok=True)
+
+FX_CNY_PER_USD = 6.70
+CJK = re.compile(r"[㐀-鿿（）：，]")
+
+def usd(cny):
+    return round(cny / FX_CNY_PER_USD, 2)
+
+def money(cny):
+    return {"cny": cny, "usd": usd(cny)}
+
+def assert_english(obj, path="$", allow=()):
+    """Fail loudly if any exported string contains Chinese characters."""
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if k not in allow: assert_english(v, f"{path}.{k}", allow)
+    elif isinstance(obj, list):
+        for i, v in enumerate(obj): assert_english(v, f"{path}[{i}]", allow)
+    elif isinstance(obj, str) and CJK.search(obj):
+        raise ValueError(f"Chinese text in export at {path}: {obj[:60]}")
+
+def write(name, obj, allow=()):
+    assert_english(obj, allow=allow)
+    p = OUT / name
+    p.write_text(json.dumps(obj, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"  {p.relative_to(BASE)}  ({p.stat().st_size/1024:.1f} KB)")
+
+def num(x):
+    return None if pd.isna(x) else (int(x) if float(x).is_integer() else float(x))
+
+# 实体简称 -> (id, English name, zone, in CLW survey area)
+ENTITIES = {
+    "鸿富锦":           ("hongfujin",     "Hongfujin",     "airport",  True),
+    "富联裕展/河南裕展": ("fii_yuzhan",    "FII Yuzhan",    "airport",  True),
+    "河南富驰":         ("henan_fuchi",   "Henan Fuchi",   "airport",  True),
+    "富联精密/富泰华":   ("fii_precision", "FII Precision", "econ_dev", False),
+}
+COORD_NAME = {"鸿富锦": "鸿富锦", "富联裕展/河南裕展": "富联裕展", "河南富驰": "河南富驰", "富联精密/富泰华": "富联精密"}
+ZONES = {"airport": "Zhengzhou Airport Economy Zone", "econ_dev": "Zhengzhou Economic-Technological Development Zone"}
+
+ins = pd.read_csv(LT / "A1_insured_workers_by_entity_annual.csv")
+ins = ins[ins["实体简称"].isin(ENTITIES)]
+coords = pd.read_csv(COORDS).set_index("name")
+
+# ---------------------------------------------------------------- scene 1
+SHARE, LEGAL_CAP = 0.57, 0.10
+plants = []
+for short, (pid, en, zone, in_clw) in ENTITIES.items():
+    insured = int(ins[(ins["实体简称"] == short) & (ins["年份"] == 2025)]["工伤保险参保人数"].iloc[0])
+    dispatch = round(insured * SHARE / (1 - SHARE))
+    c = coords.loc[COORD_NAME[short]]
+    plants.append({
+        "id": pid, "name": en, "zone": zone, "zone_label": ZONES[zone],
+        "lat": float(c["latitude"]), "lon": float(c["longitude"]),
+        "location_approximate": bool(c["location_approx"]),
+        "insured_2025": insured,
+        "est_dispatch": dispatch,
+        "est_total": insured + dispatch,
+        "legal_cap_total": round(insured / (1 - LEGAL_CAP)),
+        "legal_cap_dispatch": round(insured * LEGAL_CAP / (1 - LEGAL_CAP)),
+        "note": None if in_clw else "Outside CLW's survey area; the airport-zone dispatch share is applied as an assumption.",
+    })
+write("scene1_plants.json", {
+    "year": 2025,
+    "dispatch_share": SHARE,
+    "dispatch_share_source": "Implied by China Labor Watch's 2025 split: about 60,000-80,000 regular vs 80,000-110,000 dispatch workers at peak (CLW states the share is above 50%).",
+    "legal_cap_share": LEGAL_CAP,
+    "legal_cap_source": "Interim Provisions on Labor Dispatch (2014): dispatch workers may not exceed 10% of a company's total workforce.",
+    "method": "Estimated dispatch = insured x 0.57 / 0.43. Legal-cap total = insured / 0.9. No plant-level dispatch data exists, so one campus-wide share is applied to every plant.",
+    "placement": "Loose, roughly geographic: use lat/lon for relative position only (no basemap in v1). FII Precision sits about 20 km north-west of the airport-zone cluster.",
+    "plants": plants,
+    "comparison": {"label": "Harvard GSD students, Fall 2025", "value": 940,
+                   "source": "Harvard OIRA Fact Book, Fall 2025 enrollment (928 full-time + 12 part-time)",
+                   "url": "https://oira.harvard.edu/factbook/fact-book-enrollment/"},
+    "caveat": "Estimates. Insured counts likely undercount regular staff (CLW puts regular workers at 60,000-80,000 vs 53,208 insured in the airport zone), so these totals are conservative.",
+})
+
+# ---------------------------------------------------------------- scene 2
+DOTS = 300
+tot = sum(p["est_total"] for p in plants)
+raw = [p["est_total"] / tot * DOTS for p in plants]
+alloc = [int(r) for r in raw]
+for i in sorted(range(len(raw)), key=lambda i: raw[i] - alloc[i], reverse=True)[:DOTS - sum(alloc)]:
+    alloc[i] += 1
+dot_plants = []
+for p, n in zip(plants, alloc):
+    n_ins = round(n * p["insured_2025"] / p["est_total"])
+    dot_plants.append({"id": p["id"], "name": p["name"], "dots": n, "insured_dots": n_ins, "dispatch_dots": n - n_ins})
+write("scene2_floor.json", {
+    "dots_total": DOTS,
+    "workers_per_dot": round(tot / DOTS),
+    "insured_dots": sum(d["insured_dots"] for d in dot_plants),
+    "dispatch_dots": sum(d["dispatch_dots"] for d in dot_plants),
+    "by_plant": dot_plants,
+    "space_per_worker_m2": {"value": 16, "placeholder": True,
+        "basis": "Campus land area per worker: NYT (2016) reported about 350,000 workers on about 2.2 square miles (5.7 km2). Not floor area.",
+        "label": "Placeholder until floor-area measurement"},
+    "shift_note": "Plants run 3 x 8-hour shifts, so roughly one third of the headcount is on the floor at any moment.",
+    "floor_plan_image": "design/reference/floorplan_1F.png",
+})
+
+# ---------------------------------------------------------------- scene 3: workforce by year
+YEARS = list(range(2016, 2026))
+wf = pd.read_csv(LT / "A1_total_workforce_point_estimates.csv")
+clw = wf[wf["kind"] == "CLW total workforce"]
+SEASON = {"peak": "peak season", "trough": "off-season", "unspecified": "season not stated"}
+airport_ids = [s for s, v in ENTITIES.items() if v[2] == "airport"]
+rows = []
+for y in YEARS:
+    yr = ins[ins["年份"] == y]
+    by_ent = {ENTITIES[s][0]: (int(yr.loc[yr["实体简称"] == s, "工伤保险参保人数"].sum()) if (yr["实体简称"] == s).any() else None)
+              for s in ENTITIES}
+    airport = int(yr[yr["实体简称"].isin(airport_ids)]["工伤保险参保人数"].sum())
+    c = clw[clw["year"] == y]
+    est = None
+    if len(c):
+        r = c.iloc[0]
+        lo, hi = num(r["low"]), num(r["high"])
+        lo = lo if lo is not None else hi; hi = hi if hi is not None else lo
+        comparable = r["season"] != "trough"
+        est = {"low": lo, "high": hi, "season": r["season"], "season_label": SEASON[r["season"]],
+               "source": r["source"],
+               "gap_low": max(lo - airport, 0) if comparable else None,
+               "gap_high": max(hi - airport, 0) if comparable else None,
+               "gap_shown": bool(comparable)}
+    rows.append({"year": y, "airport_insured": airport, "insured_by_entity": by_ent, "clw_total": est})
+write("scene3_workforce_by_year.json", {
+    "scope": "Airport Economy Zone plants only (CLW's survey area). FII Precision is listed in insured_by_entity but excluded from airport_insured.",
+    "entities": {v[0]: v[1] for v in ENTITIES.values()},
+    "animation": {"autoplay": True, "seconds_per_year": 0.8},
+    "years": rows,
+    "flags": {
+        "no_estimate": [r["year"] for r in rows if r["clw_total"] is None],
+        "off_season_no_gap": [r["year"] for r in rows if r["clw_total"] and not r["clw_total"]["gap_shown"]],
+        "reporting_gap": [{"entity": "henan_fuchi", "year": 2020, "value": 1, "note": "Reporting gap, not a real drop"}],
+    },
+    "caveat": "Gap = CLW total minus insured workers: inferred dispatch, student and other uninsured workers. CLW figures are field estimates tied to a season; insured counts are year-end filings. No gap is drawn for off-season years.",
+})
+
+# ---------------------------------------------------------------- scene 3: posts by year
+posts = pd.read_csv(LT / "C1_post_type_counts_by_year.csv")
+posts = posts[posts["year"].between(2016, 2025)]
+KEYS = {"regular/unspecified": ("regular", "Regular / unspecified"),
+        "rebate-type dispatch": ("rebate_dispatch", "Rebate-type dispatch"),
+        "hourly-type dispatch": ("hourly_dispatch", "Hourly-type dispatch"),
+        "student/summer": ("student", "Student / summer"),
+        "short-term": ("short_term", "Short-term")}
+write("scene3_posts_by_year.json", {
+    "categories": [{"key": k, "label": l} for k, l in KEYS.values()],
+    "years": [{"year": int(r["year"]), **{k: int(r[src]) for src, (k, _) in KEYS.items()},
+               "total": int(sum(r[src] for src in KEYS))} for _, r in posts.iterrows()],
+    "source": "Recruitment posts from fskzpw.com (a labor-agency site), classified in scripts/labor_data.py",
+    "caveat": "Small samples in early years (8, 9 and 7 posts in 2016-2018). Posts cannot size the workforce.",
+})
+
+# ---------------------------------------------------------------- scene 4: pay model (RMB source values + USD)
+write("scene4_pay_model.json", {
+    "fx_cny_per_usd": FX_CNY_PER_USD,
+    "display": "Show USD first with the RMB source value in parentheses, e.g. \"$3.73 (¥25)\".",
+    "weeks_per_month": 4.35,
+    "defaults": {"hours_per_week": 60, "days_employed": 90, "employed_on_25th": True, "worker": "hourly_dispatch"},
+    "ranges": {"hours_per_week": [40, 75], "days_employed": [30, 180]},
+    "hours_rule": "First 40 hours per week are regular. Hours above 40 are split 50/50 between weekday overtime (1.5x) and rest-day overtime (2x).",
+    "workers": {
+        "full_time": {"label": "Full-time (insured)", "color_key": "regular",
+            "base_monthly": money(2100), "base_hours_monthly": 174,
+            "ot_multipliers": {"weekday": 1.5, "rest_day": 2.0},
+            "deduction_monthly": money(348), "deduction_label": "Social insurance (worker's share)",
+            "conditional": None,
+            "benefits": ["Social insurance", "Work injury insurance", "Partial paid sick leave (with medical record)"],
+            "contract": "Direct labor contract with Foxconn"},
+        "rebate_dispatch": {"label": "Rebate-type dispatch", "color_key": "rebate_dispatch",
+            "base_monthly": money(2100), "base_hours_monthly": 174,
+            "ot_multipliers": {"weekday": 1.5, "rest_day": 2.0},
+            "ot_note": "Legal overtime rates assumed; the CLW report does not state them.",
+            "deduction_monthly": money(0),
+            "conditional": {"type": "rebate", "amount": money(9800), "amount_range": [money(4800), money(9800)],
+                            "spread_months": 3, "condition": "days_employed >= 90",
+                            "condition_label": "Paid only after 90 continuous days",
+                            "fail": "Leaving before day 90 forfeits the whole rebate."},
+            "benefits": ["No social insurance", "No sick leave"],
+            "contract": "Agency contract plus a Rebate Agreement"},
+        "hourly_dispatch": {"label": "Hourly-type dispatch", "color_key": "hourly_dispatch",
+            "rate_paid_monthly": money(12), "ot_multipliers": None,
+            "deduction_monthly": money(0),
+            "conditional": {"type": "deferred_wage_difference", "rate": money(13), "condition": "employed_on_25th",
+                            "condition_label": "Deferred to the following month; paid only if still employed on the 25th",
+                            "fail": "Leaving before the payout month's 25th forfeits the deferred amount. The source estimates $780-900 (¥5,200-6,000) lost across two months."},
+            "benefits": ["No social insurance", "No work injury insurance", "No paid or unpaid sick leave", "Mandatory overtime (built into the flat rate)"],
+            "contract": "Agency contract plus a Wage-Difference Confirmation"},
+        "student": {"label": "Student / summer", "color_key": "student",
+            "rate_hourly": money(12), "ot_multipliers": {"weekday": 1.5, "rest_day": 2.0},
+            "deduction_monthly": money(0), "conditional": None,
+            "benefits": ["No social insurance"],
+            "contract": "School-partnership labor contract"},
+    },
+    "check_values": {
+        "full_time_60h_week_gross": money(905),
+        "hourly_dispatch_60h_month": {"paid": money(3120), "deferred": money(3380), "total": money(6500),
+                                      "hourly": {"paid": money(12), "conditional": money(13), "total": money(25)}},
+    },
+    "caveat": "Modeled from CLW-reported pay rules and recruitment posts, not payslips. The overtime split and rebate amount are assumptions.",
+})
+
+# ---------------------------------------------------------------- scene 5: hearings
+src = LEGAL_SCRIPT.read_text(encoding="utf-8")
+CATEGORY_MAP = dict(re.findall(r'"([^"]+)":\s*"([^"]+)"', re.search(r"CATEGORY_MAP = \{(.*?)\n\}", src, re.S).group(1)))
+CAUSE_EN = {
+    "劳动争议": "Labor dispute", "劳动合同纠纷": "Labor contract dispute", "人事争议": "Personnel dispute",
+    "竞业限制纠纷": "Non-compete dispute", "申请撤销仲裁裁决": "Application to set aside an arbitral award",
+    "工伤保险待遇纠纷": "Work-injury insurance benefits dispute", "失业保险待遇纠纷": "Unemployment insurance benefits dispute",
+    "社会保险纠纷": "Social insurance dispute", "合同纠纷": "Contract dispute", "买卖合同纠纷": "Sales contract dispute",
+    "广告合同纠纷": "Advertising contract dispute", "建设工程施工合同纠纷": "Construction contract dispute",
+    "建设工程分包合同纠纷": "Construction subcontract dispute", "装饰装修合同纠纷": "Renovation contract dispute",
+    "房屋买卖合同纠纷": "Property sale contract dispute", "金融借款合同纠纷": "Bank loan contract dispute",
+    "房屋租赁合同纠纷": "Property lease dispute", "承揽合同纠纷": "Work-for-hire contract dispute",
+    "侵害发明专利权纠纷": "Invention patent infringement", "侵害作品信息网络传播权纠纷": "Online copyright infringement",
+    "著作权权属纠纷": "Copyright ownership dispute", "名誉权纠纷": "Defamation dispute", "身体权纠纷": "Bodily injury dispute",
+    "生命权、健康权、身体权纠纷": "Life, health and bodily rights dispute", "健康权纠纷": "Health rights dispute",
+    "提供劳务者受害责任纠纷": "Injury to a person providing labor services", "其他民事": "Other civil matter",
+    "行政确认": "Administrative determination",
+}
+COURT_EN = {
+    "河南省郑州市中级人民法院": "Zhengzhou Intermediate People's Court, Henan",
+    "河南省郑州市郑州航空港经济综合实验区人民法院": "Zhengzhou Airport Economy Zone People's Court, Henan",
+    "河南省郑州市郑州高新技术产业开发区人民法院": "Zhengzhou High-Tech Zone People's Court, Henan",
+    "上海市静安区人民法院": "Jing'an District People's Court, Shanghai",
+    "江苏省南京市江宁区人民法院": "Jiangning District People's Court, Nanjing, Jiangsu",
+    "广东省深圳市龙华区人民法院": "Longhua District People's Court, Shenzhen, Guangdong",
+    "河南自由贸易试验区郑州片区人民法院": "Henan Pilot Free Trade Zone (Zhengzhou Area) People's Court",
+    "江苏省南京市江宁经济技术开发区人民法院": "Jiangning Development Zone People's Court, Nanjing, Jiangsu",
+    "河南省郑州市中原区人民法院": "Zhongyuan District People's Court, Zhengzhou, Henan",
+    "河南省郑州市中牟县人民法院": "Zhongmu County People's Court, Zhengzhou, Henan",
+    "广东省深圳市中级人民法院": "Shenzhen Intermediate People's Court, Guangdong",
+    "杭州互联网法院": "Hangzhou Internet Court, Zhejiang",
+    "河南省洛阳市中级人民法院": "Luoyang Intermediate People's Court, Henan",
+    "上海市嘉定区人民法院": "Jiading District People's Court, Shanghai",
+    "新疆维吾尔自治区乌鲁木齐市新市区人民法院": "Xinshi District People's Court, Urumqi, Xinjiang",
+    "上海市徐汇区人民法院": "Xuhui District People's Court, Shanghai",
+}
+ENTITY_EN = {"鸿富锦精密电子（郑州）有限公司": "Hongfujin", "富联裕展科技（河南）有限公司": "FII Yuzhan",
+             "富联精密电子（郑州）有限公司": "FII Precision", "河南富驰科技有限公司": "Henan Fuchi"}
+ROLE_EN = {"原告": "Plaintiff", "被告": "Defendant", "上诉人": "Appellant", "被上诉人": "Appellee",
+           "第三人": "Third party", "当事人": "Party", "特别程序申请人": "Applicant", "特别程序被申请人": "Respondent",
+           "申请人": "Applicant", "被申请人": "Respondent"}
+OUTCOME_EN = {"部分支持": "claim partly upheld", "驳回上诉": "appeal dismissed", "不支持": "claim not upheld",
+              "支持": "claim upheld", "撤诉": "withdrawn", "解除财产保全": "asset freeze lifted",
+              "不承担责任": "found not liable", "驳回": "dismissed", "发回重审": "sent back for retrial"}
+ORG = re.compile(r"公司|集团|厂|中心|银行|委员会|局|所|学校|学院|大学|协会|店|部|社|院|站|政府")
+GOV = re.compile(r"局|委员会|政府")
+
+def party_name_en(name):
+    n = name.replace(" ", "")
+    if "鸿富锦" in n: return "Hongfujin (Foxconn)", "foxconn"
+    if "富泰华精密" in n or "富联精密" in n: return "FII Precision (Foxconn)", "foxconn"
+    if "裕展" in n and ("河南" in n): return "FII Yuzhan (Foxconn)", "foxconn"
+    if "富驰" in n: return "Henan Fuchi (Foxconn)", "foxconn"
+    if "富士康" in n or "富泰华" in n or "裕展" in n or "富联" in n: return "Foxconn affiliate (outside Zhengzhou)", "foxconn"
+    if "苹果" in n: return "Apple (China subsidiary)", "company"
+    if GOV.search(n): return "Government agency", "government"
+    if ORG.search(n): return "Other company", "company"
+    return "Individual", "individual"
+
+ROLE_RE = re.compile("(" + "|".join(sorted(ROLE_EN, key=len, reverse=True)) + ")：")
+
+def parse_parties(raw):
+    """Return [{'role','name','type','outcome'}], English only, individuals anonymized."""
+    if not isinstance(raw, str) or not raw.strip(): return []
+    out = []
+    pieces = [p.strip() for p in re.split(r"\s*\d+\.\s+", raw) if p.strip()]  # '1. X  2. Y' lists
+    for piece in pieces:
+        chunks = ROLE_RE.split(piece)
+        segs = [(None, chunks[0])] + [(chunks[i], chunks[i + 1]) for i in range(1, len(chunks) - 1, 2)]
+        for role, text in segs:
+            for name in re.split(r"[，,]", text):
+                tags = re.findall(r"\[([^\]]+)\]", name)
+                name = re.sub(r"\[[^\]]*\]", "", name).strip()
+                if not name: continue
+                en, kind = party_name_en(name)
+                out.append({"role": ROLE_EN.get(role, "Party") if role else "Party", "name": en, "type": kind,
+                            "outcome": "; ".join(OUTCOME_EN[t] for t in tags if t in OUTCOME_EN) or None})
+    return out
+
+df = pd.read_excel(LEGAL_XLSX, sheet_name="开庭公告")
+missing = set(df["法院"]) - set(COURT_EN) | set(df["案由"]) - set(CAUSE_EN) | set(df["企业"]) - set(ENTITY_EN)
+assert not missing, f"untranslated values: {missing}"
+cases = []
+for _, r in df.iterrows():
+    d = r["正文明确时间"] if pd.notna(r["正文明确时间"]) else r["开庭时间"]
+    cases.append({
+        "id": r["记录编号"], "entity": ENTITY_EN[r["企业"]],
+        "cause": CAUSE_EN[r["案由"]], "category": CATEGORY_MAP.get(r["案由"], "Other / administrative"),
+        "date": pd.Timestamp(d).strftime("%Y-%m-%d"), "year": int(pd.Timestamp(d).year),
+        "court": COURT_EN[r["法院"]], "parties": parse_parties(r["当事人"]), "source_url": r["来源"],
+    })
+cat_order = ["Labor & employment", "Commercial contract", "Intellectual property", "Personal injury / rights", "Other / administrative"]
+n_labor = sum(c["category"] == "Labor & employment" for c in cases)
+write("scene5_hearings.json", {
+    "categories": cat_order,
+    "headline": {"labor_share": round(n_labor / len(cases), 3), "labor_count": n_labor, "total": len(cases)},
+    "cases": sorted(cases, key=lambda c: c["date"]),
+    "interaction": "Hover on desktop; tap to open a detail card on touch devices.",
+    "privacy": "Private individuals are shown only as 'Individual'. Companies other than Foxconn entities, Apple and government agencies are shown as 'Other company'.",
+    "caveat": "Hearing announcements, not unique lawsuits or rulings; a postponed case can appear twice; scraping completeness is unverified; 2026 is a partial year.",
+}, allow=("source_url",))
+print("done")

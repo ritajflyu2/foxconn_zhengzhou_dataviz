@@ -1,0 +1,6 @@
+﻿date,entity,project,headcount_before,headcount_after,reason_category,quote_zh,quote_en,source
+2019-06,FII Precision (Futaihua),真空浸胶自动化升级,,,"automation, headcount unchanged",对生产线中部分手工作业升级为自动化设备作业,Part of the manual work on the line was upgraded to automated-equipment operation,项目面板_自动化与用工 row 4 (定员口径/备注)
+2020-08,FII Precision (Futaihua),5G智能手机精密机构件生产项目,23000.0,23000.0,"automation, headcount unchanged",由于部分制程自动化升级，劳动定员不变,"Because part of the process was upgraded to automation, the design headcount is unchanged",项目面板_自动化与用工 row 5 (定员口径/备注)
+2021-09,FII Yuzhan (Henan),高端手机机构件升级改造智能制造项目,51000.0,30000.0,"automation, headcount reduced",由于工艺进行自动化升级，劳动定员减少,"Because the process underwent automation upgrades, the design headcount was reduced",项目面板_自动化与用工 row 13 (定员口径/备注)
+2022-05,FII Yuzhan (Henan),22X手机机构件及耳机小件制程智能升级改造项目,30000.0,26000.0,capacity reduction (unrelated cause),由于产能减少，劳动定员减少,"Because capacity was reduced, the design headcount was reduced",项目面板_自动化与用工 row 14 (定员口径/备注)
+2023-05,FII Yuzhan (Henan),高端手机精密机构件智能制造升级改造项目,26000.0,11614.0,"automation, headcount reduced",由于工艺进行自动化升级，劳动定员由26000人减少至11614人,"Because the process underwent automation upgrades, the design headcount was reduced from 26,000 to 11,614",项目面板_自动化与用工 row 16 (定员口径/备注)

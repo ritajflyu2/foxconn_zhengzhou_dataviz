@@ -1,0 +1,3895 @@
+{
+ "categories": [
+  "Labor & employment",
+  "Commercial contract",
+  "Intellectual property",
+  "Personal injury / rights",
+  "Other / administrative"
+ ],
+ "headline": {
+  "labor_share": 0.56,
+  "labor_count": 84,
+  "total": 150
+ },
+ "cases": [
+  {
+   "id": "QCC-066",
+   "entity": "Hongfujin",
+   "cause": "Work-injury insurance benefits dispute",
+   "category": "Labor & employment",
+   "date": "2015-01-27",
+   "year": 2015,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "appeal dismissed"
+    },
+    {
+     "role": "Appellee",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-065",
+   "entity": "Hongfujin",
+   "cause": "Administrative determination",
+   "category": "Other / administrative",
+   "date": "2015-05-18",
+   "year": 2015,
+   "court": "Zhongyuan District People's Court, Zhengzhou, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Government agency",
+     "type": "government",
+     "outcome": null
+    },
+    {
+     "role": "Third party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-064",
+   "entity": "Hongfujin",
+   "cause": "Life, health and bodily rights dispute",
+   "category": "Personal injury / rights",
+   "date": "2015-05-26",
+   "year": 2015,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-063",
+   "entity": "Hongfujin",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2015-07-13",
+   "year": 2015,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "appeal dismissed"
+    },
+    {
+     "role": "Appellee",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-062",
+   "entity": "Hongfujin",
+   "cause": "Personnel dispute",
+   "category": "Labor & employment",
+   "date": "2015-10-27",
+   "year": 2015,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-061",
+   "entity": "Hongfujin",
+   "cause": "Contract dispute",
+   "category": "Commercial contract",
+   "date": "2015-11-22",
+   "year": 2015,
+   "court": "Zhongmu County People's Court, Zhengzhou, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-060",
+   "entity": "Hongfujin",
+   "cause": "Contract dispute",
+   "category": "Commercial contract",
+   "date": "2016-01-24",
+   "year": 2016,
+   "court": "Zhengzhou High-Tech Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-059",
+   "entity": "Hongfujin",
+   "cause": "Contract dispute",
+   "category": "Commercial contract",
+   "date": "2017-01-09",
+   "year": 2017,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-090",
+   "entity": "FII Precision",
+   "cause": "Injury to a person providing labor services",
+   "category": "Personal injury / rights",
+   "date": "2017-03-31",
+   "year": 2017,
+   "court": "Zhengzhou High-Tech Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "dismissed"
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-089",
+   "entity": "FII Precision",
+   "cause": "Bodily injury dispute",
+   "category": "Personal injury / rights",
+   "date": "2017-09-24",
+   "year": 2017,
+   "court": "Zhengzhou High-Tech Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-058",
+   "entity": "Hongfujin",
+   "cause": "Contract dispute",
+   "category": "Commercial contract",
+   "date": "2017-11-28",
+   "year": 2017,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Defendant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-088",
+   "entity": "FII Precision",
+   "cause": "Bodily injury dispute",
+   "category": "Personal injury / rights",
+   "date": "2017-12-05",
+   "year": 2017,
+   "court": "Zhengzhou High-Tech Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "claim partly upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": "found not liable"
+    },
+    {
+     "role": "Defendant",
+     "name": "Other company",
+     "type": "company",
+     "outcome": "claim partly upheld"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-142",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2017-12-06",
+   "year": 2017,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "claim partly upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": "claim partly upheld"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-143",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2017-12-06",
+   "year": 2017,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "claim not upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": "claim upheld"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-057",
+   "entity": "Hongfujin",
+   "cause": "Sales contract dispute",
+   "category": "Commercial contract",
+   "date": "2018-01-31",
+   "year": 2018,
+   "court": "Shenzhen Intermediate People's Court, Guangdong",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-056",
+   "entity": "Hongfujin",
+   "cause": "Online copyright infringement",
+   "category": "Intellectual property",
+   "date": "2018-07-26",
+   "year": 2018,
+   "court": "Hangzhou Internet Court, Zhejiang",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": "claim partly upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "claim partly upheld"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-087",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2019-01-08",
+   "year": 2019,
+   "court": "Zhengzhou High-Tech Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "withdrawn"
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-055",
+   "entity": "Hongfujin",
+   "cause": "Application to set aside an arbitral award",
+   "category": "Labor & employment",
+   "date": "2019-05-07",
+   "year": 2019,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Applicant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "dismissed"
+    },
+    {
+     "role": "Respondent",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-086",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2019-05-16",
+   "year": 2019,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "sent back for retrial"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-054",
+   "entity": "Hongfujin",
+   "cause": "Injury to a person providing labor services",
+   "category": "Personal injury / rights",
+   "date": "2019-06-14",
+   "year": 2019,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "claim partly upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "found not liable"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-053",
+   "entity": "Hongfujin",
+   "cause": "Injury to a person providing labor services",
+   "category": "Personal injury / rights",
+   "date": "2019-06-19",
+   "year": 2019,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-141",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2019-07-03",
+   "year": 2019,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "claim partly upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": "claim partly upheld"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-052",
+   "entity": "Hongfujin",
+   "cause": "Copyright ownership dispute",
+   "category": "Intellectual property",
+   "date": "2019-07-30",
+   "year": 2019,
+   "court": "Luoyang Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": "withdrawn"
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-051",
+   "entity": "Hongfujin",
+   "cause": "Contract dispute",
+   "category": "Commercial contract",
+   "date": "2019-09-09",
+   "year": 2019,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "claim partly upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "claim partly upheld"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-140",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2019-10-17",
+   "year": 2019,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "claim not upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": "claim not upheld"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-050",
+   "entity": "Hongfujin",
+   "cause": "Injury to a person providing labor services",
+   "category": "Personal injury / rights",
+   "date": "2019-10-30",
+   "year": 2019,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-049",
+   "entity": "Hongfujin",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2019-10-31",
+   "year": 2019,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "claim not upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "claim upheld"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-085",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2019-12-30",
+   "year": 2019,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "appeal dismissed"
+    },
+    {
+     "role": "Appellee",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-048",
+   "entity": "Hongfujin",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2020-02-11",
+   "year": 2020,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "appeal dismissed"
+    },
+    {
+     "role": "Appellant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "appeal dismissed"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-047",
+   "entity": "Hongfujin",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2020-06-03",
+   "year": 2020,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "claim not upheld"
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "claim upheld"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-150",
+   "entity": "Henan Fuchi",
+   "cause": "Work-for-hire contract dispute",
+   "category": "Commercial contract",
+   "date": "2020-06-15",
+   "year": 2020,
+   "court": "Jiading District People's Court, Shanghai",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": "withdrawn"
+    },
+    {
+     "role": "Defendant",
+     "name": "Henan Fuchi (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/78b54faf51518d97e8fa5c5a39ade180.html?fp="
+  },
+  {
+   "id": "QCC-046",
+   "entity": "Hongfujin",
+   "cause": "Contract dispute",
+   "category": "Commercial contract",
+   "date": "2020-06-16",
+   "year": 2020,
+   "court": "Jing'an District People's Court, Shanghai",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": "claim not upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "Apple (China subsidiary)",
+     "type": "company",
+     "outcome": "claim upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "claim upheld"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-045",
+   "entity": "Hongfujin",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2020-07-21",
+   "year": 2020,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-044",
+   "entity": "Hongfujin",
+   "cause": "Health rights dispute",
+   "category": "Personal injury / rights",
+   "date": "2020-08-20",
+   "year": 2020,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "claim partly upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "claim partly upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "found not liable"
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-043",
+   "entity": "Hongfujin",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2020-09-23",
+   "year": 2020,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "appeal dismissed"
+    },
+    {
+     "role": "Appellee",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-042",
+   "entity": "Hongfujin",
+   "cause": "Contract dispute",
+   "category": "Commercial contract",
+   "date": "2020-11-12",
+   "year": 2020,
+   "court": "Jing'an District People's Court, Shanghai",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": "claim not upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "Apple (China subsidiary)",
+     "type": "company",
+     "outcome": "claim upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "claim upheld"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-041",
+   "entity": "Hongfujin",
+   "cause": "Sales contract dispute",
+   "category": "Commercial contract",
+   "date": "2021-01-05",
+   "year": 2021,
+   "court": "Jiangning District People's Court, Nanjing, Jiangsu",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Henan Fuchi (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-149",
+   "entity": "Henan Fuchi",
+   "cause": "Sales contract dispute",
+   "category": "Commercial contract",
+   "date": "2021-01-05",
+   "year": 2021,
+   "court": "Jiangning District People's Court, Nanjing, Jiangsu",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Henan Fuchi (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/78b54faf51518d97e8fa5c5a39ade180.html?fp="
+  },
+  {
+   "id": "QCC-040",
+   "entity": "Hongfujin",
+   "cause": "Sales contract dispute",
+   "category": "Commercial contract",
+   "date": "2021-01-24",
+   "year": 2021,
+   "court": "Jiangning District People's Court, Nanjing, Jiangsu",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Henan Fuchi (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-148",
+   "entity": "Henan Fuchi",
+   "cause": "Sales contract dispute",
+   "category": "Commercial contract",
+   "date": "2021-01-24",
+   "year": 2021,
+   "court": "Jiangning District People's Court, Nanjing, Jiangsu",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Henan Fuchi (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/78b54faf51518d97e8fa5c5a39ade180.html?fp="
+  },
+  {
+   "id": "QCC-039",
+   "entity": "Hongfujin",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2021-03-10",
+   "year": 2021,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "claim not upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "claim upheld"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-038",
+   "entity": "Hongfujin",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2021-03-18",
+   "year": 2021,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "claim not upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "claim upheld"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-037",
+   "entity": "Hongfujin",
+   "cause": "Sales contract dispute",
+   "category": "Commercial contract",
+   "date": "2021-03-30",
+   "year": 2021,
+   "court": "Jiangning District People's Court, Nanjing, Jiangsu",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Henan Fuchi (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-147",
+   "entity": "Henan Fuchi",
+   "cause": "Sales contract dispute",
+   "category": "Commercial contract",
+   "date": "2021-03-30",
+   "year": 2021,
+   "court": "Jiangning District People's Court, Nanjing, Jiangsu",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Henan Fuchi (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/78b54faf51518d97e8fa5c5a39ade180.html?fp="
+  },
+  {
+   "id": "QCC-036",
+   "entity": "Hongfujin",
+   "cause": "Construction subcontract dispute",
+   "category": "Commercial contract",
+   "date": "2021-04-14",
+   "year": 2021,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": "withdrawn"
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-139",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2021-06-16",
+   "year": 2021,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-035",
+   "entity": "Hongfujin",
+   "cause": "Defamation dispute",
+   "category": "Personal injury / rights",
+   "date": "2021-07-27",
+   "year": 2021,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-033",
+   "entity": "Hongfujin",
+   "cause": "Defamation dispute",
+   "category": "Personal injury / rights",
+   "date": "2021-08-02",
+   "year": 2021,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-034",
+   "entity": "Hongfujin",
+   "cause": "Defamation dispute",
+   "category": "Personal injury / rights",
+   "date": "2021-08-02",
+   "year": 2021,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-032",
+   "entity": "Hongfujin",
+   "cause": "Defamation dispute",
+   "category": "Personal injury / rights",
+   "date": "2021-08-18",
+   "year": 2021,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-031",
+   "entity": "Hongfujin",
+   "cause": "Sales contract dispute",
+   "category": "Commercial contract",
+   "date": "2021-09-05",
+   "year": 2021,
+   "court": "Jiangning District People's Court, Nanjing, Jiangsu",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Henan Fuchi (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-146",
+   "entity": "Henan Fuchi",
+   "cause": "Sales contract dispute",
+   "category": "Commercial contract",
+   "date": "2021-09-05",
+   "year": 2021,
+   "court": "Jiangning District People's Court, Nanjing, Jiangsu",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Henan Fuchi (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/78b54faf51518d97e8fa5c5a39ade180.html?fp="
+  },
+  {
+   "id": "QCC-030",
+   "entity": "Hongfujin",
+   "cause": "Advertising contract dispute",
+   "category": "Commercial contract",
+   "date": "2021-09-09",
+   "year": 2021,
+   "court": "Jing'an District People's Court, Shanghai",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-084",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2021-09-22",
+   "year": 2021,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-029",
+   "entity": "Hongfujin",
+   "cause": "Advertising contract dispute",
+   "category": "Commercial contract",
+   "date": "2021-09-28",
+   "year": 2021,
+   "court": "Jing'an District People's Court, Shanghai",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": "claim partly upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "asset freeze lifted"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-083",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2021-09-28",
+   "year": 2021,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-028",
+   "entity": "Hongfujin",
+   "cause": "Advertising contract dispute",
+   "category": "Commercial contract",
+   "date": "2021-10-12",
+   "year": 2021,
+   "court": "Jing'an District People's Court, Shanghai",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": "claim partly upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "asset freeze lifted"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-027",
+   "entity": "Hongfujin",
+   "cause": "Advertising contract dispute",
+   "category": "Commercial contract",
+   "date": "2021-10-22",
+   "year": 2021,
+   "court": "Jing'an District People's Court, Shanghai",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-082",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2021-10-28",
+   "year": 2021,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-081",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2021-10-31",
+   "year": 2021,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-080",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2021-11-03",
+   "year": 2021,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-026",
+   "entity": "Hongfujin",
+   "cause": "Advertising contract dispute",
+   "category": "Commercial contract",
+   "date": "2021-11-14",
+   "year": 2021,
+   "court": "Jing'an District People's Court, Shanghai",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-079",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2021-11-15",
+   "year": 2021,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-138",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2021-11-16",
+   "year": 2021,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-137",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2021-12-13",
+   "year": 2021,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-078",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2021-12-16",
+   "year": 2021,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-025",
+   "entity": "Hongfujin",
+   "cause": "Advertising contract dispute",
+   "category": "Commercial contract",
+   "date": "2021-12-21",
+   "year": 2021,
+   "court": "Jing'an District People's Court, Shanghai",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": "claim partly upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "asset freeze lifted"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-136",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2022-01-10",
+   "year": 2022,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-135",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2022-01-11",
+   "year": 2022,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-134",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2022-01-20",
+   "year": 2022,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-024",
+   "entity": "Hongfujin",
+   "cause": "Advertising contract dispute",
+   "category": "Commercial contract",
+   "date": "2022-02-20",
+   "year": 2022,
+   "court": "Jing'an District People's Court, Shanghai",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": "claim partly upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": "asset freeze lifted"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-133",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2022-03-10",
+   "year": 2022,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-132",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2022-03-14",
+   "year": 2022,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-023",
+   "entity": "Hongfujin",
+   "cause": "Renovation contract dispute",
+   "category": "Commercial contract",
+   "date": "2022-05-18",
+   "year": 2022,
+   "court": "Xinshi District People's Court, Urumqi, Xinjiang",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-131",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2022-06-14",
+   "year": 2022,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-022",
+   "entity": "Hongfujin",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2022-06-15",
+   "year": 2022,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-130",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2022-06-15",
+   "year": 2022,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-129",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2022-06-16",
+   "year": 2022,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-021",
+   "entity": "Hongfujin",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2022-07-06",
+   "year": 2022,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-020",
+   "entity": "Hongfujin",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2022-07-07",
+   "year": 2022,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Appellant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-126",
+   "entity": "FII Yuzhan",
+   "cause": "Property sale contract dispute",
+   "category": "Commercial contract",
+   "date": "2022-07-26",
+   "year": 2022,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-128",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2022-07-26",
+   "year": 2022,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-127",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2022-07-27",
+   "year": 2022,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-124",
+   "entity": "FII Yuzhan",
+   "cause": "Construction contract dispute",
+   "category": "Commercial contract",
+   "date": "2022-07-28",
+   "year": 2022,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-125",
+   "entity": "FII Yuzhan",
+   "cause": "Construction contract dispute",
+   "category": "Commercial contract",
+   "date": "2022-07-29",
+   "year": 2022,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-122",
+   "entity": "FII Yuzhan",
+   "cause": "Construction contract dispute",
+   "category": "Commercial contract",
+   "date": "2022-08-01",
+   "year": 2022,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-123",
+   "entity": "FII Yuzhan",
+   "cause": "Construction contract dispute",
+   "category": "Commercial contract",
+   "date": "2022-08-01",
+   "year": 2022,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-121",
+   "entity": "FII Yuzhan",
+   "cause": "Construction contract dispute",
+   "category": "Commercial contract",
+   "date": "2022-08-02",
+   "year": 2022,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-120",
+   "entity": "FII Yuzhan",
+   "cause": "Bank loan contract dispute",
+   "category": "Commercial contract",
+   "date": "2022-08-12",
+   "year": 2022,
+   "court": "Henan Pilot Free Trade Zone (Zhengzhou Area) People's Court",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Appellant",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-019",
+   "entity": "Hongfujin",
+   "cause": "Sales contract dispute",
+   "category": "Commercial contract",
+   "date": "2022-08-23",
+   "year": 2022,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-077",
+   "entity": "FII Precision",
+   "cause": "Property lease dispute",
+   "category": "Commercial contract",
+   "date": "2022-09-01",
+   "year": 2022,
+   "court": "Zhengzhou High-Tech Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-119",
+   "entity": "FII Yuzhan",
+   "cause": "Contract dispute",
+   "category": "Commercial contract",
+   "date": "2022-09-07",
+   "year": 2022,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-018",
+   "entity": "Hongfujin",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2022-10-12",
+   "year": 2022,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-118",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2022-12-13",
+   "year": 2022,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-017",
+   "entity": "Hongfujin",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2023-01-13",
+   "year": 2023,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-076",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2023-02-28",
+   "year": 2023,
+   "court": "Zhengzhou High-Tech Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-075",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2023-05-22",
+   "year": 2023,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-016",
+   "entity": "Hongfujin",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2023-05-24",
+   "year": 2023,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-015",
+   "entity": "Hongfujin",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2023-06-12",
+   "year": 2023,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-074",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2023-07-04",
+   "year": 2023,
+   "court": "Zhengzhou High-Tech Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-014",
+   "entity": "Hongfujin",
+   "cause": "Non-compete dispute",
+   "category": "Labor & employment",
+   "date": "2023-07-21",
+   "year": 2023,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "appeal dismissed"
+    },
+    {
+     "role": "Appellee",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-073",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2023-08-22",
+   "year": 2023,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-013",
+   "entity": "Hongfujin",
+   "cause": "Unemployment insurance benefits dispute",
+   "category": "Labor & employment",
+   "date": "2023-10-25",
+   "year": 2023,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-012",
+   "entity": "Hongfujin",
+   "cause": "Other civil matter",
+   "category": "Other / administrative",
+   "date": "2023-11-02",
+   "year": 2023,
+   "court": "Longhua District People's Court, Shenzhen, Guangdong",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-011",
+   "entity": "Hongfujin",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2023-11-16",
+   "year": 2023,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-009",
+   "entity": "Hongfujin",
+   "cause": "Invention patent infringement",
+   "category": "Intellectual property",
+   "date": "2023-11-27",
+   "year": 2023,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-010",
+   "entity": "Hongfujin",
+   "cause": "Invention patent infringement",
+   "category": "Intellectual property",
+   "date": "2023-11-27",
+   "year": 2023,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-072",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2023-12-06",
+   "year": 2023,
+   "court": "Zhengzhou High-Tech Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "claim partly upheld"
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": "claim partly upheld"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-008",
+   "entity": "Hongfujin",
+   "cause": "Sales contract dispute",
+   "category": "Commercial contract",
+   "date": "2023-12-19",
+   "year": 2023,
+   "court": "Longhua District People's Court, Shenzhen, Guangdong",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-117",
+   "entity": "FII Yuzhan",
+   "cause": "Online copyright infringement",
+   "category": "Intellectual property",
+   "date": "2023-12-19",
+   "year": 2023,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-116",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2024-01-23",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-115",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2024-01-30",
+   "year": 2024,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-071",
+   "entity": "FII Precision",
+   "cause": "Construction subcontract dispute",
+   "category": "Commercial contract",
+   "date": "2024-02-02",
+   "year": 2024,
+   "court": "Zhengzhou High-Tech Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-007",
+   "entity": "Hongfujin",
+   "cause": "Contract dispute",
+   "category": "Commercial contract",
+   "date": "2024-02-19",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-114",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2024-02-23",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-113",
+   "entity": "FII Yuzhan",
+   "cause": "Online copyright infringement",
+   "category": "Intellectual property",
+   "date": "2024-02-28",
+   "year": 2024,
+   "court": "Xuhui District People's Court, Shanghai",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-112",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2024-04-08",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-070",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2024-04-11",
+   "year": 2024,
+   "court": "Henan Pilot Free Trade Zone (Zhengzhou Area) People's Court",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-111",
+   "entity": "FII Yuzhan",
+   "cause": "Other civil matter",
+   "category": "Other / administrative",
+   "date": "2024-04-26",
+   "year": 2024,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Applicant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Respondent",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-109",
+   "entity": "FII Yuzhan",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2024-05-13",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-110",
+   "entity": "FII Yuzhan",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2024-05-13",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-069",
+   "entity": "FII Precision",
+   "cause": "Contract dispute",
+   "category": "Commercial contract",
+   "date": "2024-05-26",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-145",
+   "entity": "Henan Fuchi",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2024-06-05",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Henan Fuchi (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/78b54faf51518d97e8fa5c5a39ade180.html?fp="
+  },
+  {
+   "id": "QCC-108",
+   "entity": "FII Yuzhan",
+   "cause": "Social insurance dispute",
+   "category": "Labor & employment",
+   "date": "2024-06-12",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-006",
+   "entity": "Hongfujin",
+   "cause": "Contract dispute",
+   "category": "Commercial contract",
+   "date": "2024-07-02",
+   "year": 2024,
+   "court": "Jiangning Development Zone People's Court, Nanjing, Jiangsu",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Third party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-107",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2024-07-03",
+   "year": 2024,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-068",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2024-07-08",
+   "year": 2024,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "appeal dismissed"
+    },
+    {
+     "role": "Appellee",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  },
+  {
+   "id": "QCC-106",
+   "entity": "FII Yuzhan",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2024-07-10",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-105",
+   "entity": "FII Yuzhan",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2024-07-22",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-005",
+   "entity": "Hongfujin",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2024-07-24",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-104",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2024-07-24",
+   "year": 2024,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-103",
+   "entity": "FII Yuzhan",
+   "cause": "Work-injury insurance benefits dispute",
+   "category": "Labor & employment",
+   "date": "2024-07-25",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-102",
+   "entity": "FII Yuzhan",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2024-07-26",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-099",
+   "entity": "FII Yuzhan",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2024-07-29",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-100",
+   "entity": "FII Yuzhan",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2024-07-29",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-101",
+   "entity": "FII Yuzhan",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2024-07-29",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-098",
+   "entity": "FII Yuzhan",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2024-07-30",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-097",
+   "entity": "FII Yuzhan",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2024-08-08",
+   "year": 2024,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "appeal dismissed"
+    },
+    {
+     "role": "Appellee",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-095",
+   "entity": "FII Yuzhan",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2024-08-13",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-096",
+   "entity": "FII Yuzhan",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2024-08-13",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-004",
+   "entity": "Hongfujin",
+   "cause": "Contract dispute",
+   "category": "Commercial contract",
+   "date": "2024-08-19",
+   "year": 2024,
+   "court": "Jiangning Development Zone People's Court, Nanjing, Jiangsu",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Third party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-144",
+   "entity": "Henan Fuchi",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2024-09-09",
+   "year": 2024,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "Henan Fuchi (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/78b54faf51518d97e8fa5c5a39ade180.html?fp="
+  },
+  {
+   "id": "QCC-003",
+   "entity": "Hongfujin",
+   "cause": "Invention patent infringement",
+   "category": "Intellectual property",
+   "date": "2024-09-19",
+   "year": 2024,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Plaintiff",
+     "name": "Other company",
+     "type": "company",
+     "outcome": null
+    },
+    {
+     "role": "Defendant",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-094",
+   "entity": "FII Yuzhan",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2024-10-22",
+   "year": 2024,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "appeal dismissed"
+    },
+    {
+     "role": "Appellee",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-093",
+   "entity": "FII Yuzhan",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2024-10-28",
+   "year": 2024,
+   "court": "Zhengzhou Airport Economy Zone People's Court, Henan",
+   "parties": [
+    {
+     "role": "Defendant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-002",
+   "entity": "Hongfujin",
+   "cause": "Work-injury insurance benefits dispute",
+   "category": "Labor & employment",
+   "date": "2024-11-14",
+   "year": 2024,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellee",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-092",
+   "entity": "FII Yuzhan",
+   "cause": "Labor contract dispute",
+   "category": "Labor & employment",
+   "date": "2024-11-20",
+   "year": 2024,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Appellee",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-001",
+   "entity": "Hongfujin",
+   "cause": "Other civil matter",
+   "category": "Other / administrative",
+   "date": "2025-01-09",
+   "year": 2025,
+   "court": "Longhua District People's Court, Shenzhen, Guangdong",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Foxconn affiliate (outside Zhengzhou)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Foxconn affiliate (outside Zhengzhou)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Foxconn affiliate (outside Zhengzhou)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/23ff9bf8b651300facf948aa4f5d970f.html"
+  },
+  {
+   "id": "QCC-091",
+   "entity": "FII Yuzhan",
+   "cause": "Other civil matter",
+   "category": "Other / administrative",
+   "date": "2025-01-09",
+   "year": 2025,
+   "court": "Longhua District People's Court, Shenzhen, Guangdong",
+   "parties": [
+    {
+     "role": "Party",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Foxconn affiliate (outside Zhengzhou)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "FII Yuzhan (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Foxconn affiliate (outside Zhengzhou)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Foxconn affiliate (outside Zhengzhou)",
+     "type": "foxconn",
+     "outcome": null
+    },
+    {
+     "role": "Party",
+     "name": "Hongfujin (Foxconn)",
+     "type": "foxconn",
+     "outcome": null
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/43bbf1e27fd6dcf38bc2819744fc26da.html"
+  },
+  {
+   "id": "QCC-067",
+   "entity": "FII Precision",
+   "cause": "Labor dispute",
+   "category": "Labor & employment",
+   "date": "2026-04-06",
+   "year": 2026,
+   "court": "Zhengzhou Intermediate People's Court, Henan",
+   "parties": [
+    {
+     "role": "Appellant",
+     "name": "Individual",
+     "type": "individual",
+     "outcome": "appeal dismissed"
+    },
+    {
+     "role": "Appellant",
+     "name": "FII Precision (Foxconn)",
+     "type": "foxconn",
+     "outcome": "appeal dismissed"
+    }
+   ],
+   "source_url": "https://www.qcc.com/csusong/e47c5146b5d41f360a89e86aaf222ee9.html?fp="
+  }
+ ],
+ "interaction": "Hover on desktop; tap to open a detail card on touch devices.",
+ "privacy": "Private individuals are shown only as 'Individual'. Companies other than Foxconn entities, Apple and government agencies are shown as 'Other company'.",
+ "caveat": "Hearing announcements, not unique lawsuits or rulings; a postponed case can appear twice; scraping completeness is unverified; 2026 is a partial year."
+}

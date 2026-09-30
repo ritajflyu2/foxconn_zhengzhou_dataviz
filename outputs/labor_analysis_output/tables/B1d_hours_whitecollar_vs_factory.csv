@@ -1,0 +1,7 @@
+﻿group,season,hours_low,hours_high,measured
+White-collar (office),Off-season,40.0,40.0,False
+White-collar (office),Peak season,40.0,40.0,False
+White-collar (office),Heaviest shifts (Aug-Sep 2025),40.0,40.0,False
+Factory assembly-line worker,Off-season,52.00923787528868,59.39953810623557,True
+Factory assembly-line worker,Peak season,55.01154734411085,70.0230946882217,True
+Factory assembly-line worker,Heaviest shifts (Aug-Sep 2025),69.0,75.0,True

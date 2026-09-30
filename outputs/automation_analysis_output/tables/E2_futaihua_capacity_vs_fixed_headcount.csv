@@ -1,0 +1,5 @@
+﻿year,design_capacity_1k_units_per_day,design_headcount,cnc_count,robot_count,design_headcount_per_1k_daily_capacity,cnc_per_design_headcount
+2017,105.0,23000.0,6272.0,196.0,219.0,0.273
+2017.5,70.0,23000.0,,,328.6,
+2020,110.5,23000.0,4540.0,216.0,208.1,0.197
+2022,108.2,23000.0,4531.0,160.0,212.6,0.197
