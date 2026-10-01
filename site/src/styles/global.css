@@ -938,34 +938,11 @@ body {
   color: var(--ink-muted);
 }
 
-/* --- Scene 5: dispute grid, dark ground --- */
-
-.scene--dark {
-  background: #0d0d0c;
-  color: #f0efe9;
-  margin: -2rem -2rem 0;
-  padding: 2.5rem 2rem 2rem;
-  border-radius: 0 0 12px 12px;
-}
-
-.scene--dark .scene__index,
-.scene--dark .scene__summary {
-  color: #b3b0a3;
-}
-
-.scene--dark .scene h2,
-.scene--dark h2 {
-  color: #f8f7f2;
-}
-
-.scene--dark .caveat {
-  border-top-color: #333330;
-  color: #a7a49a;
-}
-
-.scene--dark .caveat strong {
-  color: #d9d6cc;
-}
+/* --- Scene 5: dispute grid, dark ground ---
+   The dark ground itself is a page-wide `body.theme-dark` token override
+   (tokens.css), toggled by sceneManager — every element below already reads
+   `var(--ink...)`/`var(--surface...)`, so no per-scene color overrides are
+   needed here any more. */
 
 .dispute-headline {
   margin: 0 0 1.5rem;
@@ -983,18 +960,18 @@ body {
 
 .dispute-headline__note {
   margin: 0.5rem 0 0;
-  color: #cfccc1;
+  color: var(--ink-secondary);
   font-size: 0.9375rem;
 }
 
 .legend--dark .legend__item {
-  background: #1a1a18;
-  border-color: #333330;
-  color: #cfccc1;
+  background: var(--surface-raised);
+  border-color: var(--grid);
+  color: var(--ink-secondary);
 }
 
 .legend--dark .legend__value {
-  color: #f0efe9;
+  color: var(--ink);
 }
 
 .dispute-figure {
@@ -1011,28 +988,28 @@ body {
 }
 
 .hearing-cube:focus-visible {
-  stroke: #f8f7f2;
+  stroke: var(--ink);
   stroke-width: 1.5;
 }
 
 .dispute-year-label {
   font-family: var(--font-mono);
   font-size: 11px;
-  fill: #87847a;
+  fill: var(--ink-muted);
   text-anchor: middle;
 }
 
 .dispute-note {
   margin: 0.75rem 0 0;
   font-size: 0.75rem;
-  color: #87847a;
+  color: var(--ink-muted);
 }
 
 .dispute-closing {
   margin: 2rem 0 0;
   font-family: var(--font-title);
   font-size: 1.25rem;
-  color: #d9d6cc;
+  color: var(--ink-secondary);
   text-align: center;
 }
 

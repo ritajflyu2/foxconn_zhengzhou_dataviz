@@ -11,6 +11,11 @@ const idFromHash = () => {
 // Per spec: the floor nav appears on scenes 3-5, not on 1-2.
 const FLOOR_NAV_SCENES = new Set([3, 4, 5]);
 
+// Scene 5 ("When pay fails") is the one dark-ground scene (storyboard: "Two
+// grounds, one switch") — toggled on <body> so the dark ground covers the
+// whole page (header, scene nav, floor nav), not just the scene's content.
+const DARK_SCENES = new Set([5]);
+
 export function createSceneManager({ nav, root, pageGrid }) {
   const buttons = new Map();
   let currentId = null;
@@ -40,6 +45,7 @@ export function createSceneManager({ nav, root, pageGrid }) {
     currentId = id;
 
     pageGrid?.classList.toggle('has-floor-nav', FLOOR_NAV_SCENES.has(id));
+    document.body.classList.toggle('theme-dark', DARK_SCENES.has(id));
 
     for (const [sceneId, button] of buttons) {
       button.setAttribute('aria-current', String(sceneId === id));

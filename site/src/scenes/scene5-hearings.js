@@ -105,7 +105,6 @@ export default {
       summary:
         'One cube per hearing announcement, 2015–2026, colored by dispute type. Hover a cube for that case; tap to open the same card on a touch device.',
     });
-    el.classList.add('scene--dark');
 
     const { labor_share, labor_count, total } = data.headline;
     const headline = document.createElement('div');

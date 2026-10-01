@@ -39,3 +39,19 @@
   --ink-muted: #7b7566;
   --grid: #ddd5c4;
 }
+
+/* Scene 5 only ("When pay fails"): a dark ground for the whole page, not just
+   the scene's own content column — toggled on <body> by sceneManager, so the
+   header, scene nav, and floor nav switch along with the scene content.
+   Every other scene keeps the sand ground above. These hex values are the
+   same ones validated with validate_palette.js --mode dark --surface #0d0d0c
+   (see the dark-theme-throughout branch); Scene 5's own DISPUTE_COLORS are
+   separately validated against this same surface in scene5-hearings.js. */
+body.theme-dark {
+  --surface: #0d0d0c;
+  --surface-raised: #1a1a18;
+  --ink: #f0efe9;
+  --ink-secondary: #cfccc1;
+  --ink-muted: #8f8b7e;
+  --grid: #333330;
+}
