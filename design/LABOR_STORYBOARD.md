@@ -184,7 +184,7 @@ Cross-check to display: the airport-zone estimated total at 57% is ~124k, below 
 - Colors match the shared mapping, so "regular" (blue) lines up visually with "insured" in the left chart.
 - Caveat to show: post counts are small in early years (8, 9 and 7 posts in 2016–2018), so shares in those years rest on very few posts.
 
-**Transition to Scene 4:** the post-type colors carry over. Four circles, one per worker type, separate out of the right chart.
+**Transition to Scene 4:** the post-type colors carry over. The rest of Scene 3 dims and the four colors that match Scene 4's worker types are pulled out of the right chart into four clusters, one per type (short-term, which has no Scene 4 row, fades away). Each cluster is labelled with its Scene 4 name and contract so the viewer reads what each color means; then the clusters drop into Scene 4 and become the legend dots of the four pay rows.
 
 ---
 

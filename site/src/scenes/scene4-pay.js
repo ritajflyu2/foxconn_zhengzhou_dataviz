@@ -329,6 +329,7 @@ export default {
         const dot = document.createElement('span');
         dot.className = 'pay-row__dot';
         dot.style.background = color;
+        dot.dataset.kind = worker.color_key; // the 3 → 4 transition lands each color's cluster here
         const name = document.createElement('span');
         name.className = 'pay-row__name';
         name.textContent = worker.label;

@@ -47,7 +47,7 @@ function renderDotBar(svg, { x, yBase, grid, segments, revealKey, padEmpty, tool
     cursor += seg.count;
     if (seg.count === 0) continue;
 
-    const segG = g.append('g').attr('class', 'bar-segment');
+    const segG = g.append('g').attr('class', 'bar-segment').attr('data-kind', seg.kind ?? null);
     const dots = segG
       .selectAll(null)
       .data(slice)
@@ -369,7 +369,9 @@ function buildPostsChart(container, posts) {
   const plotHeight = base - MARGIN.top;
 
   const figure = document.createElement('figure');
-  figure.className = 'figure chart-col__figure';
+  // `posts-figure` + each segment's data-kind are where the 3 → 4 transition
+  // picks up the worker-type colors.
+  figure.className = 'figure chart-col__figure posts-figure';
   container.append(figure);
 
   const svg = select(figure)
@@ -410,6 +412,7 @@ function buildPostsChart(container, posts) {
       segments.push({
         count: Math.max(0, dotsSoFar - prevDots),
         fill: colorFor(colorKeyFor[cat.key]),
+        kind: cat.key,
         card: () => singleValueCard(String(y.year), cat.label, `${count(y[cat.key] ?? 0)} posts`),
       });
       prevDots = dotsSoFar;

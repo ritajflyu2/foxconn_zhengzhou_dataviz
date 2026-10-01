@@ -3,6 +3,7 @@ import { bySceneId } from './lib/dataLoader.js';
 import { colorFor } from './lib/colorTokens.js';
 import { circlesToDots } from './transitions/circlesToDots.js';
 import { dotsToBars } from './transitions/dotsToBars.js';
+import { postsToLegend } from './transitions/postsToLegend.js';
 
 const idFromHash = () => {
   const match = /^#scene-(\d+)$/.exec(window.location.hash);
@@ -19,7 +20,7 @@ const FLOOR_NAV_SCENES = new Set([3, 4, 5]);
 const DARK_SCENES = new Set([5]);
 
 // Keyed "from>to". Only forward moves animate; anything else just mounts.
-const TRANSITIONS = { '1>2': circlesToDots, '2>3': dotsToBars };
+const TRANSITIONS = { '1>2': circlesToDots, '2>3': dotsToBars, '3>4': postsToLegend };
 
 const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 

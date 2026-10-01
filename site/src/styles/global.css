@@ -644,6 +644,30 @@ body {
   visibility: hidden;
 }
 
+/* 3 → 4: what each worker-type color means, shown under its cluster. */
+.transition-label {
+  position: absolute;
+  transform: translate(-50%, 0);
+  width: max-content;
+  max-width: 13rem;
+  text-align: center;
+  pointer-events: none;
+}
+
+.transition-label__name {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--ink);
+}
+
+.transition-label__meaning {
+  margin: 0.2rem 0 0;
+  font-size: 0.8125rem;
+  font-style: italic;
+  color: var(--ink-secondary);
+}
+
 .transition-overlay canvas {
   position: absolute;
   inset: 0;
