@@ -610,6 +610,53 @@ body {
   cursor: pointer;
 }
 
+/* --- Scene transitions: a fixed canvas over the page while dots move --- */
+.transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+
+/* A full-window still of the outgoing page (ground, header, scene) that
+   dissolves into the new one; the canvas paints above it. */
+.transition-ghost {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--surface);
+  pointer-events: none;
+}
+
+.transition-ghost > * {
+  position: absolute;
+  margin: 0;
+}
+
+.transition-overlay canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.transition-skip {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  pointer-events: auto;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--surface-raised);
+  color: var(--ink);
+  cursor: pointer;
+}
+
 .player-scrubber {
   flex: 1;
   max-width: 20rem;

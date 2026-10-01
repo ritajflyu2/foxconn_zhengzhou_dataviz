@@ -185,24 +185,28 @@ export default {
     // Colors: shuffle an array of the exact insured/dispatch counts, so the mix
     // is spread across the floor while the totals stay exact.
     const rng = seededRandom(99);
-    const palette = [
-      ...Array(data.insured_dots).fill(blue),
-      ...Array(data.dispatch_dots).fill(orange),
+    const kinds = [
+      ...Array(data.insured_dots).fill('insured'),
+      ...Array(data.dispatch_dots).fill('dispatch'),
     ];
-    for (let i = palette.length - 1; i > 0; i--) {
+    for (let i = kinds.length - 1; i > 0; i--) {
       const k = Math.floor(rng() * (i + 1));
-      [palette[i], palette[k]] = [palette[k], palette[i]];
+      [kinds[i], kinds[k]] = [kinds[k], kinds[i]];
     }
+    const fillOf = { insured: blue, dispatch: orange };
 
+    // `floor-dots` + data-kind are what the 1 → 2 transition lands its dots on.
     svg
       .append('g')
+      .attr('class', 'floor-dots')
       .selectAll('circle')
       .data(positions)
       .join('circle')
       .attr('cx', (p) => p[0])
       .attr('cy', (p) => p[1])
       .attr('r', DOT_R)
-      .attr('fill', (_p, i) => palette[i] ?? orange);
+      .attr('data-kind', (_p, i) => kinds[i] ?? 'dispatch')
+      .attr('fill', (_p, i) => fillOf[kinds[i] ?? 'dispatch']);
 
     const placed = document.createElement('p');
     placed.className = 'figure__note';

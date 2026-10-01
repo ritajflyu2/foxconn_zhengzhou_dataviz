@@ -1,6 +1,7 @@
 import { scenes } from './scenes/index.js';
 import { bySceneId } from './lib/dataLoader.js';
 import { colorFor } from './lib/colorTokens.js';
+import { circlesToDots } from './transitions/circlesToDots.js';
 
 const idFromHash = () => {
   const match = /^#scene-(\d+)$/.exec(window.location.hash);
@@ -16,9 +17,16 @@ const FLOOR_NAV_SCENES = new Set([3, 4, 5]);
 // whole page (header, scene nav, floor nav), not just the scene's content.
 const DARK_SCENES = new Set([5]);
 
+// Keyed "from>to". Only forward moves animate; anything else just mounts.
+const TRANSITIONS = { '1>2': circlesToDots };
+
+const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+
 export function createSceneManager({ nav, root, pageGrid }) {
   const buttons = new Map();
   let currentId = null;
+  let navToken = 0;
+  let active = null;
 
   for (const scene of scenes) {
     const button = document.createElement('button');
@@ -37,18 +45,45 @@ export function createSceneManager({ nav, root, pageGrid }) {
     buttons.set(scene.id, button);
   }
 
-  function show(id) {
+  async function show(id) {
     if (id === currentId) return;
-    const scene = scenes.find((s) => s.id === id);
+    const token = ++navToken;
 
-    scene.mount(root, bySceneId[scene.id]);
+    // A running transition jumps to its end state before the next scene loads.
+    if (active) {
+      active.finish();
+      await active.done;
+    }
+    if (token !== navToken) return;
+
+    const from = currentId;
+    const scene = scenes.find((s) => s.id === id);
     currentId = id;
 
     pageGrid?.classList.toggle('has-floor-nav', FLOOR_NAV_SCENES.has(id));
     document.body.classList.toggle('theme-dark', DARK_SCENES.has(id));
-
     for (const [sceneId, button] of buttons) {
       button.setAttribute('aria-current', String(sceneId === id));
+    }
+
+    // Mount off-page, then swap in only if this is still the scene asked for:
+    // Scene 2's mount is async, and a late resolve must not overwrite a newer scene.
+    const mountNext = async (onCommit) => {
+      const stage = document.createElement('div');
+      await scene.mount(stage, bySceneId[id]);
+      if (token !== navToken) return false;
+      root.replaceChildren(...stage.childNodes);
+      onCommit?.(root.firstElementChild);
+      return true;
+    };
+
+    const transition = TRANSITIONS[`${from}>${id}`];
+    if (transition && !reducedMotion()) {
+      active = transition({ root, toData: bySceneId[id], mountNext });
+      await active.done;
+      active = null;
+    } else {
+      await mountNext();
     }
   }
 

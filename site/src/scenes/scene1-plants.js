@@ -244,7 +244,8 @@ export default {
 
     const hint = document.createElement('p');
     hint.className = 'figure__hint';
-    hint.textContent = 'Hover a ring for that value alone; hover the plant name for the full breakdown.';
+    hint.textContent =
+      'Hover a ring for that value alone; hover the plant name for the full breakdown. Click a plant to break it into workers on the floor.';
     body.append(hint);
 
     const figure = document.createElement('figure');
@@ -351,8 +352,22 @@ export default {
       .attr('tabindex', 0)
       .attr('role', 'button')
       .attr('aria-label', (d) =>
-        `${d.plant.name}: ${count(d.plant.insured_2025)} insured, ${count(d.plant.est_total_low)} estimated total`
-      );
+        `${d.plant.name}: ${count(d.plant.insured_2025)} insured, ${count(d.plant.est_total_low)} estimated total. Press Enter to see the workers on the floor.`
+      )
+      // Read by the 1 → 2 transition to break each circle into its own dots.
+      .attr('data-plant-id', (d) => d.plant.id)
+      .attr('data-r-insured', (d) => rOf(d.plant.insured_2025))
+      .attr('data-r-low', (d) => rOf(d.plant.est_total_low));
+
+    const toFloor = () => {
+      window.location.hash = 'scene-2';
+    };
+    groups.on('click', toFloor).on('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toFloor();
+      }
+    });
 
     const scaleAt = () => figure.getBoundingClientRect().width / W;
     const showAt = (x, y) => ({ x: x * scaleAt(), y: y * scaleAt() });
