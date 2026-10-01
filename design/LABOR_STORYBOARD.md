@@ -8,9 +8,17 @@ Reference images live in `design/reference/`:
 
 - `storyboard_sketch.jpg`: hand sketch of the scene flow
 - `factory_exploded.png`: 4-floor exploded factory (1F = labor floor, used as the index in Scene 3)
-- `floorplan_1F.png`: isometric floor with a CNC machine, conveyor, fenced robot arm, control panel and storage racks; the Scene 2 floor plan for now (transparent background, 738×465). The earlier version is kept as `floorplan_1F_v1.png`.
+- `floorplan_1F.png`: empty isometric 1F assembly floor with a loading dock (left), two workbench lines (center), a forklift, pallets and shelving. Transparent background, 719×440. This is the Scene 2 floor plan.
 - `wage_calculator_ref.png`: layout reference for Scene 4
 - `cube_grid_ref.webp`: high-contrast cube reference for Scene 5
+- `vibe_dot_grid_poster.webp`: mood reference, a poster built from a grid of equal dots in flat saturated colors on a warm sand ground
+- `vibe_concentric_rings_poster.webp`: mood reference, a dot grid where each cell is a disc, ring or nested rings of different sizes
+- `vibe_beeswarm_dark_ui.webp`: mood reference, a dark data dashboard with a beeswarm of colored dots per row over a year axis
+- `vibe_network_dark_ui.webp`: mood reference, a dark network graph with pastel nodes and small monospace pill-shaped legend labels
+
+There might be more mood references that was not specified above but always look for it in the folder. 
+
+Mood references set the general look (see "Visual direction"). They are not layouts to copy.
 
 ---
 
@@ -52,7 +60,27 @@ Consequences for the build:
 - **Estimates look different from measurements**: estimated quantities use a hatched or dotted fill, measured ones a solid fill. This carries through all scenes.
 - Respect `prefers-reduced-motion`: every animation must have a static end state and a "skip" control.
 
+- **Font**
+Use Cormorant Garamond for titles and Inter for descriptive text
+
 ---
+
+## Visual direction
+
+From the mood references in `design/reference/vibe_*`. These set the look; the scene specs below still decide content.
+
+- **The dot is the unit.** Workers, plants and hearings are all drawn as round marks: discs, rings and nested rings. This ties the page together. Scene 1's layered circles are nested rings, Scene 2's workers are dots, Scene 3's bars are stacked dots, and Scene 5's hearings are cubes (the one deliberate shape change, marking the shift into conflict).
+- **Two grounds, one switch.**
+  - Scenes 1–4: light warm sand/paper ground (like the two posters), flat saturated fills, no gradients or shadows on data marks.
+  - Scene 5: near-black charcoal ground (like the two dashboards), where color carries the energy. The switch happens in the fire transition, so the page literally goes dark when pay fails.
+- **Color:** flat and saturated, but the worker-type mapping in "Shared rules" still decides which color means what. The rich poster palettes are a mood, not extra categories. Every palette must pass `validate_palette.js` on its own ground (light for 1–4, dark for 5).
+- **Texture through repetition.** Density and rhythm come from many small equal marks on a regular grid, not from decoration. Empty cells (no data) stay visible as faint dots or outlines, as in the poster grids.
+- **Type:**
+  - small monospace labels for numbers, years and legends, with tabular figures;
+  - a clean sans for UI and body;
+  - one display face for scene titles only.
+- **Legends and tags:** small pill-shaped labels with a count, e.g. "Dispatch (170)", as in the network reference. Use the same pill style for the season tags in Scene 3 ("peak season", "off-season").
+- **Chrome:** keep it minimal. A thin top bar, generous margins, and charts that sit directly on the ground without cards.
 
 ## Scene 1 — Zoom out: where the workers are
 
@@ -90,7 +118,7 @@ The red ring sits just outside the blue core; everything beyond it is over the c
 
 Cross-check to display: the airport-zone estimated total at 57% is ~124k, below CLW's 2025 peak of 150–200k. The insured count likely undercounts regular staff (CLW puts regular workers at 60–80k vs. 53k insured). The per-plant figures are therefore conservative, and the note should say so.
 
-**Comparison marker (bottom-right):** a small green circle drawn to the same area scale for **Harvard GSD, Fall 2025: 940 students** ([Harvard OIRA Fact Book](https://oira.harvard.edu/factbook/fact-book-enrollment/): 928 full-time + 12 part-time). At this scale Hongfujin's circle has about 9× the GSD circle's radius.
+**Comparison marker (bottom-right):** a small green circle drawn to the same area scale for **Harvard University, Fall 2025: 24,317 degree students** ([Harvard OIRA Fact Book](https://oira.harvard.edu/factbook/fact-book-enrollment/), University Total; students in more than one school counted once).
 
 **Hover:** plant name (English), zone, insured, legal-cap total, estimated dispatch, estimated total, share used.
 
@@ -102,12 +130,12 @@ Cross-check to display: the airport-zone estimated total at 57% is ~124k, below 
 
 **Idea:** the big circles dismantle into individual dots that pour onto a single assembly-line floor plan.
 
-- **Floor plan:** `design/reference/floorplan_1F.png`, an isometric floor with a CNC machine (back left), a conveyor (center), a robot arm inside a yellow safety fence (center right), a control panel, and storage racks along the back walls. Still a stand-in for a real Foxconn layout.
+- **Floor plan:** `design/reference/floorplan_1F.png`, an empty isometric 1F with a loading dock (left), two workbench lines (center), a forklift, pallets and shelving. Still a stand-in for a real Foxconn layout.
   - **Dots must sit on the floor in the same isometric projection.** Lay the dots out on a flat 2D grid, then apply one affine transform (rotate + scale-Y, or a CSS/SVG matrix) that maps the grid onto the floor parallelogram. Calibrate it once from the four inner floor corners in the image.
-  - **Keep dots off the equipment**: define keep-out polygons, in grid space, for the CNC machine, the conveyor, the fenced robot cell, the control panel and the racks. The open floor inside the yellow floor markings is the main area for dots.
+  - **Keep dots off the furniture**: define keep-out polygons, in grid space, for the benches, pallets, shelving, forklift and dock. Dots cluster along the two workbench lines, where people would stand, and fill the open floor inside the yellow markings.
   - **Draw order:** image first, dots on top. Walls and pillars then need a second, masked copy of the image layered above the dots, so dots behind a pillar are hidden.
-  - **Resolution:** 738×465 is low for retina screens. Fine for v1; ask for a larger export before final.
-- **Dots keep the split:** 43% blue (insured) / 57% orange (dispatch), matching Scene 1's default share. **Decision: 300 dots in total, 1 dot ≈ 479 workers** (all four plants' estimated total ÷ 300). That gives 130 insured and 170 dispatch dots, allocated per plant in `scene2_floor.json` so each Scene 1 circle breaks into its own share. Show the unit in the legend ("1 dot ≈ 480 workers").
+  - **Resolution:** 719×440 is low for retina screens. Fine for v1; ask for a larger export before final.
+- **Dots keep the split** from Scene 1 (blue insured / orange dispatch). **Decision: 1 dot = 100 workers.** Each plant gets round(est_total_low ÷ 100) dots, split into insured and dispatch by that plant's Scene 1 insured/total ratio, summed in `scene2_floor.json` (currently 1,548 dots: 618 insured + 930 dispatch). Show the unit in the legend ("1 dot = 100 workers"). The dots are laid on an even grid parallel to the floor edges and cover the whole floor, with no outline (illustrative; they are not placed per real workstation), colored with a fixed seed so the layout is stable across reloads.
 - **Right side, "space per worker" block:** a square drawn at true scale representing the average m² per worker. **[PLACEHOLDER value: 16 m²]**
   - This is campus-level: NYT 2016, ~350,000 workers on ~5.7 km² ≈ 16 m² per worker (land area, not floor area).
   - To replace: take one zone's EIA design headcount (e.g. K区 60,000 or G区 30,000, from `data/automation/自动化_环评设备定员产能面板与月度时间线_2010-2026.xlsx`) ÷ that zone's footprint traced in Google Earth × floor count.
@@ -122,7 +150,7 @@ Cross-check to display: the airport-zone estimated total at 57% is ~124k, below 
 
 **Layout:** two charts side by side, plus the floor index.
 
-- **Right edge:** the exploded-factory image as a small index (`factory_exploded.png`) with 1F highlighted, showing where the viewer is in the building.
+- **Left edge:** the exploded-factory image as a small index (`factory_exploded.png`) , showing where the viewer is in the building.
 - **Left chart, workforce composition by year:** modeled on `outputs/labor_analysis_output/charts/A1_insured_workers_vs_total_workforce.png`. The dots from Scene 2 settle into the bars.
 - **Right chart, recruitment posts by type:** modeled on `outputs/labor_analysis_output/charts/C1_post_type_counts_over_time.png`.
 
@@ -265,7 +293,7 @@ Cross-check to display: the airport-zone estimated total at 57% is ~124k, below 
 | File | Scene | Contents |
 |---|---|---|
 | `site/data/labor/scene1_plants.json` | 1 | 4 plants: lat/lon, insured 2025, legal-cap size, estimated dispatch/total at 57%, GSD comparison |
-| `site/data/labor/scene2_floor.json` | 2 | 300 dots split by plant and by insured/dispatch; space-per-worker placeholder |
+| `site/data/labor/scene2_floor.json` | 2 | dots at 100 workers/dot (currently 1,548), split by plant and by insured/dispatch; space-per-worker placeholder |
 | `site/data/labor/scene3_workforce_by_year.json` | 3 | 2016–2025 airport-zone insured, per-entity insured, CLW total with season and gap, flags |
 | `site/data/labor/scene3_posts_by_year.json` | 3 | 2016–2025 recruitment post counts by type |
 | `site/data/labor/scene4_pay_model.json` | 4 | calculator parameters, defaults, ranges, benefits, contracts, check values |
@@ -277,7 +305,7 @@ Cross-check to display: the airport-zone estimated total at 57% is ~124k, below 
 
 1. **Dispatch share:** 57% only, no toggle.
 2. **Scene 1 placement:** loose, roughly geographic (lat/lon for relative position), no basemap.
-3. **Scene 2 dots:** 300 dots (1 dot ≈ 479 workers).
+3. **Scene 2 dots:** 1 dot = 100 workers (currently 1,548 dots), even grid covering the whole floor.
 4. **Scene 3 animation:** plays automatically, with pause/replay.
 5. **Scene 5 on touch devices:** tap opens a detail card.
 6. **Page end:** the Labor page ends with the dispute grid. No management-floor teaser.

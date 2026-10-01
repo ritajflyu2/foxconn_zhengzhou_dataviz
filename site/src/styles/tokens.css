@@ -1,0 +1,41 @@
+:root {
+  --font-title: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Worker-type colors — shared across scenes 1–4 (storyboard, "Shared rules").
+     Validated as a 5-way categorical set with validate_palette.js --mode light
+     --pairs all: no failing checks, worst all-pairs CVD ΔE 7.6. That sits in the
+     6–8 band, which is only legal alongside secondary encoding — so every chart
+     using these needs a legend plus direct labels, never color alone. */
+  --color-regular: #2a78d6;
+  --color-dispatch: #eb6834;
+  --color-rebate-dispatch: #ee7f45;
+  --color-hourly-dispatch: #a8431c;
+  --color-student: #1baf7a;
+  --color-short-term: #9a5fa8;
+
+  /* Red is reserved for the legal cap, and only ever as a stroke. Deeper than
+     the project's usual #e34948: against the dispatch orange it sits right
+     beside in every Scene 1 circle, that red scored ΔE 7.1 for normal vision —
+     below the hard floor of 15. This one clears every check. */
+  --color-legal-cap: #c8102e;
+
+  /* Comparison marks only (Harvard GSD), never a worker type. Always carries a
+     direct label, which is what its ΔE 7.6 against orange requires. */
+  --color-comparison: #006b3c;
+
+  /* Uncertainty range marker (Scene 1's CLW high-end layer), not a worker
+     identity — so it sits outside the categorical CVD checks above. Passes
+     contrast vs. the sand surface on its own. */
+  --color-estimate-range: #78705f;
+
+  /* Light warm sand ground for scenes 1–4 (Visual direction). Scene 5 switches
+     to a dark ground with its own palette. */
+  --surface: #f2ece0;
+  --surface-raised: #f8f4ea;
+  --ink: #1f1d18;
+  --ink-secondary: #4a463c;
+  --ink-muted: #7b7566;
+  --grid: #ddd5c4;
+}

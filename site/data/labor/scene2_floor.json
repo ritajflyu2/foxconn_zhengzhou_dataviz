@@ -1,36 +1,36 @@
 {
- "dots_total": 300,
- "workers_per_dot": 479,
- "insured_dots": 130,
- "dispatch_dots": 170,
+ "dots_total": 1548,
+ "workers_per_dot": 100,
+ "insured_dots": 618,
+ "dispatch_dots": 930,
  "by_plant": [
   {
    "id": "hongfujin",
    "name": "Hongfujin",
-   "dots": 162,
-   "insured_dots": 70,
-   "dispatch_dots": 92
+   "dots": 839,
+   "insured_dots": 335,
+   "dispatch_dots": 504
   },
   {
    "id": "fii_yuzhan",
    "name": "FII Yuzhan",
-   "dots": 62,
-   "insured_dots": 27,
-   "dispatch_dots": 35
+   "dots": 320,
+   "insured_dots": 128,
+   "dispatch_dots": 192
   },
   {
    "id": "henan_fuchi",
    "name": "Henan Fuchi",
-   "dots": 34,
-   "insured_dots": 15,
-   "dispatch_dots": 19
+   "dots": 173,
+   "insured_dots": 69,
+   "dispatch_dots": 104
   },
   {
    "id": "fii_precision",
    "name": "FII Precision",
-   "dots": 42,
-   "insured_dots": 18,
-   "dispatch_dots": 24
+   "dots": 216,
+   "insured_dots": 86,
+   "dispatch_dots": 130
   }
  ],
  "space_per_worker_m2": {

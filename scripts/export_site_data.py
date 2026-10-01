@@ -68,52 +68,131 @@ ins = ins[ins["实体简称"].isin(ENTITIES)]
 coords = pd.read_csv(COORDS).set_index("name")
 
 # ---------------------------------------------------------------- scene 1
-SHARE, LEGAL_CAP = 0.57, 0.10
+# CLW's 2025 airport-zone dispatch estimate is campus-wide (80,000-110,000 at
+# peak), not per plant. Split it across the three airport plants in
+# proportion to each plant's insured headcount -- the only real per-plant
+# measure we have -- so each plant's share of the campus total stays fixed
+# whether CLW's low or high end is used.
+CLW_DISPATCH_LOW, CLW_DISPATCH_HIGH = 80_000, 110_000
+LEGAL_CAP = 0.10  # dispatch may not exceed 10% of a plant's TOTAL workforce
+
+airport_insured = {
+    short: int(ins[(ins["实体简称"] == short) & (ins["年份"] == 2025)]["工伤保险参保人数"].iloc[0])
+    for short, (pid, en, zone, in_clw) in ENTITIES.items() if in_clw
+}
+airport_total_insured = sum(airport_insured.values())
+
+# FII Precision has no CLW figure. Borrow the airport zone's low-end dispatch
+# intensity (dispatch per insured worker) so its dispatch share of total matches
+# the airport low end exactly.
+AIRPORT_LOW_RATIO = CLW_DISPATCH_LOW / airport_total_insured  # dispatch per insured
+FII_PRECISION_SHARE = CLW_DISPATCH_LOW / (CLW_DISPATCH_LOW + airport_total_insured)  # dispatch / total
+
+# The legal rule caps dispatch at 10% of a plant's TOTAL workforce, so regular
+# workers must be at least 90% of the total. We draw the red "legal line" at
+# that 90%-of-total level: it sits near the outer (estimated-total) edge, far
+# outside the blue insured core, because actual regular workers are only ~40%
+# of the total while the law requires >=90%. The band from blue to red is the
+# dispatch that is filling jobs the law reserves for regular staff (the illegal
+# excess); the thin band from red to the outer edge is the legal 10% dispatch.
+def legal_fields(total):
+    legal_dispatch = round(LEGAL_CAP * total)
+    regular_floor = round((1 - LEGAL_CAP) * total)
+    assert abs((total - regular_floor) / total - LEGAL_CAP) < 1e-3, "legal line must be 90% of TOTAL"
+    return legal_dispatch, regular_floor
+
 plants = []
 for short, (pid, en, zone, in_clw) in ENTITIES.items():
     insured = int(ins[(ins["实体简称"] == short) & (ins["年份"] == 2025)]["工伤保险参保人数"].iloc[0])
-    dispatch = round(insured * SHARE / (1 - SHARE))
     c = coords.loc[COORD_NAME[short]]
-    plants.append({
+
+    plant = {
         "id": pid, "name": en, "zone": zone, "zone_label": ZONES[zone],
         "lat": float(c["latitude"]), "lon": float(c["longitude"]),
         "location_approximate": bool(c["location_approx"]),
         "insured_2025": insured,
-        "est_dispatch": dispatch,
-        "est_total": insured + dispatch,
-        "legal_cap_total": round(insured / (1 - LEGAL_CAP)),
-        "legal_cap_dispatch": round(insured * LEGAL_CAP / (1 - LEGAL_CAP)),
-        "note": None if in_clw else "Outside CLW's survey area; the airport-zone dispatch share is applied as an assumption.",
-    })
+    }
+
+    if in_clw:
+        share = insured / airport_total_insured
+        dispatch_low = round(CLW_DISPATCH_LOW * share)
+        dispatch_high = round(CLW_DISPATCH_HIGH * share)
+        total_low = insured + dispatch_low
+        total_high = insured + dispatch_high
+        legal_disp_low, regular_floor_low = legal_fields(total_low)
+        legal_disp_high, regular_floor_high = legal_fields(total_high)
+        plant.update({
+            "clw_share_of_airport_dispatch": round(share, 4),
+            "est_dispatch_low": dispatch_low,
+            "est_dispatch_high": dispatch_high,
+            "est_total_low": total_low,
+            "est_total_high": total_high,
+            # Dispatch as a share of THIS plant's own total workforce. Because
+            # dispatch is allocated in proportion to insured headcount above,
+            # this ratio comes out equal for all three airport plants -- it is
+            # the derived per-plant share, not an input.
+            "dispatch_share_of_plant_low": round(dispatch_low / total_low, 4),
+            "dispatch_share_of_plant_high": round(dispatch_high / total_high, 4),
+            # Legal line = 90% of total (regular floor). The red circle uses the
+            # default (low) total. Legal max dispatch = 10% of total.
+            "legal_regular_floor_low": regular_floor_low,
+            "legal_regular_floor_high": regular_floor_high,
+            "legal_max_dispatch_low": legal_disp_low,
+            "legal_max_dispatch_high": legal_disp_high,
+            "dispatch_over_cap_low": dispatch_low - legal_disp_low,
+            "dispatch_over_cap_high": dispatch_high - legal_disp_high,
+            "note": None,
+        })
+    else:
+        dispatch = round(insured * AIRPORT_LOW_RATIO)
+        total = insured + dispatch
+        legal_disp, regular_floor = legal_fields(total)
+        plant.update({
+            "clw_share_of_airport_dispatch": None,
+            "est_dispatch_low": dispatch,
+            "est_dispatch_high": None,
+            "est_total_low": total,
+            "est_total_high": None,
+            "dispatch_share_of_plant_low": round(dispatch / total, 4),
+            "dispatch_share_of_plant_high": None,
+            "legal_regular_floor_low": regular_floor,
+            "legal_regular_floor_high": None,
+            "legal_max_dispatch_low": legal_disp,
+            "legal_max_dispatch_high": None,
+            "dispatch_over_cap_low": dispatch - legal_disp,
+            "dispatch_over_cap_high": None,
+            "note": "Outside CLW's survey area; it has no CLW figure, so the airport zone's low-end dispatch share is borrowed as an assumption.",
+        })
+    plants.append(plant)
+
 write("scene1_plants.json", {
     "year": 2025,
-    "dispatch_share": SHARE,
-    "dispatch_share_source": "Implied by China Labor Watch's 2025 split: about 60,000-80,000 regular vs 80,000-110,000 dispatch workers at peak (CLW states the share is above 50%).",
+    "clw_dispatch_range": {"low": CLW_DISPATCH_LOW, "high": CLW_DISPATCH_HIGH},
+    "clw_dispatch_source": "China Labor Watch's 2025 airport-zone estimate: about 80,000-110,000 dispatch workers at peak, campus-wide. Split across the three airport plants in proportion to each plant's insured headcount.",
+    "fii_precision_dispatch_share": round(FII_PRECISION_SHARE, 4),
     "legal_cap_share": LEGAL_CAP,
-    "legal_cap_source": "Interim Provisions on Labor Dispatch (2014): dispatch workers may not exceed 10% of a company's total workforce.",
-    "method": "Estimated dispatch = insured x 0.57 / 0.43. Legal-cap total = insured / 0.9. No plant-level dispatch data exists, so one campus-wide share is applied to every plant.",
+    "legal_cap_source": "Interim Provisions on Labor Dispatch (2014): dispatch workers may not exceed 10% of a company's TOTAL workforce. So regular workers must be at least 90% of the total; the red legal line marks that 90% level, drawn against the default (low) total estimate.",
+    "method": "Airport-zone plants: estimated dispatch = CLW's campus-wide 80,000-110,000 range, allocated to each plant in proportion to its insured headcount. FII Precision: no CLW figure, so it borrows the airport zone's low-end dispatch share. Legal line = 90% of each plant's total workforce (the regular-worker floor at which dispatch would be exactly 10%).",
     "placement": "Loose, roughly geographic: use lat/lon for relative position only (no basemap in v1). FII Precision sits about 20 km north-west of the airport-zone cluster.",
     "plants": plants,
-    "comparison": {"label": "Harvard GSD students, Fall 2025", "value": 940,
-                   "source": "Harvard OIRA Fact Book, Fall 2025 enrollment (928 full-time + 12 part-time)",
+    "comparison": {"label": "Harvard University students, Fall 2025", "value": 24317,
+                   "source": "Harvard OIRA Fact Book, University Total degree students, Fall 2025 (students in more than one school counted once)",
                    "url": "https://oira.harvard.edu/factbook/fact-book-enrollment/"},
-    "caveat": "Estimates. Insured counts likely undercount regular staff (CLW puts regular workers at 60,000-80,000 vs 53,208 insured in the airport zone), so these totals are conservative.",
+    "caveat": "Estimates. CLW's dispatch range is a campus-wide field estimate split across plants by insured share, not a plant-level count. FII Precision has no CLW figure at all; its dispatch is a 50% assumption.",
 })
 
 # ---------------------------------------------------------------- scene 2
-DOTS = 300
-tot = sum(p["est_total"] for p in plants)
-raw = [p["est_total"] / tot * DOTS for p in plants]
-alloc = [int(r) for r in raw]
-for i in sorted(range(len(raw)), key=lambda i: raw[i] - alloc[i], reverse=True)[:DOTS - sum(alloc)]:
-    alloc[i] += 1
+# Derived straight from the Scene 1 low-end totals so the two scenes agree.
+WORKERS_PER_DOT = 100
 dot_plants = []
-for p, n in zip(plants, alloc):
-    n_ins = round(n * p["insured_2025"] / p["est_total"])
+for p in plants:
+    n = round(p["est_total_low"] / WORKERS_PER_DOT)
+    n_ins = round(n * p["insured_2025"] / p["est_total_low"])  # same insured/total split as Scene 1
     dot_plants.append({"id": p["id"], "name": p["name"], "dots": n, "insured_dots": n_ins, "dispatch_dots": n - n_ins})
+DOTS = sum(d["dots"] for d in dot_plants)
 write("scene2_floor.json", {
     "dots_total": DOTS,
-    "workers_per_dot": round(tot / DOTS),
+    "workers_per_dot": WORKERS_PER_DOT,
     "insured_dots": sum(d["insured_dots"] for d in dot_plants),
     "dispatch_dots": sum(d["dispatch_dots"] for d in dot_plants),
     "by_plant": dot_plants,

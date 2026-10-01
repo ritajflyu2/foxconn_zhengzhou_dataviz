@@ -4,7 +4,7 @@ MDE studio project (Rita Lyu & Eleanor Li). We are building the **Labor** page o
 
 ## Read first
 - Spec: `design/LABOR_STORYBOARD.md` — scenes, data, interactions, caveats, decisions. Follow it; if something is unclear or conflicts, ask instead of guessing.
-- Reference images: `design/reference/`
+- Reference images: `design/reference/`. The `vibe_*` images are mood references; the look they set is written up under "Visual direction" in the storyboard.
 - Folder map: `README.md`
 
 ## Data rules
@@ -27,3 +27,22 @@ MDE studio project (Rita Lyu & Eleanor Li). We are building the **Labor** page o
 - For bigger tasks, propose a short plan first and wait for approval.
 - Stack: Vite + vanilla JS + D3 in `site/`. Ask before adding other libraries.
 - After a task, tell me how to check it in the browser (which number or behavior to look for).
+
+## Build order (one step at a time)
+Build in this order. **Do only the current step, then stop**: summarize what changed, say how to check it in the browser, and wait for approval before starting the next step. Never start the next step on your own, even if the current one went smoothly. Build every scene static (no animation) first; transitions come last.
+
+| # | Step | Check |
+|---|---|---|
+| 1 | Skeleton: Vite + D3 in `site/`, 5 placeholder scenes, navigation, shared color/type tokens (Visual direction), loader for all 6 JSON files; each placeholder shows one real value from its JSON | `npm run dev`; click through 5 scenes |
+| 2 | Scene 1 nested-ring circles, static, roughly geographic, plus GSD marker | Hongfujin hover: 33,498 insured, 77,902 est. total, legal-cap ring 37,220 |
+| 3 | Scene 2 floor plan with 300 dots on the isometric floor | dots on open floor/along benches, 130 insured / 170 dispatch |
+| 4 | Scene 3 two charts static, then synced autoplay | 2016/2020/2021/2024 "no total estimate"; 2018/2022 no gap; both charts advance together |
+| 5 | Scene 4 wage calculator (logic + controls, no animation) | defaults show $3.73 (¥25)/hr and $970 (¥6,500)/mo; "employed on 25th" = No marks the deferred part forfeited |
+| 6 | Scene 5 cube grid on dark ground, hover + tap cards | 150 cubes, 84 labor; parties only "Individual"/companies |
+| 7a | Transition 1→2: circles break into dots | ends in the static Scene 2 state |
+| 7b | Transition 2→3: dots stack into bars | ends in the static Scene 3 state |
+| 7c | Transition 4→5: fire burns the calculator, ground turns dark | reduced-motion: quick fade |
+| 8 | Polish: phone width, reduced motion, keyboard focus | check on a phone |
+| 9 | Deploy to GitHub Pages | live link opens |
+
+Current step: **1** (update this line when a step is approved and committed).
