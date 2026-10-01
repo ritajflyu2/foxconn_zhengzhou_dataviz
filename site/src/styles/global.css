@@ -633,6 +633,11 @@ body {
   margin: 0;
 }
 
+.transition-ghost > .floor-nav-slot {
+  display: block;
+  padding: 2rem 0 2rem 2rem;
+}
+
 /* 2 → 3: the floor plan shrinking into the index, and bars whose dots are still in flight. */
 .transition-floor {
   position: absolute;

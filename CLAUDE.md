@@ -45,4 +45,4 @@ Build in this order. **Do only the current step, then stop**: summarize what cha
 | 8 | Polish: phone width, reduced motion, keyboard focus | check on a phone |
 | 9 | Deploy to GitHub Pages | live link opens |
 
-Current step: **7c** (update this line when a step is approved and committed).
+Current step: **8** (update this line when a step is approved and committed).

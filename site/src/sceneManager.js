@@ -4,6 +4,7 @@ import { colorFor } from './lib/colorTokens.js';
 import { circlesToDots } from './transitions/circlesToDots.js';
 import { dotsToBars } from './transitions/dotsToBars.js';
 import { postsToLegend } from './transitions/postsToLegend.js';
+import { fireBurn } from './transitions/fireBurn.js';
 
 const idFromHash = () => {
   const match = /^#scene-(\d+)$/.exec(window.location.hash);
@@ -20,7 +21,7 @@ const FLOOR_NAV_SCENES = new Set([3, 4, 5]);
 const DARK_SCENES = new Set([5]);
 
 // Keyed "from>to". Only forward moves animate; anything else just mounts.
-const TRANSITIONS = { '1>2': circlesToDots, '2>3': dotsToBars, '3>4': postsToLegend };
+const TRANSITIONS = { '1>2': circlesToDots, '2>3': dotsToBars, '3>4': postsToLegend, '4>5': fireBurn };
 
 const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 
@@ -80,9 +81,12 @@ export function createSceneManager({ nav, root, pageGrid }) {
       return true;
     };
 
+    // Transitions are skipped under reduced motion, unless one has its own
+    // reduced version (the fire's quick fade to black).
     const transition = TRANSITIONS[`${from}>${id}`];
-    if (transition && !reducedMotion()) {
-      active = transition({ root, toData: bySceneId[id], mountNext });
+    const reduced = reducedMotion();
+    if (transition && (!reduced || transition.hasReducedMotion)) {
+      active = transition({ root, toData: bySceneId[id], mountNext, reduced });
       await active.done;
       active = null;
     } else {

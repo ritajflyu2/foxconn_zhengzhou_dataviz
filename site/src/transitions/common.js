@@ -55,16 +55,28 @@ export function createOverlay(onSkip) {
 // A full-window still of the page as it was (ground, header, outgoing scene),
 // so the swap underneath — and any scroll it needs — is invisible while it
 // dissolves. The outgoing scene element itself is moved in, pinned in place.
+const THEME_TOKENS = ['--surface', '--surface-raised', '--ink', '--ink-secondary', '--ink-muted', '--grid'];
+
 export function snapshot(fromEl) {
   const ghost = document.createElement('div');
   ghost.className = 'transition-ghost';
   ghost.setAttribute('aria-hidden', 'true');
+  // Freeze the outgoing ground and ink, so the still keeps its look even when
+  // the new scene switches the page theme (4 → 5 goes dark underneath it).
+  const theme = getComputedStyle(document.body);
+  for (const token of THEME_TOKENS) ghost.style.setProperty(token, theme.getPropertyValue(token));
   const pin = (node, rect) => {
     Object.assign(node.style, { left: `${rect.left}px`, top: `${rect.top}px`, width: `${rect.width}px` });
     ghost.append(node);
   };
   const header = document.querySelector('.site-header');
   if (header) pin(header.cloneNode(true), header.getBoundingClientRect());
+  const floorNav = document.querySelector('.page-grid.has-floor-nav #floor-nav-slot');
+  if (floorNav) {
+    const clone = floorNav.cloneNode(true);
+    clone.removeAttribute('id');
+    pin(clone, floorNav.getBoundingClientRect());
+  }
   const rect = fromEl.getBoundingClientRect();
   fromEl.style.animation = 'none';
   pin(fromEl, rect);
