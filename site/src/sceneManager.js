@@ -2,6 +2,7 @@ import { scenes } from './scenes/index.js';
 import { bySceneId } from './lib/dataLoader.js';
 import { colorFor } from './lib/colorTokens.js';
 import { circlesToDots } from './transitions/circlesToDots.js';
+import { dotsToBars } from './transitions/dotsToBars.js';
 
 const idFromHash = () => {
   const match = /^#scene-(\d+)$/.exec(window.location.hash);
@@ -18,7 +19,7 @@ const FLOOR_NAV_SCENES = new Set([3, 4, 5]);
 const DARK_SCENES = new Set([5]);
 
 // Keyed "from>to". Only forward moves animate; anything else just mounts.
-const TRANSITIONS = { '1>2': circlesToDots };
+const TRANSITIONS = { '1>2': circlesToDots, '2>3': dotsToBars };
 
 const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 
@@ -59,19 +60,20 @@ export function createSceneManager({ nav, root, pageGrid }) {
     const from = currentId;
     const scene = scenes.find((s) => s.id === id);
     currentId = id;
-
-    pageGrid?.classList.toggle('has-floor-nav', FLOOR_NAV_SCENES.has(id));
-    document.body.classList.toggle('theme-dark', DARK_SCENES.has(id));
     for (const [sceneId, button] of buttons) {
       button.setAttribute('aria-current', String(sceneId === id));
     }
 
     // Mount off-page, then swap in only if this is still the scene asked for:
     // Scene 2's mount is async, and a late resolve must not overwrite a newer scene.
+    // Page chrome switches at the same moment, so the outgoing scene never
+    // reflows into the new layout (e.g. the floor-nav column) while it is shown.
     const mountNext = async (onCommit) => {
       const stage = document.createElement('div');
       await scene.mount(stage, bySceneId[id]);
       if (token !== navToken) return false;
+      pageGrid?.classList.toggle('has-floor-nav', FLOOR_NAV_SCENES.has(id));
+      document.body.classList.toggle('theme-dark', DARK_SCENES.has(id));
       root.replaceChildren(...stage.childNodes);
       onCommit?.(root.firstElementChild);
       return true;

@@ -633,6 +633,17 @@ body {
   margin: 0;
 }
 
+/* 2 → 3: the floor plan shrinking into the index, and bars whose dots are still in flight. */
+.transition-floor {
+  position: absolute;
+  transform-origin: center;
+  pointer-events: none;
+}
+
+.yeardots.awaiting-dots {
+  visibility: hidden;
+}
+
 .transition-overlay canvas {
   position: absolute;
   inset: 0;

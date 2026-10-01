@@ -165,7 +165,7 @@ export default {
       .attr('role', 'img')
       .attr('aria-label', `${count(data.dots_total)} dots on the assembly-line floor, one dot for about ${count(data.workers_per_dot)} workers`);
 
-    svg.append('image').attr('href', floorUrl).attr('x', 0).attr('y', 0).attr('width', IMG.w).attr('height', IMG.h);
+    svg.append('image').attr('class', 'floor-plan-image').attr('href', floorUrl).attr('x', 0).attr('y', 0).attr('width', IMG.w).attr('height', IMG.h);
 
     // Dots depend on the mask image decoding first.
     const mask = await loadMaskPixels(floorMaskUrl, IMG.w, IMG.h);

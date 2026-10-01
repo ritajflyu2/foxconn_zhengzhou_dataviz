@@ -1,4 +1,5 @@
 import { colorFor } from '../lib/colorTokens.js';
+import { seededRandom, lerp, bezier, createOverlay, snapshot, scrollToScene } from './common.js';
 
 // Transition 1 → 2: each plant circle dissolves into its own worker dots
 // (insured dots from the blue core, dispatch dots from the orange band, counts
@@ -18,16 +19,6 @@ const HANDOFF_SPREAD_MS = 160; // dots peel off into their curves at slightly di
 const FLIGHT_MS = [950, 1450];
 const LIFT_PX = [20, 110]; // dots come down onto the floor from slightly above
 const GOLDEN = Math.PI * (3 - Math.sqrt(5));
-
-function seededRandom(seed = 12) {
-  let s = seed;
-  return () => {
-    s = (s * 1664525 + 1013904223) % 4294967296;
-    return s / 4294967296;
-  };
-}
-
-const lerp = (a, b, t) => a + (b - a) * t;
 
 // Even sunflower spiral over a disc (r0 = 0) or a ring (r0 > 0), equal area per dot.
 // Each point keeps its circle centre and how far out it sits (0 = centre, 1 = edge).
@@ -114,18 +105,6 @@ function curveFrom(h, to, duration, rng) {
   };
 }
 
-function bezier(c, u) {
-  const v = 1 - u;
-  const a = v * v * v;
-  const b = 3 * v * v * u;
-  const cc = 3 * v * u * u;
-  const d = u * u * u;
-  return {
-    x: a * c.p0.x + b * c.p1.x + cc * c.p2.x + d * c.p3.x,
-    y: a * c.p0.y + b * c.p1.y + cc * c.p2.y + d * c.p3.y,
-  };
-}
-
 // Pair left-to-right so each plant's dots travel as one stream instead of crossing.
 function pairTargets(sources, targets) {
   const byX = (a, b) => a.from.x - b.from.x || a.from.y - b.from.y;
@@ -134,47 +113,6 @@ function pairTargets(sources, targets) {
   s.forEach((d, i) => {
     d.to = t[i] ?? null;
   });
-}
-
-// A full-window still of the page as it was (ground, header, Scene 1), so the
-// swap underneath — and any scroll it needs — is invisible while it dissolves.
-function snapshot(fromEl) {
-  const ghost = document.createElement('div');
-  ghost.className = 'transition-ghost';
-  ghost.setAttribute('aria-hidden', 'true');
-  const pin = (node, rect) => {
-    Object.assign(node.style, { left: `${rect.left}px`, top: `${rect.top}px`, width: `${rect.width}px` });
-    ghost.append(node);
-  };
-  const header = document.querySelector('.site-header');
-  if (header) pin(header.cloneNode(true), header.getBoundingClientRect());
-  const rect = fromEl.getBoundingClientRect();
-  fromEl.style.animation = 'none';
-  pin(fromEl, rect);
-  return ghost;
-}
-
-function createOverlay(onSkip) {
-  const wrap = document.createElement('div');
-  wrap.className = 'transition-overlay';
-  const canvas = document.createElement('canvas');
-  wrap.append(canvas);
-
-  const skip = document.createElement('button');
-  skip.type = 'button';
-  skip.className = 'transition-skip';
-  skip.textContent = 'Skip animation';
-  skip.addEventListener('click', onSkip);
-  wrap.append(skip);
-
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = Math.round(window.innerWidth * dpr);
-  canvas.height = Math.round(window.innerHeight * dpr);
-  const ctx = canvas.getContext('2d');
-  ctx.scale(dpr, dpr);
-
-  document.body.append(wrap);
-  return { wrap, ctx };
 }
 
 // Every dot of one color in a single path.
@@ -235,8 +173,7 @@ export function circlesToDots({ root, toData, mountNext }) {
       dotLayer = sceneEl.querySelector('.floor-dots');
       if (dotLayer) dotLayer.style.visibility = 'hidden';
       sceneEl.style.animation = 'none';
-      const top = root.getBoundingClientRect().top;
-      if (top < 0) window.scrollBy(0, top - 16);
+      scrollToScene(root);
 
       const target = targetDots(root);
       endR = target.endR;

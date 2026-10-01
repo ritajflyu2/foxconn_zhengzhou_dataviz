@@ -142,13 +142,13 @@ Cross-check to display: the airport-zone estimated total at 57% is ~124k, below 
   - Optional second square: space per worker *on shift*. Plants run 3 × 8h shifts, so roughly ⅓ of the headcount is present at once.
 - **Label the placeholder visibly** ("placeholder until floor-area measurement") so it can't be mistaken for a finding.
 
-**Transition to Scene 3:** the floor plan shrinks and slides to the right edge, becoming the floor index. The dots rise and stack into bars.
+**Transition to Scene 3:** the floor plan, dots and all, shrinks and slides to the left edge, becoming 1F of the floor index. As Scene 3's autoplay reaches each year, that year's dots stream out of 1F and stack into their bar, so the workforce chart builds one bar at a time (no pile of waiting dots over the chart) (**decision:** the stacking rides the autoplay, ~0.8s per year). The dots are a motif that carries across the screen, not a one-to-one count: a Scene 3 dot is not 100 workers, so dots may fade in or out on the way.
 
 ---
 
 ## Scene 3 — Over time: who is insured, who is hired
 
-**Layout:** two charts side by side, plus the floor index.
+**Layout:** two charts side by side, plus the floor index. The floor index is always on the **left** of the content (Scenes 3–5), never the right.
 
 - **Left edge:** the exploded-factory image as a small index (`factory_exploded.png`) , showing where the viewer is in the building.
 - **Left chart, workforce composition by year:** modeled on `outputs/labor_analysis_output/charts/A1_insured_workers_vs_total_workforce.png`. The dots from Scene 2 settle into the bars.

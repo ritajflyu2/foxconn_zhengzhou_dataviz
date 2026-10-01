@@ -239,7 +239,8 @@ function buildWorkforceChart(container, workforce) {
   const plotHeight = base - MARGIN.top;
 
   const figure = document.createElement('figure');
-  figure.className = 'figure chart-col__figure';
+  // `workforce-figure` is where the 2 → 3 transition stacks Scene 2's dots.
+  figure.className = 'figure chart-col__figure workforce-figure';
   container.append(figure);
 
   const svg = select(figure)
@@ -461,7 +462,7 @@ function playerControls(container, { years, secondsPerYear, onReveal }) {
     scrubber.value = String(Math.max(0, revealCount - 1));
     yearReadout.textContent = revealCount > 0 ? String(years[Math.min(revealCount, years.length) - 1].year) : String(years[0].year);
     button.textContent = playing ? 'Pause' : revealCount >= years.length ? 'Replay' : 'Play';
-    onReveal(revealCount);
+    onReveal(revealCount, playing);
   }
 
   function stop() {
@@ -581,9 +582,11 @@ export default {
     playerControls(body, {
       years: workforce.years,
       secondsPerYear: workforce.animation?.seconds_per_year ?? 0.8,
-      onReveal(revealCount) {
+      onReveal(revealCount, playing) {
         leftChart.setReveal(revealCount);
         rightChart.setReveal(revealCount);
+        // The 2 → 3 transition follows the autoplay through this event.
+        el.dispatchEvent(new CustomEvent('yearreveal', { detail: { revealCount, playing, total: workforce.years.length } }));
       },
     });
 
