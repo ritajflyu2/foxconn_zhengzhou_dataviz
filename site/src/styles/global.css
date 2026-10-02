@@ -1274,6 +1274,84 @@ body {
   text-decoration: underline;
 }
 
+/* --- Scene 2: assembly floor and dorm room --- */
+
+/* Floor (bigger) and dorm (smaller) side by side; the per-person area is a
+   side note under the dorm. */
+.scene2-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2.3fr) minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: start;
+}
+
+@media (max-width: 760px) {
+  .scene2-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.scene2-area {
+  margin-top: 1rem;
+}
+
+.scene2-area .chart-col__head {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ink-secondary);
+}
+
+/* The floor image recedes once the workers are on it. */
+.scene2-floor .floor-plan-image {
+  transition: opacity 900ms ease;
+}
+
+.scene2-floor.is-populated .floor-plan-image {
+  opacity: 0.38;
+}
+
+.dorm-area {
+  display: block;
+  width: 100%;
+  max-width: 8.5rem;
+  height: auto;
+  margin: 0.5rem 0;
+}
+
+.dorm-area__room {
+  fill: none;
+  stroke: var(--ink-muted);
+  stroke-width: 1.25;
+  stroke-dasharray: 4 3;
+}
+
+.dorm-area__room-label,
+.dorm-area__scale,
+.dorm-area .size-dim__label {
+  font-family: var(--font-mono);
+  font-size: 21px;
+  fill: var(--ink-muted);
+}
+
+.dorm-area__person {
+  fill: var(--color-dispatch);
+  fill-opacity: 0.18;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.dorm-area__person-label {
+  font-family: var(--font-title);
+  font-size: 34px;
+  font-weight: 600;
+  fill: var(--ink);
+}
+
+.dorm-area__scalebar {
+  stroke: var(--ink-muted);
+  stroke-width: 1.5;
+}
+
 /* --- Introduction: Size --- */
 
 .size-figure__credit {

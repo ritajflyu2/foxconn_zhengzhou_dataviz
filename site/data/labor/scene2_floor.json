@@ -1,8 +1,121 @@
 {
- "dots_total": 1548,
- "workers_per_dot": 100,
- "insured_dots": 618,
- "dispatch_dots": 930,
+ "insured_share": 0.3994,
+ "insured_share_source": "Scene 1: insured staff as a share of the estimated total workforce (low end), all four plants, 2025",
+ "line": {
+  "image": "production_line.webp",
+  "image_px": [
+   1774,
+   887
+  ],
+  "slope": 0.5,
+  "lines": [
+   {
+    "x0": 1072,
+    "x1": 1286,
+    "c": -284
+   },
+   {
+    "x0": 1377,
+    "x1": 1543,
+    "c": -269
+   },
+   {
+    "x0": 587,
+    "x1": 707,
+    "c": -204
+   },
+   {
+    "x0": 811,
+    "x1": 1044,
+    "c": -168
+   },
+   {
+    "x0": 1248,
+    "x1": 1466,
+    "c": -165
+   },
+   {
+    "x0": 485,
+    "x1": 684,
+    "c": -101
+   },
+   {
+    "x0": 387,
+    "x1": 624,
+    "c": -4
+   },
+   {
+    "x0": 772,
+    "x1": 1169,
+    "c": 2
+   },
+   {
+    "x0": 685,
+    "x1": 1085,
+    "c": 124
+   },
+   {
+    "x0": 287,
+    "x1": 535,
+    "c": 127
+   },
+   {
+    "x0": 732,
+    "x1": 998,
+    "c": 218
+   }
+  ],
+  "workers_per_line": 120,
+  "per_line": {
+   "insured": 48,
+   "dispatch": 72
+  },
+  "source": "China Labor Watch, Zhengzhou Foxconn report (September 2025), p. 25: a worker says her production line has over 120 workers",
+  "caveat": "One worker's account of her own line, applied to every line here; lines vary. The floor is an illustrative stand-in, not a measured Foxconn layout, and the insured / dispatch mix is the campus-wide average, not counted per line."
+ },
+ "dorm": {
+  "image": "dorm.webp",
+  "image_px": [
+   1536,
+   1024
+  ],
+  "beds": [
+   {
+    "x": 390,
+    "y": 195
+   },
+   {
+    "x": 310,
+    "y": 435
+   },
+   {
+    "x": 740,
+    "y": 290
+   },
+   {
+    "x": 690,
+    "y": 520
+   },
+   {
+    "x": 1150,
+    "y": 440
+   },
+   {
+    "x": 1180,
+    "y": 690
+   }
+  ],
+  "people": 6,
+  "per_room": {
+   "insured": 2,
+   "dispatch": 4
+  },
+  "m2_per_person": 5,
+  "room_m2": 30,
+  "people_source": "China Labor Watch, Zhengzhou Foxconn report (September 2025), p. 19: new workers were put in the Fuhang building, six to a room",
+  "size_source": "JGJ 36-2016 Code for Design of Dormitory Buildings: a 6-person room with bunk beds, at least 5 m2 of usable floor per person",
+  "caveat": "Size is the Chinese design standard for a 6-person bunk room, not a measured Foxconn room; the room image is illustrative."
+ },
  "by_plant": [
   {
    "id": "hongfujin",
@@ -33,12 +146,5 @@
    "dispatch_dots": 130
   }
  ],
- "space_per_worker_m2": {
-  "value": 16,
-  "placeholder": true,
-  "basis": "Campus land area per worker: NYT (2016) reported about 350,000 workers on about 2.2 square miles (5.7 km2). Not floor area.",
-  "label": "Placeholder until floor-area measurement"
- },
- "shift_note": "Plants run 3 x 8-hour shifts, so roughly one third of the headcount is on the floor at any moment.",
- "floor_plan_image": "design/reference/floorplan_1F.png"
+ "shift_note": "Plants run 3 x 8-hour shifts, so roughly one third of the headcount is on the floor at any moment."
 }

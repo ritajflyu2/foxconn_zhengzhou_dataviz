@@ -182,25 +182,67 @@ write("scene1_plants.json", {
 })
 
 # ---------------------------------------------------------------- scene 2
-# Derived straight from the Scene 1 low-end totals so the two scenes agree.
-WORKERS_PER_DOT = 100
+# One assembly floor and one dorm room, one dot per worker. The insured /
+# dispatch split is Scene 1's campus-wide low-end ratio, applied per line and
+# per room. Line and bed positions are pixel coordinates in the two
+# reference images (design/reference/production line.png, dorm.jpg): line
+# centres were found from the rows of workstation monitors, beds by eye.
+from PIL import Image
+ASSET_OUT = BASE / "site" / "assets" / "labor"
+ASSET_OUT.mkdir(parents=True, exist_ok=True)
+REF = BASE / "design" / "reference"
+CLW_2025 = "China Labor Watch, Zhengzhou Foxconn report (September 2025)"
+WORKERS_PER_LINE = 120   # CLW 2025 p. 25: "Her production line has over 120 workers."
+DORM_PEOPLE = 6          # CLW 2025 p. 19: new workers "where six people shared a room"
+DORM_M2_PER_PERSON = 5   # JGJ 36-2016, class-4 dorm (6 people, bunk beds): 5 m2 per person
+insured_share = sum(p["insured_2025"] for p in plants) / sum(p["est_total_low"] for p in plants)
+def split(n):
+    ins = round(n * insured_share)
+    return {"insured": ins, "dispatch": n - ins}
+LINES = [  # x0, x1, c: a line runs from x0 to x1 along y = 0.5 x + c (image px)
+    (1072, 1286, -284), (1377, 1543, -269), (587, 707, -204), (811, 1044, -168), (1248, 1466, -165),
+    (485, 684, -101), (387, 624, -4), (772, 1169, 2), (685, 1085, 124), (287, 535, 127), (732, 998, 218)]
+BEDS = [(390, 195), (310, 435), (740, 290), (690, 520), (1150, 440), (1180, 690)]  # mattress centres
+
+line_src = Image.open(REF / "production line.png").convert("RGBA")
+line_src.save(ASSET_OUT / "production_line.webp", "WEBP", quality=88, method=6)
+dorm_src = Image.open(REF / "dorm.jpg").convert("RGBA")
+# White studio background -> transparent, so the room sits on the page ground.
+px = dorm_src.load()
+for y in range(dorm_src.height):
+    for x in range(dorm_src.width):
+        r_, g_, b_, _ = px[x, y]
+        if min(r_, g_, b_) > 246:
+            px[x, y] = (r_, g_, b_, 0)
+dorm_src.save(ASSET_OUT / "dorm.webp", "WEBP", quality=88, method=6)
+
+# Scene 1's own plant split, kept for the 1 -> 2 transition (circles break into dots).
 dot_plants = []
 for p in plants:
-    n = round(p["est_total_low"] / WORKERS_PER_DOT)
-    n_ins = round(n * p["insured_2025"] / p["est_total_low"])  # same insured/total split as Scene 1
+    n = round(p["est_total_low"] / 100)
+    n_ins = round(n * p["insured_2025"] / p["est_total_low"])
     dot_plants.append({"id": p["id"], "name": p["name"], "dots": n, "insured_dots": n_ins, "dispatch_dots": n - n_ins})
-DOTS = sum(d["dots"] for d in dot_plants)
+
 write("scene2_floor.json", {
-    "dots_total": DOTS,
-    "workers_per_dot": WORKERS_PER_DOT,
-    "insured_dots": sum(d["insured_dots"] for d in dot_plants),
-    "dispatch_dots": sum(d["dispatch_dots"] for d in dot_plants),
+    "insured_share": round(insured_share, 4),
+    "insured_share_source": "Scene 1: insured staff as a share of the estimated total workforce (low end), all four plants, 2025",
+    "line": {
+        "image": "production_line.webp", "image_px": list(line_src.size), "slope": 0.5,
+        "lines": [{"x0": a, "x1": b, "c": c} for a, b, c in LINES],
+        "workers_per_line": WORKERS_PER_LINE, "per_line": split(WORKERS_PER_LINE),
+        "source": f"{CLW_2025}, p. 25: a worker says her production line has over 120 workers",
+        "caveat": "One worker's account of her own line, applied to every line here; lines vary. The floor is an illustrative stand-in, not a measured Foxconn layout, and the insured / dispatch mix is the campus-wide average, not counted per line.",
+    },
+    "dorm": {
+        "image": "dorm.webp", "image_px": list(dorm_src.size), "beds": [{"x": x, "y": y} for x, y in BEDS],
+        "people": DORM_PEOPLE, "per_room": split(DORM_PEOPLE),
+        "m2_per_person": DORM_M2_PER_PERSON, "room_m2": DORM_PEOPLE * DORM_M2_PER_PERSON,
+        "people_source": f"{CLW_2025}, p. 19: new workers were put in the Fuhang building, six to a room",
+        "size_source": "JGJ 36-2016 Code for Design of Dormitory Buildings: a 6-person room with bunk beds, at least 5 m2 of usable floor per person",
+        "caveat": "Size is the Chinese design standard for a 6-person bunk room, not a measured Foxconn room; the room image is illustrative.",
+    },
     "by_plant": dot_plants,
-    "space_per_worker_m2": {"value": 16, "placeholder": True,
-        "basis": "Campus land area per worker: NYT (2016) reported about 350,000 workers on about 2.2 square miles (5.7 km2). Not floor area.",
-        "label": "Placeholder until floor-area measurement"},
     "shift_note": "Plants run 3 x 8-hour shifts, so roughly one third of the headcount is on the floor at any moment.",
-    "floor_plan_image": "design/reference/floorplan_1F.png",
 })
 
 # ---------------------------------------------------------------- scene 3: workforce by year

@@ -50,20 +50,22 @@ function sourceDots(sceneEl, byPlant) {
   return { dots, startR: Number.isFinite(minSpacing) ? minSpacing * 0.42 : 2 };
 }
 
+// Every dot of every `.floor-dots` layer (Scene 2 has the lines and the dorm
+// beds), each with its own on-screen radius.
 function targetDots(sceneEl) {
   const dots = { insured: [], dispatch: [] };
-  const layer = sceneEl.querySelector('.floor-dots');
-  const svg = layer?.ownerSVGElement;
-  if (!svg) return { dots, endR: 3 };
-  const m = svg.getScreenCTM();
-  const scale = Math.hypot(m.a, m.b);
   let endR = 3;
-  for (const c of layer.querySelectorAll('circle')) {
-    if (!dots[c.dataset.kind]) continue;
-    const x = Number(c.getAttribute('cx'));
-    const y = Number(c.getAttribute('cy'));
-    dots[c.dataset.kind].push({ x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f });
-    endR = Number(c.getAttribute('r')) * scale;
+  for (const layer of sceneEl.querySelectorAll('.floor-dots')) {
+    const m = layer.ownerSVGElement.getScreenCTM();
+    const scale = Math.hypot(m.a, m.b);
+    for (const c of layer.querySelectorAll('circle')) {
+      if (!dots[c.dataset.kind]) continue;
+      const x = Number(c.getAttribute('cx'));
+      const y = Number(c.getAttribute('cy'));
+      const r = Number(c.getAttribute('r')) * scale;
+      dots[c.dataset.kind].push({ x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f, r });
+      endR = Math.min(endR === 3 ? r : endR, r);
+    }
   }
   return { dots, endR };
 }
@@ -138,7 +140,7 @@ export function circlesToDots({ root, toData, mountNext }) {
   let skipped = false;
   let overlay = null;
   let mounting = null;
-  let dotLayer = null;
+  let dotLayers = [];
   let fade = null;
   const skip = () => {
     skipped = true;
@@ -170,8 +172,10 @@ export function circlesToDots({ root, toData, mountNext }) {
     let targetsAt = null; // ms after t0 when the floor positions became known
 
     mounting = mountNext((sceneEl) => {
-      dotLayer = sceneEl.querySelector('.floor-dots');
-      if (dotLayer) dotLayer.style.visibility = 'hidden';
+      dotLayers = [...sceneEl.querySelectorAll('.floor-dots')];
+      for (const l of dotLayers) l.style.visibility = 'hidden';
+      // The floor image dims as the dots start landing on it.
+      setTimeout(() => sceneEl.querySelector('.scene2-floor')?.classList.add('is-populated'), 500);
       sceneEl.style.animation = 'none';
       scrollToScene(root);
 
@@ -212,7 +216,7 @@ export function circlesToDots({ root, toData, mountNext }) {
             const p = bezier(d.curve, u);
             d.x = p.x;
             d.y = p.y;
-            d.r = lerp(startR, endR, u);
+            d.r = lerp(startR, d.to.r ?? endR, u);
           }
         }
         draw(overlay.ctx, layers, Math.min(1, t / APPEAR_MS));
@@ -237,7 +241,7 @@ export function circlesToDots({ root, toData, mountNext }) {
       document.removeEventListener('keydown', onKey);
       fade?.finish();
       overlay?.wrap.remove();
-      if (dotLayer) dotLayer.style.visibility = '';
+      for (const l of dotLayers) l.style.visibility = '';
     });
 
   return { done, finish: skip };

@@ -40,14 +40,15 @@ const INDEX_1F = { cx: 0.5, cy: 0.835, width: 0.9 };
 // Which floor-dot type feeds each recruitment-post type (null = none: appears in place).
 const POST_SOURCE = { regular: 'insured', rebate_dispatch: 'dispatch', hourly_dispatch: 'dispatch', student: null, short_term: null };
 
+// Every dot of every `.floor-dots` layer: the assembly lines and the dorm beds.
 function floorDots(sceneEl) {
   const out = [];
-  const layer = sceneEl.querySelector('.floor-dots');
-  const svg = layer?.ownerSVGElement;
-  if (!svg) return out;
-  for (const c of layer.querySelectorAll('circle')) {
-    const p = toScreen(svg, Number(c.getAttribute('cx')), Number(c.getAttribute('cy')));
-    out.push({ kind: c.dataset.kind, x: p.x, y: p.y, r: Number(c.getAttribute('r')) * p.scale });
+  for (const layer of sceneEl.querySelectorAll('.floor-dots')) {
+    const svg = layer.ownerSVGElement;
+    for (const c of layer.querySelectorAll('circle')) {
+      const p = toScreen(svg, Number(c.getAttribute('cx')), Number(c.getAttribute('cy')));
+      out.push({ kind: c.dataset.kind, x: p.x, y: p.y, r: Number(c.getAttribute('r')) * p.scale });
+    }
   }
   return out;
 }
@@ -117,11 +118,18 @@ function bandMapper(sources, band) {
   const k = Math.min((band.width - 2 * BAND_PAD) / Math.max(1, x1 - x0), (band.height - 2 * BAND_PAD) / Math.max(1, y1 - y0));
   const cx = band.left + band.width / 2;
   const cy = band.top + band.height / 2;
-  return (p) => ({ x: cx + (p.x - (x0 + x1) / 2) * k, y: cy + (p.y - (y0 + y1) / 2) * k, r: Math.max(BAND_MIN_R, p.r * k) });
+  // One dot size in the band: the floor's own (smallest) dots, scaled.
+  const r = Math.max(BAND_MIN_R, Math.min(...sources.map((p) => p.r)) * k);
+  return (p) => ({ x: cx + (p.x - (x0 + x1) / 2) * k, y: cy + (p.y - (y0 + y1) / 2) * k, r });
 }
 
-function draw(ctx, dots) {
+// Positions are recorded at scroll `scroll0`; drawing shifts them by however
+// far the page has scrolled since, so waiting and flying dots move with the
+// page (the band and the charts) instead of sitting fixed over the text.
+function draw(ctx, dots, scroll0) {
+  ctx.setTransform(ctx.getTransform().a, 0, 0, ctx.getTransform().d, 0, 0);
   ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+  ctx.translate(0, scroll0 - window.scrollY);
   for (const d of dots) {
     if (d.landed || d.a <= 0.01) continue;
     const fillA = d.a * (1 - d.m);
@@ -169,7 +177,7 @@ export function dotsToBars({ root, mountNext }) {
     const rng = seededRandom(23);
 
     // The canvas and the flying floor plan replace their originals in the still.
-    fromEl.querySelector('.floor-dots')?.style.setProperty('visibility', 'hidden');
+    fromEl.querySelectorAll('.floor-dots').forEach((l) => l.style.setProperty('visibility', 'hidden'));
     floorImg.style.setProperty('visibility', 'hidden');
 
     overlay = createOverlay(skip);
@@ -192,6 +200,7 @@ export function dotsToBars({ root, mountNext }) {
 
     let dots = null;
     let t0 = null;
+    let scroll0 = 0;
 
     mounting = mountNext((el) => {
       sceneEl = el;
@@ -210,6 +219,7 @@ export function dotsToBars({ root, mountNext }) {
       if (overflow > 0) window.scrollBy(0, Math.min(overflow, band.getBoundingClientRect().top - 8));
       const toBand = bandMapper(sources, band.getBoundingClientRect());
       t0 = performance.now();
+      scroll0 = window.scrollY;
 
       const bars = barTargets(sceneEl);
       const index = document.querySelector('#floor-nav-slot .floor-index__image svg');
@@ -368,7 +378,7 @@ export function dotsToBars({ root, mountNext }) {
           }
         }
 
-        draw(overlay.ctx, dots);
+        draw(overlay.ctx, dots, scroll0);
         if (dots.every((d) => d.landed)) resolve();
         else requestAnimationFrame(step);
       };
