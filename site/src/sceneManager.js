@@ -1,6 +1,5 @@
 import { scenes } from './scenes/index.js';
 import { bySceneId } from './lib/dataLoader.js';
-import { colorFor } from './lib/colorTokens.js';
 import { circlesToDots } from './transitions/circlesToDots.js';
 import { dotsToBars } from './transitions/dotsToBars.js';
 import { postsToLegend } from './transitions/postsToLegend.js';
@@ -25,28 +24,54 @@ const TRANSITIONS = { '1>2': circlesToDots, '2>3': dotsToBars, '3>4': postsToLeg
 
 const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 
+const go = (id) => {
+  if (scenes.some((s) => s.id === id)) window.location.hash = `scene-${id}`;
+};
+
+// Previous / next arrows with "Scene n of 5 · label" between them.
+function createArrows(nav, getCurrent) {
+  const arrow = (dir, glyph) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = `scene-arrows__btn scene-arrows__btn--${dir}`;
+    b.textContent = glyph;
+    b.addEventListener('click', () => go(getCurrent() + (dir === 'next' ? 1 : -1)));
+    return b;
+  };
+  const prev = arrow('prev', '←');
+  const next = arrow('next', '→');
+  const label = document.createElement('p');
+  label.className = 'scene-arrows__label';
+  label.setAttribute('aria-live', 'polite');
+  nav.append(prev, label, next);
+
+  // Arrow keys too — except while a slider or text field has focus (they use them).
+  document.addEventListener('keydown', (e) => {
+    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if (e.target.closest?.('input, textarea, select, [contenteditable], [role="slider"]')) return;
+    if (e.key === 'ArrowRight') go(getCurrent() + 1);
+    else if (e.key === 'ArrowLeft') go(getCurrent() - 1);
+  });
+
+  const first = scenes[0].id;
+  const last = scenes[scenes.length - 1].id;
+  return (id) => {
+    const scene = scenes.find((s) => s.id === id);
+    const before = scenes.find((s) => s.id === id - 1);
+    const after = scenes.find((s) => s.id === id + 1);
+    label.textContent = `Scene ${id} of ${scenes.length} · ${scene.navLabel}`;
+    prev.disabled = id === first;
+    next.disabled = id === last;
+    prev.setAttribute('aria-label', before ? `Previous scene: ${before.navLabel}` : 'No previous scene');
+    next.setAttribute('aria-label', after ? `Next scene: ${after.navLabel}` : 'No next scene');
+  };
+}
+
 export function createSceneManager({ nav, root, pageGrid }) {
-  const buttons = new Map();
   let currentId = null;
   let navToken = 0;
   let active = null;
-
-  for (const scene of scenes) {
-    const button = document.createElement('button');
-    button.type = 'button';
-
-    const dot = document.createElement('span');
-    dot.className = 'nav-dot';
-    dot.style.background = colorFor(scene.colorKey ?? 'regular');
-    button.append(dot, document.createTextNode(`${scene.id}. ${scene.navLabel}`));
-
-    button.addEventListener('click', () => {
-      window.location.hash = `scene-${scene.id}`;
-    });
-
-    nav.append(button);
-    buttons.set(scene.id, button);
-  }
+  const updateArrows = createArrows(nav, () => currentId);
 
   async function show(id) {
     if (id === currentId) return;
@@ -62,9 +87,7 @@ export function createSceneManager({ nav, root, pageGrid }) {
     const from = currentId;
     const scene = scenes.find((s) => s.id === id);
     currentId = id;
-    for (const [sceneId, button] of buttons) {
-      button.setAttribute('aria-current', String(sceneId === id));
-    }
+    updateArrows(id);
 
     // Mount off-page, then swap in only if this is still the scene asked for:
     // Scene 2's mount is async, and a late resolve must not overwrite a newer scene.

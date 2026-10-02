@@ -8,7 +8,7 @@ const root = document.querySelector('#scene-root');
 try {
   assertDataLoaded();
   mountFloorNav(document.querySelector('#floor-nav-slot'));
-  createSceneManager({ nav: document.querySelector('#scene-nav'), root, pageGrid: document.querySelector('#page-grid') }).start();
+  createSceneManager({ nav: document.querySelector('#scene-arrows'), root, pageGrid: document.querySelector('#page-grid') }).start();
   console.info(`Loaded ${files.length} data files: ${files.join(', ')}`);
 } catch (error) {
   root.innerHTML = '<p class="caveat"></p>';
