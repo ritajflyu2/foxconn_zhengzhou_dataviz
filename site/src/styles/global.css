@@ -1262,6 +1262,65 @@ body {
   border-width: 0 1.25px 1.25px;
 }
 
+/* --- Introduction: Production pace --- */
+
+.prod-caption {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-title);
+  font-size: clamp(1.25rem, 2.6vw, 1.6rem);
+  color: var(--ink);
+  min-height: 1.5em;
+}
+
+.prod-counters {
+  display: flex;
+  gap: 2.5rem;
+  margin: 0 0 0.75rem;
+}
+
+.prod-counter__label {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.prod-counter__value {
+  margin: 0.15rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.prod-figure canvas {
+  display: block;
+  touch-action: manipulation;
+}
+
+.prod-ending {
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+
+.prod-ending.is-visible {
+  opacity: 1;
+}
+
+.prod-end {
+  margin: 1rem 0 0.75rem;
+  font-family: var(--font-title);
+  font-size: clamp(1.25rem, 2.6vw, 1.6rem);
+  line-height: 1.3;
+  color: var(--ink);
+  max-width: 46rem;
+}
+
+.prod-swatch {
+  border-radius: 3px;
+}
+
 @keyframes scene-in {
   from {
     opacity: 0;

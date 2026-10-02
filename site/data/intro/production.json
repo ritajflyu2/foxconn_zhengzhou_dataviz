@@ -1,0 +1,15 @@
+{
+  "peak_iphones_per_day": 500000,
+  "peak_sources": [
+    "China Daily, 2017-09-19",
+    "Silicon UK, 2023-01-04, citing Henan Daily"
+  ],
+  "peak_caveat": "Press-reported peak, not confirmed by Foxconn or Apple, for the whole Zhengzhou site.",
+  "hours_per_day": 24,
+  "hours_note": "The daily peak is spread evenly over 24 hours (the plants run around the clock).",
+  "phone_model": "iPhone 17 Pro",
+  "phone_thickness_mm": 8.75,
+  "phone_thickness_source": "Apple, iPhone 17 Pro technical specifications (support.apple.com/en-us/125090)",
+  "phone_caveat": "Assumes every phone is an iPhone 17 Pro; the 2025 peak model was the iPhone 17 (China Labor Watch, September 2025). The phone images are an illustrative mockup.",
+  "mount_fuji_height_m": 3776
+}

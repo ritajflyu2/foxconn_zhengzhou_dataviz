@@ -35,6 +35,14 @@
      the line baked into the imagery. Not a worker type. */
   --color-site-outline: #fbc02d;
 
+  /* Introduction "Production pace": sampled from the mockup and photo
+     assets (site/assets/intro/), so the zoomed-out stack bar, the Fuji
+     silhouette and the legend swatches match the images. Illustration
+     colors, not worker types. */
+  --color-iphone: #f47c3c;
+  --color-fuji: #1f4478;
+  --color-fuji-snow: #eef1f5;
+
   /* Light warm sand ground for scenes 1–4 (Visual direction). Scene 5 switches
      to a dark ground with its own palette. */
   --surface: #f2ece0;
