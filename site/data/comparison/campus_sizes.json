@@ -54,6 +54,34 @@
       "width_m": 780,
       "length_m": 1253,
       "width_length_source": "apple hq 2.kml (placemark \"apple campus\"): east-west and north-south extent of the traced polygon, local equirectangular projection."
+    },
+    "harvard_sec": {
+      "image": "harvard_sec_cutout.png",
+      "image_px": [
+        772,
+        651
+      ],
+      "outline_bbox_px": [
+        12,
+        12,
+        748,
+        627
+      ],
+      "m_per_px": 0.3067,
+      "m_per_px_scale_bar": 0.3175,
+      "scale_bar_vs_kml_pct": 3.5,
+      "width_m": 230,
+      "length_m": 192,
+      "width_length_source": "Haravard SEC campus - including outdoor.kml (placemark \"SEC COMPLEX\"): east-west and north-south extent of the traced polygon, local equirectangular projection."
     }
-  }
+  },
+  "harvard_sec": {
+    "area_ha": 2.92,
+    "area_acres": 7.21,
+    "area_km2": 0.0292,
+    "source": "Haravard SEC campus - including outdoor.kml (placemark \"SEC COMPLEX\"): hand-traced outline of the Science and Engineering Complex including its outdoor space, Google Earth Web",
+    "method": "Shoelace polygon area on a local equirectangular projection centered at the polygon centroid.",
+    "drawn_shape_is_illustrative": false
+  },
+  "ratio_foxconn_to_harvard_sec": 206.0
 }

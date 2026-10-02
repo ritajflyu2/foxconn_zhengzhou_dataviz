@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document id="document">
+	<name>Untitled map project</name>
+	<gx:CascadingStyle kml:id="__managed_style_0B9C34225F422FAA487C_highlight">
+		<Style>
+			<IconStyle>
+				<scale>1.2</scale>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>3</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>40ffffff</color>
+			</PolyStyle>
+			<BalloonStyle>
+				<displayMode>hide</displayMode>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<gx:CascadingStyle kml:id="__managed_style_0B9C34225F422FAA487C_normal">
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>2</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>40ffffff</color>
+			</PolyStyle>
+			<BalloonStyle>
+				<displayMode>hide</displayMode>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<StyleMap id="__managed_style_0B9C34225F422FAA487C">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_0B9C34225F422FAA487C_normal</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_0B9C34225F422FAA487C_highlight</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Placemark id="00C6903B1E422FAA4866">
+		<name>Apple Campus</name>
+		<visibility>0</visibility>
+		<LookAt>
+			<longitude>-122.0014921630667</longitude>
+			<latitude>37.32908828839578</latitude>
+			<altitude>51.07294518243301</altitude>
+			<heading>0</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>6512.450768306155</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0B9C34225F422FAA487C</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-122.0141451607324,37.3341249036401,0 -122.0123509828947,37.3335171228125,0 -122.0111011653888,37.33224826159319,0 -122.012065223076,37.33129710244688,0 -122.0119882467517,37.33096193699721,0 -122.0125381266598,37.33061613299579,0 -122.0122513473178,37.33000567867131,0 -122.0047064912223,37.32605442781554,0 -122.0048338139972,37.33401950456795,0 -122.0053353935504,37.33406572587126,0 -122.0053279751543,37.33778764182767,0 -122.0141757410233,37.33776610787523,0 -122.0141451607324,37.3341249036401,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="0259760B9F422FDC767F">
+		<name>Foxconn zhengzhou airplane zone</name>
+		<LookAt>
+			<longitude>113.85590326428</longitude>
+			<latitude>34.55369559462341</latitude>
+			<altitude>141.9802876373453</altitude>
+			<heading>0.0005140114439134035</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>11363.42292875983</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0B9C34225F422FAA487C</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						113.8332688273974,34.56136221461754,0 113.8304800455482,34.54965922410155,0 113.8407966595217,34.54731196895188,0 113.8705187066186,34.53663423041712,0 113.8724283060049,34.54046428547266,0 113.8697513259155,34.5413580219443,0 113.8703804088425,34.5431284420187,0 113.8725628562192,34.55199559882019,0 113.8699982508163,34.55506155003204,0 113.8334709144993,34.56145692648818,0 113.8332688273974,34.56136221461754,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="0E0B7B6A96422FEB7F08">
+		<name>apple campus</name>
+		<LookAt>
+			<longitude>-122.0065354981826</longitude>
+			<latitude>37.33166004698283</latitude>
+			<altitude>57.52815665455039</altitude>
+			<heading>0</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>3901.237578048022</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0B9C34225F422FAA487C</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-122.0141605544705,37.33424495730904,0 -122.0132403547822,37.33417767245808,0 -122.0119656768414,37.33364863728165,0 -122.0114011956767,37.33302328549209,0 -122.011130271564,37.33230449032978,0 -122.0120101225904,37.33133317596909,0 -122.0127857250574,37.33002923148867,0 -122.0061351193487,37.32652860763824,0 -122.0058130770408,37.32709922568485,0 -122.0057750819075,37.33323392438484,0 -122.0053766134416,37.33398817433466,0 -122.0053906265573,37.33779396093681,0 -122.014201603912,37.33774748600503,0 -122.0141690566513,37.33602520728684,0 -122.0141703853815,37.33513789942497,0 -122.0141605544705,37.33424495730904,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="040F882BFC4233461F41">
+		<name>SEC COMPLEX</name>
+		<LookAt>
+			<longitude>-71.12597375493715</longitude>
+			<latitude>42.36277566132372</latitude>
+			<altitude>2.955782500560182</altitude>
+			<heading>0</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>624.0555648162264</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0B9C34225F422FAA487C</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-71.12748045207057,42.36283166384801,0 -71.12739701681581,42.36269370654779,0 -71.12704084475639,42.36251854602315,0 -71.12670549196912,42.36214754816185,0 -71.12652235613523,42.36195613603725,0 -71.12651719572996,42.36183562784849,0 -71.12643155472271,42.36176135069513,0 -71.12486567797126,42.36209385934139,0 -71.1247449370244,42.36244710866346,0 -71.12557271931642,42.36348795115046,0 -71.12754143481723,42.36331766358406,0 -71.12748045207057,42.36283166384801,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+</Document>
+</kml>

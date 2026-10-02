@@ -8,13 +8,15 @@ Data lives in `site/data/intro/` (written by `scripts/export_intro_data.py`) and
 
 ## Screen 1 — Size
 
-**Idea:** Foxconn Zhengzhou's airport zone and Apple Park, side by side on one baseline at the same scale (layout: `design/reference/size comparison sketch.png`).
+**Idea:** Foxconn Zhengzhou's airport zone next to two familiar campuses, Apple Park and Harvard's Science and Engineering Complex (with its outdoor space), side by side on one baseline at the same scale (layout: `design/reference/size comparison sketch.png`).
 
 - Each site is a Google Earth screenshot cut out to its own traced outline (outside removed), from `design/reference/google_earth/cropped/*_cutout.png`. Imagery credit "© Google" shown under the figure.
-- Rough width and length dimension lines from each KML outline (east-west and north-south extents): Foxconn from `foxconn zhengzhou google earth.kml`, Apple Park from the "apple campus" placemark in `apple hq 2.kml`. Each cut-out is drawn at the scale that matches its outline to its own KML extents.
+- Rough width and length dimension lines from each KML outline (east-west and north-south extents): Foxconn from `foxconn zhengzhou google earth.kml`, Apple Park from the "apple campus" placemark in `apple hq 2.kml`, Harvard SEC from the "SEC COMPLEX" placemark in `Haravard SEC campus - including outdoor.kml` (screenshot `harvard SEC including outdoor.png`). Each cut-out is drawn at the scale that matches its outline to its own KML extents.
 - Under each site: area in hectares, then acres in parentheses, then km² smaller.
   - Foxconn: from its KML polygon (601.5 ha).
   - Apple Park: Apple's published 175 acres (Apple Newsroom, Feb 2017); its outline is illustrative only.
+  - Harvard SEC: from its KML polygon (2.92 ha, 7.21 acres).
+- Under each comparison site: "Foxconn Zhengzhou is N× this size" (≈ 8.5× Apple Park, ≈ 206× the Harvard SEC), from the ratios in the JSON. Foxconn takes the width left after one fixed column per comparison site; that sets the shared scale.
 - Legend: outline, dimension lines, same scale; a 1 km scale bar.
 - Data: `site/data/comparison/campus_sizes.json` (areas, sources, and the cut-out geometry under `layout`). Note: this file was written by a one-off script that is not yet in `scripts/`.
 

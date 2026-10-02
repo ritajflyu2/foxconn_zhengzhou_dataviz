@@ -1313,6 +1313,18 @@ body {
   fill: var(--ink-secondary);
 }
 
+.size-ratio {
+  font-size: 12px;
+  fill: var(--ink-secondary);
+}
+
+.size-ratio__value {
+  font-family: var(--font-title);
+  font-size: 22px;
+  font-weight: 600;
+  fill: var(--ink);
+}
+
 .size-area__note {
   font-size: 11px;
   fill: var(--ink-muted);
