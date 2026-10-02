@@ -716,6 +716,12 @@ body {
   visibility: hidden;
 }
 
+/* 2 → 3: space opened between Scene 3's summary and its charts, where the
+   floor's dots wait (drawn on the overlay canvas); closed once they land. */
+.transition-band {
+  overflow: hidden;
+}
+
 /* 3 → 4: what each worker-type color means, shown under its cluster. */
 .transition-label {
   position: absolute;
