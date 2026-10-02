@@ -1,0 +1,26 @@
+{
+  "plants": [
+    {
+      "name": "Hongfujin",
+      "m3_per_year": 3280000.0,
+      "liters_per_year": 3280000000.0,
+      "eia": "Hongfujin Precision Electronics (Zhengzhou), EIA report for the K-zone heat-source station expansion, May 2023 (tables 2-12 to 2-49: emissions of every project on site, 2010-2022)",
+      "url": "https://oss.dahe.cn/bdtypt/sbgt-wztipt/typtfile/20230524/f101558a544b4c4bad1f61510be57f6d.pdf",
+      "scope": "whole plant, all wastewater"
+    },
+    {
+      "name": "FII Yuzhan",
+      "m3_per_year": 3541500.0,
+      "liters_per_year": 3541500000.0,
+      "eia": "Henan Yuzhan (FII Yuzhan), EIA for the phone-structure-part upgrade and new earphone-part line, December 2020 (table 52: whole plant after the project)",
+      "url": "https://m.zzhkgq.gov.cn/2020/12-05/3383271.html",
+      "scope": "whole plant, industrial wastewater"
+    }
+  ],
+  "total_m3_per_year": 6821500.0,
+  "total_liters_per_year": 6821500000.0,
+  "olympic_pool_m3": 2500,
+  "olympic_pool_note": "An Olympic pool: 50 m x 25 m x 2 m deep (the minimum for World Aquatics competition), 2,500 m3 or 2.5 million liters.",
+  "source": "Environmental impact assessments (EIAs) of each plant, published on Chinese government EIA-disclosure portals; values compiled in the project's environment workbook",
+  "caveat": "Approved design figures from each plant's EIA, not measured discharge. Two of the airport zone's three plants (Henan Fuchi has no figure on file); the two EIAs count wastewater differently (all wastewater vs. industrial only), and FII Yuzhan took over some of Hongfujin's metal-parts projects, so the two figures may overlap slightly."
+}

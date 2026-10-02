@@ -1274,6 +1274,50 @@ body {
   text-decoration: underline;
 }
 
+/* --- Introduction: Wastewater --- */
+
+.water-figure canvas {
+  display: block;
+}
+
+.water-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding-top: 0.75rem;
+  background: var(--surface);
+}
+
+.water-sticky .prod-counters {
+  margin-bottom: 0.5rem;
+}
+
+.water-swatch {
+  width: 16px;
+  height: 8px;
+  flex: none;
+  border-radius: 1px;
+}
+
+.water-swatch--pool {
+  background: #4fb0e8 url('../../assets/intro/olympic_pool.webp') center / cover;
+  border-radius: 1px;
+}
+
+.water-swatch--water {
+  background: linear-gradient(var(--color-water-light) 0 35%, var(--color-water) 35%);
+  border-radius: 3px;
+}
+
+.water-end {
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+
+.water-end.is-visible {
+  opacity: 1;
+}
+
 /* --- Scene 2: assembly floor and dorm room --- */
 
 /* Floor (bigger) and dorm (smaller) side by side; the per-person area is a

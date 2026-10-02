@@ -48,6 +48,18 @@ Computed in JS: ≈ 5.8 a second (shown "about 6"), stack ≈ 4,375 m, ≈ 600 m
 - Caveats in small text: the peak caveat, the phone caveat, and "Heights are to scale; widths are not."
 - Assets: optimized copies in `site/assets/intro/` (`iphone_back`, `iphone_side`, `fuji`), made from `design/reference/` by `scripts/export_intro_data.py`.
 
-## Screen 3 — Environmental footprint
+## Screen 3 — Wastewater
 
-To come.
+**Idea:** one year of the airport zone's wastewater as Olympic swimming pools. A tank of water sits across the top with a moving, wavy surface (colours and look from `design/reference/water tank.png`). Pools appear one by one in reading order, each drawn from `design/reference/olympic size pool.png` (drained, then full). A stream pours from the tank into each new pool and it fills from the bottom up with a waving waterline. It starts slowly, so a single pool can be read, then speeds up until all are full (about 18 s). Pools are drawn large (about 42 px wide, so the page runs long); the tank and the counters stay pinned to the top while the page automatically scrolls to follow the filling row (scrolling by hand stops the follow until Replay). The waves keep moving after the end, except under reduced motion.
+
+**Data** (`site/data/intro/wastewater.json`, read by `scripts/export_intro_data.py` from `data/environment/环境_环评核定与验收历史排放_2010-2026.xlsx`):
+
+| Plant | Wastewater / year | Source (EIA) |
+|---|---|---|
+| Hongfujin | 328 万 m³ ≈ 3.28 bn L (whole plant, all wastewater) | K-zone heat-source station expansion EIA, May 2023, tables 2-12 to 2-49 |
+| FII Yuzhan | 354.15 万 m³ ≈ 3.54 bn L (whole plant, industrial) | Structure-part upgrade + earphone-part line EIA, Dec 2020, table 52 |
+| **Total** | **≈ 6.82 bn L ≈ 2,729 Olympic pools** (2,500 m³ each: 50 × 25 × 2 m) | |
+
+- **Decision:** the EIA figure, not the earlier "300 million L / 120 pools" (about 10× lower than the EIAs; likely a 万m³ / liter mix-up).
+- Counters: liters and pools filled. Pause / Skip / Replay; starts in view; reduced motion shows the end state. Hover a pool: what one pool holds.
+- **Caveat:** approved design figures, not measured discharge; two of the zone's three plants (Henan Fuchi has no figure); the two EIAs count wastewater differently; FII Yuzhan took over some Hongfujin projects, so they may overlap slightly.

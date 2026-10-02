@@ -1,5 +1,5 @@
 import size from './size.js';
 import production from './production.js';
+import wastewater from './wastewater.js';
 
-// More screens (environmental footprint) land here later.
-export const introScenes = [size, production];
+export const introScenes = [size, production, wastewater];

@@ -43,6 +43,13 @@
   --color-fuji: #1f4478;
   --color-fuji-snow: #eef1f5;
 
+  /* Introduction "Wastewater": the water-tank reference
+     (design/reference/water tank.png): body, lighter crest, deeper edge.
+     Illustration colours, not worker types. */
+  --color-water: #5082d2;
+  --color-water-light: #7298d7;
+  --color-water-deep: #4177d0;
+
   /* Light warm sand ground for scenes 1–4 (Visual direction). Scene 5 switches
      to a dark ground with its own palette. */
   --surface: #f2ece0;
