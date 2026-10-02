@@ -1,5 +1,7 @@
 import { easeCubicInOut } from 'd3';
 import { seededRandom, lerp, bezier, toScreen, createOverlay, snapshot, scrollToScene } from './common.js';
+import { raw } from '../lib/dataLoader.js';
+import { createPostWords } from './postWords.js';
 
 // Transition 3 → 4: the recruitment-post colors that match Scene 4's worker
 // types are pulled out of the posts chart into one cluster per type (the rest
@@ -7,6 +9,13 @@ import { seededRandom, lerp, bezier, toScreen, createOverlay, snapshot, scrollTo
 // labelled with that worker type's name and contract from scene4_pay_model.json,
 // so the viewer reads what each color means. Then Scene 4 fades in and every
 // cluster drops into its row's legend dot, its label settling onto the row name.
+//
+// In between, a word cloud of the most-used words in all the hiring posts
+// (scene4_post_words.json) fills the screen below the clusters, each word in
+// the colour of the worker type whose posts use it most. The transition holds
+// there until the viewer presses Continue. Reduced motion: no movement — the
+// clusters, labels and words appear in place, and Continue goes straight to
+// Scene 4.
 
 const DIM_MS = 500;
 const DIM_TO = 0.12; // Scene 3 stays faintly visible while the clusters are read
@@ -14,13 +23,16 @@ const GATHER_MS = [700, 950];
 const GATHER_SPREAD_MS = 220;
 const LABEL_IN_AT = 550;
 const LABEL_IN_MS = 400;
-const HOLD_UNTIL_MS = 2500; // when the clusters start to drop
+const HOLD_UNTIL_MS = 2500; // when the clusters drop if there is no words layer
+const WORDS_AT_MS = 1300; // words appear once the clusters have formed
+const WORDS_BOTTOM_PX = 100; // keep clear of the fixed arrow bar
 const DESCEND_MS = [950, 1150];
 const ROW_STAGGER_MS = 110;
 const SCENE_IN_MS = 500;
 const CLUSTER_MAX_R = 46;
 const CLUSTER_MIN_R = 14;
-const CLUSTER_Y = 0.38; // cluster row, as a fraction of the window height
+const CLUSTER_Y = 0.38; // cluster row, as a fraction of the window height (no words layer)
+const CLUSTER_Y_WORDS = 0.16; // higher when the words fill the space below
 const SPIN = 0.00035; // slow turn of each cluster while it is being read (rad/ms)
 const GOLDEN = Math.PI * (3 - Math.sqrt(5));
 
@@ -28,7 +40,9 @@ function postDots(sceneEl) {
   const svg = sceneEl.querySelector('.posts-figure svg');
   const out = [];
   if (!svg) return out;
-  for (const seg of svg.querySelectorAll('.yeardots.revealed .bar-segment[data-kind]')) {
+  // Every year's bars, revealed or not: leaving Scene 3 mid-playback must not
+  // leave the clusters for types that only appear in later years empty.
+  for (const seg of svg.querySelectorAll('.yeardots .bar-segment[data-kind]')) {
     for (const c of seg.querySelectorAll('circle')) {
       const p = toScreen(svg, Number(c.getAttribute('cx')), Number(c.getAttribute('cy')));
       out.push({ kind: seg.dataset.kind, color: c.getAttribute('fill'), x: p.x, y: p.y, r: Number(c.getAttribute('r')) * p.scale });
@@ -62,7 +76,7 @@ function draw(ctx, dots) {
   }
 }
 
-export function postsToLegend({ root, toData, mountNext }) {
+export function postsToLegend({ root, toData, mountNext, reduced = false }) {
   let skipped = false;
   let overlay = null;
   let committed = false;
@@ -87,10 +101,23 @@ export function postsToLegend({ root, toData, mountNext }) {
     document.addEventListener('keydown', onKey);
     const ghost = snapshot(fromEl);
     overlay.wrap.prepend(ghost);
-    anims.push(ghost.animate([{ opacity: 1 }, { opacity: DIM_TO }], { duration: DIM_MS, easing: 'ease-out', fill: 'forwards' }));
+    // The still stays opaque (it hides the live page behind it, header included);
+    // a sand veil over it does the dimming.
+    const veil = document.createElement('div');
+    veil.className = 'transition-veil';
+    ghost.after(veil);
+    const wordsData = raw.scene4_post_words;
+    // Deeper while the word cloud is up, so Scene 3's charts don't read through it.
+    const veilTo = 1 - (wordsData ? DIM_TO / 2.5 : DIM_TO);
+    anims.push(veil.animate([{ opacity: 0 }, { opacity: veilTo }], { duration: reduced ? 0 : DIM_MS, easing: 'ease-out', fill: 'forwards' }));
 
-    // One cluster per Scene 4 worker type, in Scene 4's row order, across the content column.
-    const content = (document.querySelector('#scene-root') ?? root).getBoundingClientRect();
+    const clusterY = window.innerHeight * (wordsData ? CLUSTER_Y_WORDS : CLUSTER_Y);
+
+    // One cluster per Scene 4 worker type, in Scene 4's row order, across a
+    // column centred in the window (a transition screen, so not offset for the
+    // floor index the way the scenes are).
+    const colW = Math.min(1088, window.innerWidth - 64);
+    const content = { left: (window.innerWidth - colW) / 2, width: colW };
     const counts = kinds.map((k) => sources.filter((s) => s.kind === k).length);
     const maxCount = Math.max(1, ...counts);
     const clusters = workers.map((w, i) => {
@@ -101,7 +128,7 @@ export function postsToLegend({ root, toData, mountNext }) {
       return {
         kind: w.color_key,
         cx: content.left + (content.width * (i + 0.5)) / workers.length,
-        cy: window.innerHeight * CLUSTER_Y,
+        cy: Math.max(CLUSTER_MAX_R + 24, clusterY),
         r,
         n,
         label,
@@ -110,8 +137,8 @@ export function postsToLegend({ root, toData, mountNext }) {
     for (const c of clusters) {
       Object.assign(c.label.style, { left: `${c.cx}px`, top: `${c.cy + CLUSTER_MAX_R + 14}px` });
       c.labelIn = c.label.animate([{ opacity: 0, transform: 'translate(-50%, 6px)' }, { opacity: 1, transform: 'translate(-50%, 0)' }], {
-        duration: LABEL_IN_MS,
-        delay: LABEL_IN_AT,
+        duration: reduced ? 0 : LABEL_IN_MS,
+        delay: reduced ? 0 : LABEL_IN_AT,
         easing: 'ease-out',
         fill: 'both',
       });
@@ -134,8 +161,8 @@ export function postsToLegend({ root, toData, mountNext }) {
           x: s.x,
           y: s.y,
           a: 1,
-          delay: rng() * GATHER_SPREAD_MS,
-          dur: lerp(GATHER_MS[0], GATHER_MS[1], rng()),
+          delay: reduced ? 0 : rng() * GATHER_SPREAD_MS,
+          dur: reduced ? 1 : lerp(GATHER_MS[0], GATHER_MS[1], rng()),
           bow: (rng() - 0.5) * 120,
         });
       });
@@ -149,6 +176,29 @@ export function postsToLegend({ root, toData, mountNext }) {
       return { x: d.cluster.cx + Math.cos(a) * d.slotR, y: d.cluster.cy + Math.sin(a) * d.slotR };
     };
 
+    // The words layer, laid out below the clusters' labels down to the arrow bar.
+    let continued = false;
+    let words = null;
+    if (wordsData) {
+      const labelBottom = Math.max(...clusters.map((c) => c.label.getBoundingClientRect().bottom));
+      const top = labelBottom + 18;
+      const box = { left: content.left + 32, top, width: content.width - 64, height: window.innerHeight - WORDS_BOTTOM_PX - top };
+      // Laid out while the clusters form; shown once both are ready.
+      createPostWords(overlay.wrap, wordsData, box, {
+        onContinue: async () => {
+          if (reduced) return skip();
+          await words.hide();
+          continued = true;
+        },
+      })
+        .then((w) => (words = w))
+        .catch((err) => {
+          console.error('Words layer failed; continuing without it.', err);
+          continued = true;
+        });
+    }
+    let wordsShown = false;
+
     let descend = null; // set when Scene 4 is on the page
     const t0 = performance.now();
 
@@ -160,7 +210,8 @@ export function postsToLegend({ root, toData, mountNext }) {
       });
       committed = true;
       if (!ok) return skip();
-      anims.push(ghost.animate([{ opacity: DIM_TO }, { opacity: 0 }], { duration: SCENE_IN_MS, easing: 'ease-in', fill: 'forwards' }));
+      anims.push(ghost.animate([{ opacity: 1 }, { opacity: 0 }], { duration: SCENE_IN_MS, easing: 'ease-in', fill: 'forwards' }));
+      anims.push(veil.animate([{ opacity: veilTo }, { opacity: 0 }], { duration: SCENE_IN_MS, easing: 'ease-in', fill: 'forwards' }));
 
       rowDots = [...root.querySelectorAll('.pay-row__dot[data-kind]')];
       for (const el of rowDots) el.style.visibility = 'hidden';
@@ -193,7 +244,12 @@ export function postsToLegend({ root, toData, mountNext }) {
         if (skipped) return resolve();
         const t = now - t0;
 
-        if (!descending && t >= HOLD_UNTIL_MS) descending = startDescend(t);
+        if (words && !wordsShown && (reduced || t >= WORDS_AT_MS)) {
+          wordsShown = true;
+          words.show(reduced);
+        }
+        // Hold on the words until Continue; without them, drop after a short read.
+        if (!descending && (continued || (!wordsData && t >= HOLD_UNTIL_MS))) descending = startDescend(t);
 
         if (descend) {
           const k = easeCubicInOut(Math.min(1, (t - descend.start) / descend.total));
@@ -298,3 +354,5 @@ export function postsToLegend({ root, toData, mountNext }) {
 
   return { done, finish: skip };
 }
+
+postsToLegend.hasReducedMotion = true;

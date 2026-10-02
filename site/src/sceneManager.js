@@ -113,7 +113,9 @@ export function createSceneManager({ nav, root, pageGrid }) {
 
     // Transitions are skipped under reduced motion, unless one has its own
     // reduced version (the fire's quick fade to black).
-    const transition = TRANSITIONS[`${from}>${id}`];
+    // Only when the outgoing scene is actually on the page: a transition cut
+    // short by a newer navigation can leave nothing to animate from.
+    const transition = root.querySelector('.scene') ? TRANSITIONS[`${from}>${id}`] : null;
     const reduced = reducedMotion();
     if (transition && (!reduced || transition.hasReducedMotion)) {
       active = transition({ root, toData: bySceneId[id], mountNext, reduced });

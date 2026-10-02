@@ -746,6 +746,73 @@ body {
   color: var(--ink-secondary);
 }
 
+/* Dims a page still from above (the still itself stays opaque). */
+.transition-veil {
+  position: absolute;
+  inset: 0;
+  background: var(--surface);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 3 → 4: word cloud of the hiring posts, held until Continue. */
+.post-words {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.post-words__head {
+  position: absolute;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.post-words__title {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.post-words__sub {
+  margin: 0.2rem 0 0;
+  max-width: 44rem;
+  font-size: 0.8125rem;
+  color: var(--ink-secondary);
+}
+
+.post-words__continue {
+  pointer-events: auto;
+  flex: none;
+}
+
+.post-words__cloud {
+  position: absolute;
+  overflow: visible;
+}
+
+.post-words__word {
+  pointer-events: auto;
+  cursor: default;
+}
+
+.post-words__word:focus {
+  outline: none;
+  text-decoration: underline;
+}
+
+.post-words__caveat {
+  position: absolute;
+  margin: 0;
+  font-size: 0.6875rem;
+  line-height: 1.45;
+  color: var(--ink-muted);
+}
+
 .transition-overlay canvas {
   position: absolute;
   inset: 0;

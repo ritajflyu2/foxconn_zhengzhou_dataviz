@@ -306,6 +306,85 @@ write("scene4_pay_model.json", {
     "caveat": "Modeled from CLW-reported pay rules and recruitment posts, not payslips. The overtime split and rebate amount are assumptions.",
 })
 
+# ---------------------------------------------------------------- 3 -> 4 transition: words in hiring posts
+# What the hiring posts say, across all scraped posts (not split by worker
+# type): the summary (摘要, field "desc") of every post on fskzpw.com. Bodies
+# are skipped because the site later overwrote many with a 2026 FAQ template.
+# Summaries are segmented with jieba (custom dictionary keeps compounds such as
+# 返费工 whole). Generic words (Foxconn, Zhengzhou, recruit, sign up, website,
+# we/you, dates and numbers) are left out by keeping only the words below,
+# chosen from the top of the frequency list for what they say about how
+# workers are addressed and sold to: pay, urgency, screening, the work.
+# Only the English gloss is exported.
+import jieba
+jieba.setLogLevel(60)
+POSTS_JSON = BASE / "data" / "原始文件_抓取数据" / "招聘帖全文抓取_fskzpw_2010-2026.json"
+POST_WORDS = {  # 中文 -> (English gloss, theme)
+    "返费": ("rebate", "pay"), "小时工": ("hourly worker", "pay"), "补贴": ("subsidy", "pay"),
+    "返费工": ("rebate worker", "pay"), "高价": ("high price", "pay"), "最高价": ("top price", "pay"),
+    "价格": ("price", "pay"), "薪资": ("pay", "pay"), "待遇": ("perks", "pay"), "底薪": ("base pay", "pay"),
+    "奖金": ("bonus", "pay"), "涨价": ("price rise", "pay"), "政策": ("policy", "pay"), "模式": ("pay scheme", "pay"),
+    "赶紧": ("hurry", "urgency"), "名额": ("spots", "urgency"), "名额有限": ("limited spots", "urgency"),
+    "提前报名": ("sign up early", "urgency"), "抓紧时间": ("lose no time", "urgency"), "机会": ("opportunity", "urgency"),
+    "紧急通知": ("urgent notice", "urgency"), "务必": ("be sure to", "urgency"), "锁定": ("lock in", "urgency"),
+    "限时": ("limited time", "urgency"), "机会难得": ("rare chance", "urgency"), "好消息": ("good news", "urgency"),
+    "重磅": ("big news", "urgency"), "停招": ("hiring paused", "urgency"), "错过": ("miss out", "urgency"),
+    "面试": ("interview", "screening"), "年龄": ("age", "screening"), "身份证": ("ID card", "screening"),
+    "在职": ("still on the job", "screening"), "打卡": ("clock in", "screening"), "入职": ("start work", "screening"),
+    "直招": ("direct hire", "screening"), "中介": ("middleman", "screening"),
+    "工友": ("fellow workers", "people"), "大家": ("everyone", "people"), "小伙伴": ("buddies", "people"),
+    "求职者": ("job seekers", "people"), "普工": ("general worker", "people"), "暑假工": ("summer worker", "people"),
+    "寒假工": ("winter-break worker", "people"), "学生工": ("student worker", "people"), "短期": ("short-term", "people"),
+    "进厂": ("enter the factory", "work"), "苹果": ("Apple", "work"), "组装": ("assembly", "work"),
+    "测试": ("testing", "work"), "无尘": ("clean room", "work"), "加班": ("overtime", "work"),
+}
+for w in [*POST_WORDS, "事业群", "招聘网", "不容错过", "零配件"]:
+    jieba.add_word(w, freq=100000)
+post_raw = json.loads(POSTS_JSON.read_text(encoding="utf-8"))["posts"]
+# Colour layer: each word is tagged with the worker type (one of Scene 4's four
+# rows, from the C1 post classification) whose posts use it most, as a share of
+# that type's own posts so the small student group is not drowned out.
+post_type = pd.read_csv(LT / "C1_post_type_classification.csv", dtype={"文章ID": str}).set_index("文章ID")["post_type"]
+WORD_TYPES = {k: KEYS[k] for k in ["regular/unspecified", "rebate-type dispatch", "hourly-type dispatch", "student/summer"]}
+type_total = {k: int((post_type == k).sum()) for k in WORD_TYPES}
+doc_freq, mentions = {w: 0 for w in POST_WORDS}, {w: 0 for w in POST_WORDS}
+by_type = {w: {k: 0 for k in WORD_TYPES} for w in POST_WORDS}
+for pid, p in post_raw.items():
+    tokens = list(jieba.cut(re.sub(r"[0-9０-９]+", " ", p.get("desc", ""))))
+    for w in POST_WORDS:
+        n = tokens.count(w)
+        mentions[w] += n
+        doc_freq[w] += n > 0
+        if n and post_type.get(pid) in by_type[w]:
+            by_type[w][post_type[pid]] += 1
+too_rare = [w for w, n in doc_freq.items() if n < 10]
+assert not too_rare, f"words in fewer than 10 posts: {too_rare}"
+
+TYPE_MIN_POSTS = 8  # a type needs this many posts using the word to claim it by share
+
+def top_type(w):
+    eligible = [t for t in WORD_TYPES if by_type[w][t] >= TYPE_MIN_POSTS]
+    k = (max(eligible, key=lambda t: by_type[w][t] / type_total[t]) if eligible
+         else max(WORD_TYPES, key=lambda t: by_type[w][t]))  # too rare everywhere: most posts wins
+    key, label = WORD_TYPES[k]
+    return {"type": key, "type_label": label, "type_posts": by_type[w][k], "type_total": type_total[k],
+            "type_share": round(by_type[w][k] / type_total[k], 4)}
+
+years = sorted({m.group(0) for p in post_raw.values() if (m := re.search(r"20\d\d", p.get("date", "")))})
+write("scene4_post_words.json", {
+    "total_posts": len(post_raw),
+    "year_range": [int(years[0]), int(years[-1])],
+    "types": [{"key": key, "label": label, "posts": type_total[k]} for k, (key, label) in WORD_TYPES.items()],
+    "words": sorted(
+        ({"word": en, "theme": theme, "posts": doc_freq[zh], "share": round(doc_freq[zh] / len(post_raw), 4), "mentions": mentions[zh], **top_type(zh)}
+         for zh, (en, theme) in POST_WORDS.items()),
+        key=lambda d: -d["posts"]),
+    "color_rule": "Each word is coloured by the worker type whose posts use it most, as a share of that type's own posts (needing at least 8 of them; otherwise the type with the most posts using it).",
+    "source": "Summaries of recruitment posts scraped from fskzpw.com (a labor-agency site), translated to English",
+    "method": "Each post's summary was split into words (jieba, a Chinese word segmenter). A word's size is the share of all posts whose summary uses it. Generic words (Foxconn, Zhengzhou, recruit, sign up, website, we/you, dates, numbers) are left out; the words shown were picked from the most frequent for what they say about pay, urgency, screening and the work.",
+    "caveat": "Agency posts, not Foxconn's own: they show how workers are recruited, not what the job is. Summaries are short (about 100 characters) and translations are approximate.",
+})
+
 # ---------------------------------------------------------------- scene 5: hearings
 src = LEGAL_SCRIPT.read_text(encoding="utf-8")
 CATEGORY_MAP = dict(re.findall(r'"([^"]+)":\s*"([^"]+)"', re.search(r"CATEGORY_MAP = \{(.*?)\n\}", src, re.S).group(1)))
