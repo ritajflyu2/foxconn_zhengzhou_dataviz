@@ -1318,6 +1318,125 @@ body {
   opacity: 1;
 }
 
+/* --- Introduction: Hazardous waste --- */
+
+.hw-what {
+  max-width: 46rem;
+  margin: -1rem 0 1rem;
+}
+
+.hw-lane__sub,
+.hw-tower__label {
+  font-size: 12px;
+  fill: var(--ink-muted);
+}
+
+.hw-tower__label {
+  font-family: var(--font-title);
+  font-size: 17px;
+  font-weight: 600;
+  fill: var(--ink);
+}
+
+.hw-phase {
+  font-family: var(--font-title);
+  font-size: 24px;
+  font-weight: 600;
+  fill: var(--ink);
+}
+
+.hw-lane__tally {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  fill: var(--ink);
+}
+
+/* Drawn over the fill; the fill underneath takes the hover. */
+.hw-lattice,
+.hw-deck,
+.hw-tower__line,
+.hw-ref {
+  pointer-events: none;
+}
+
+.hw-lattice {
+  stroke: var(--ink-secondary);
+  stroke-width: 0.9;
+  stroke-opacity: 0.65;
+}
+
+.hw-deck {
+  fill: var(--ink-secondary);
+  fill-opacity: 0.85;
+}
+
+.hw-lane {
+  stroke: var(--grid);
+  stroke-width: 1.5;
+}
+
+.hw-lane__name {
+  font-family: var(--font-title);
+  font-size: 20px;
+  font-weight: 600;
+  fill: var(--ink);
+}
+
+.hw-lane__value {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  fill: var(--ink-secondary);
+}
+
+.hw-truck__bed {
+  fill: var(--surface-raised);
+  stroke: var(--ink-secondary);
+  stroke-width: 1.25;
+}
+
+.hw-truck__cab {
+  fill: var(--ink-secondary);
+}
+
+.hw-truck__wheel {
+  fill: var(--ink);
+}
+
+.hw-tower {
+  fill: var(--surface-raised);
+}
+
+.hw-tower__line {
+  fill: none;
+  stroke: var(--ink-secondary);
+  stroke-width: 1.25;
+}
+
+.hw-band {
+  cursor: default;
+}
+
+.hw-ref line {
+  stroke: var(--ink);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.hw-ref text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--ink-secondary);
+}
+
+.hw-end {
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+
+.hw-end.is-visible {
+  opacity: 1;
+}
+
 /* --- Scene 2: assembly floor and dorm room --- */
 
 /* Floor (bigger) and dorm (smaller) side by side; the per-person area is a

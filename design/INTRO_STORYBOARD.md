@@ -63,3 +63,30 @@ Computed in JS: ≈ 5.8 a second (shown "about 6"), stack ≈ 4,375 m, ≈ 600 m
 - **Decision:** the EIA figure, not the earlier "300 million L / 120 pools" (about 10× lower than the EIAs; likely a 万m³ / liter mix-up).
 - Counters: liters and pools filled. Pause / Skip / Replay; starts in view; reduced motion shows the end state. Hover a pool: what one pool holds.
 - **Caveat:** approved design figures, not measured discharge; two of the zone's three plants (Henan Fuchi has no figure); the two EIAs count wastewater differently; FII Yuzhan took over some Hongfujin projects, so they may overlap slightly.
+
+## Screen 4 — Hazardous waste
+
+**Idea:** from one day of hazardous waste (trucks loading at each plant) to one year of it (Eiffel Towers). Hazardous waste here means solid and liquid waste (spent filters and activated carbon, used containers and oils, sludge) hauled away by licensed contractors; it is not air emissions and not wastewater.
+
+**Data** (`site/data/intro/hazardous_waste.json`, from `scripts/export_intro_data.py`; the site computes every total):
+
+| Plant | Tonnes / year | Source | Status |
+|---|---|---|---|
+| Hongfujin (iPhone assembly) | 9,619.311 (spent activated carbon 9,244.288, waste containers 374.1, lubricating oil 0.4, other 0.523) | 2023 K-zone EIA, table 2-49, existing works through 2022 (entered in the script; not in the workbook) | EIA estimate |
+| FII Yuzhan (phone metal parts) | 8,713.71 | April 2026 EIA, table 2-13, existing works as of 2025 (read from the environment workbook) | EIA figure |
+| Henan Fuchi | not available ("no data found") | | not drawn; one note under the lanes |
+
+Truck payload 20 t (assumption, labelled); Eiffel Tower 10,100 t (Wikipedia; the JSON also carries the 7,300 t metal structure, not shown). Computed: at least ≈ 18,333 t a year, ≈ 50.2 t and ≈ 2.5 truckloads a day, ≈ 917 a year, ≈ 1.8 towers.
+
+**Animation** (one SVG, one clock; starts in view; Pause / Skip / Replay; reduced motion shows the end state):
+
+Layout: the day on the left (the truck lanes), the year on the right (the Eiffel Towers); no chart titles, the Time counter carries the day.
+
+1. **Day** (fast, ≈ 2.6 s): one truck lane per plant (no clock). The truck at the dock fills with that plant's daily tonnes (≈ 26.4 t, ≈ 23.9 t); each full 20 t truck is parked beside it ("full, ready to go"). The same tonnes fill the towers at the same time, so the day is only a thin first layer at the base, marked "one day →". "About 2.5 truckloads a day, on average: a thin first layer in the tower."
+2. **Year:** after a short, smooth pause (≈ 1.8 s), the trucks stay exactly as the day left them (one parked, one part-filled) and only the towers keep filling. The year starts slowly (day 2, day 3, …) and speeds up (≈ 7.5 s for the year), with day, tonnes and truckload counters. "The same 2.5 truckloads, every day for a year: 917 in all." No flying dots and no refilling trucks.
+3. **Towers:** original, detailed Eiffel Tower silhouettes (legs and arch, three platform decks, lattice X-bays, lantern and spire; after `design/reference/Eiffel tower.avif`), labelled "Eiffel Tower 1 / 2", filled by area (full when the silhouette is), stacked by plant on one tonnes scale: Hongfujin first, FII Yuzhan on top, overflowing into the second tower (to ≈ 0.8). One dashed baseline: "One Eiffel Tower, 10,100 t".
+4. **End line:** "At least 18,000 tonnes of hazardous waste a year from two airport-zone plants: about 1.8 Eiffel Towers."
+
+- Plant colours: a brown (`--color-hw-hongfujin` #c0731f) and a darker brown (`--color-hw-yuzhan` #7b3f0a), from truck cargo to tower fill (validated, all checks pass on sand). Legend lists the two plants.
+- Hover / tap a fill: plant, tonnes, tonnes ÷ 10,100, status, source.
+- **Caveat** in place: EIA estimates and approved amounts, not measured shipments; different years (works through 2022 vs 2025); Henan Fuchi not included, so totals are minimums; truck size is an assumption; a small Hongfujin / FII Yuzhan overlap not ruled out; separate from wastewater and air emissions.

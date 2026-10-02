@@ -106,6 +106,56 @@ def wastewater():
     }
 
 
+# ---------------------------------------------------------------- hazardous waste
+# Solid and liquid hazardous waste (spent filters and activated carbon, used
+# containers, oils, sludge) hauled off by licensed contractors, per plant, from
+# each plant's own EIA. Yuzhan's figure is in the environment workbook;
+# Hongfujin's is entered here from its EIA table (not in the workbook).
+HONGFUJIN_HW = {
+    "tonnes_per_year": 9619.311,
+    "components": [
+        {"name": "spent activated carbon", "tonnes": 9244.288},
+        {"name": "waste containers", "tonnes": 374.1},
+        {"name": "lubricating oil", "tonnes": 0.4},
+        {"name": "other small items", "tonnes": 0.523},
+    ],
+}
+
+
+def hazardous_waste():
+    df = pd.read_excel(EIA_XLSX, sheet_name="长表_全部记录")
+    row = df[df["实体"].astype(str).str.contains("河南裕展") & df["口径"].astype(str).str.contains("全厂现有工程（截至2025年）", regex=False)
+             & df["污染物"].astype(str).str.contains("危险废物")]
+    assert len(row) == 1 and row.iloc[0]["单位"] == "t/a", row
+    comp_sum = sum(c["tonnes"] for c in HONGFUJIN_HW["components"])
+    assert abs(comp_sum - HONGFUJIN_HW["tonnes_per_year"]) < 0.01, comp_sum
+    return {
+        "plants": [
+            {"key": "hongfujin", "name": "Hongfujin", "role": "iPhone assembly", "tonnes_per_year": HONGFUJIN_HW["tonnes_per_year"],
+             "basis": "EIA estimate for the plant's existing works (all projects through 2022)",
+             "source": "Hongfujin Precision Electronics (Zhengzhou), K-zone heat-source station expansion EIA, May 2023, table 2-49 (whole-plant existing works)",
+             "status": "EIA estimate", "components": HONGFUJIN_HW["components"]},
+            {"key": "yuzhan", "name": "FII Yuzhan", "role": "phone metal parts", "tonnes_per_year": float(row.iloc[0]["数值"]),
+             "basis": "Existing works as of 2025, as stated in the plant's latest EIA",
+             "source": "FII Yuzhan, 5G high-end AI phone structure-part upgrade EIA, April 2026, table 2-13 (pollutant summary of existing works)",
+             "status": "EIA figure", "components": None},
+            {"key": "fuchi", "name": "Henan Fuchi", "role": "third airport-zone plant", "tonnes_per_year": None,
+             "basis": None, "source": None, "status": "not available", "note": "No data found"},
+        ],
+        "days_per_year": 365,
+        "truck_payload_tonnes": 20,
+        "truck_payload_note": "Assumption: a 20-tonne load per truck",
+        "eiffel_total_tonnes": 10100,
+        "eiffel_metal_structure_tonnes": 7300,
+        "eiffel_source": "Wikipedia, Eiffel Tower: about 10,100 tonnes in total, of which about 7,300 tonnes is the metal structure",
+        "what_it_is": "Hazardous waste here means solid and liquid waste, such as spent filters and activated carbon, used containers and oils, and sludge, hauled away by licensed contractors. It is not air emissions and not wastewater.",
+        "end_line": "At least {combined} tonnes of hazardous waste a year from two airport-zone plants: about {multiple} Eiffel Towers.",
+        "caveat": ("EIA estimates and approved amounts, not measured shipments. The two figures are for different years (Hongfujin's works through 2022, "
+                   "FII Yuzhan's as of 2025). Henan Fuchi is not included, so every total is a minimum. The truck size is an assumption. A small overlap "
+                   "between Hongfujin and FII Yuzhan (which took over some Hongfujin projects) is not ruled out. Hazardous waste is separate from wastewater and air emissions."),
+    }
+
+
 def main():
     DATA_OUT.mkdir(parents=True, exist_ok=True)
     ASSET_OUT.mkdir(parents=True, exist_ok=True)
@@ -117,6 +167,9 @@ def main():
     print(f"wrote {path.relative_to(ROOT)}")
     path = DATA_OUT / "wastewater.json"
     path.write_text(json.dumps(wastewater(), indent=2) + "\n")
+    print(f"wrote {path.relative_to(ROOT)}")
+    path = DATA_OUT / "hazardous_waste.json"
+    path.write_text(json.dumps(hazardous_waste(), indent=2) + "\n")
     print(f"wrote {path.relative_to(ROOT)}")
 
 

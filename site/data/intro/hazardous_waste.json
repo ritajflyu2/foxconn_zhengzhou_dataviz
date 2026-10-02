@@ -1,0 +1,60 @@
+{
+  "plants": [
+    {
+      "key": "hongfujin",
+      "name": "Hongfujin",
+      "role": "iPhone assembly",
+      "tonnes_per_year": 9619.311,
+      "basis": "EIA estimate for the plant's existing works (all projects through 2022)",
+      "source": "Hongfujin Precision Electronics (Zhengzhou), K-zone heat-source station expansion EIA, May 2023, table 2-49 (whole-plant existing works)",
+      "status": "EIA estimate",
+      "components": [
+        {
+          "name": "spent activated carbon",
+          "tonnes": 9244.288
+        },
+        {
+          "name": "waste containers",
+          "tonnes": 374.1
+        },
+        {
+          "name": "lubricating oil",
+          "tonnes": 0.4
+        },
+        {
+          "name": "other small items",
+          "tonnes": 0.523
+        }
+      ]
+    },
+    {
+      "key": "yuzhan",
+      "name": "FII Yuzhan",
+      "role": "phone metal parts",
+      "tonnes_per_year": 8713.71,
+      "basis": "Existing works as of 2025, as stated in the plant's latest EIA",
+      "source": "FII Yuzhan, 5G high-end AI phone structure-part upgrade EIA, April 2026, table 2-13 (pollutant summary of existing works)",
+      "status": "EIA figure",
+      "components": null
+    },
+    {
+      "key": "fuchi",
+      "name": "Henan Fuchi",
+      "role": "third airport-zone plant",
+      "tonnes_per_year": null,
+      "basis": null,
+      "source": null,
+      "status": "not available",
+      "note": "No data found"
+    }
+  ],
+  "days_per_year": 365,
+  "truck_payload_tonnes": 20,
+  "truck_payload_note": "Assumption: a 20-tonne load per truck",
+  "eiffel_total_tonnes": 10100,
+  "eiffel_metal_structure_tonnes": 7300,
+  "eiffel_source": "Wikipedia, Eiffel Tower: about 10,100 tonnes in total, of which about 7,300 tonnes is the metal structure",
+  "what_it_is": "Hazardous waste here means solid and liquid waste, such as spent filters and activated carbon, used containers and oils, and sludge, hauled away by licensed contractors. It is not air emissions and not wastewater.",
+  "end_line": "At least {combined} tonnes of hazardous waste a year from two airport-zone plants: about {multiple} Eiffel Towers.",
+  "caveat": "EIA estimates and approved amounts, not measured shipments. The two figures are for different years (Hongfujin's works through 2022, FII Yuzhan's as of 2025). Henan Fuchi is not included, so every total is a minimum. The truck size is an assumption. A small overlap between Hongfujin and FII Yuzhan (which took over some Hongfujin projects) is not ruled out. Hazardous waste is separate from wastewater and air emissions."
+}
