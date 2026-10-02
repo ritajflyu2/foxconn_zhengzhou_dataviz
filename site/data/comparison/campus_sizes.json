@@ -1,0 +1,59 @@
+{
+  "foxconn_zhengzhou_airport_zone": {
+    "area_ha": 601.51,
+    "area_acres": 1486.37,
+    "area_km2": 6.0151,
+    "source": "foxconn zhengzhou google earth.kml (hand-traced outline, Google Earth Web)",
+    "method": "Shoelace polygon area on a local equirectangular projection centered at the polygon centroid.",
+    "drawn_shape_is_illustrative": false
+  },
+  "apple_park": {
+    "area_ha": 70.82,
+    "area_acres": 175.0,
+    "area_km2": 0.7082,
+    "source": "Apple Newsroom, \"Apple Park opens to employees in April\" (Feb 2017): https://www.apple.com/newsroom/2017/02/apple-park-opens-to-employees-in-april/",
+    "method": "Published figure (175 acres), converted to ha and km2. The drawn outline in apple campus 2.png (used for the crop/illustrative image only) and apple hq 2.kml (reference only) are NOT the source of this area.",
+    "drawn_shape_is_illustrative": true
+  },
+  "ratio_foxconn_to_apple": 8.494,
+  "layout": {
+    "foxconn_zhengzhou_airport_zone": {
+      "image": "foxconn_cutout.png",
+      "image_px": [
+        1597,
+        1152
+      ],
+      "outline_bbox_px": [
+        12,
+        12,
+        1573,
+        1128
+      ],
+      "m_per_px": 2.4467,
+      "m_per_px_scale_bar": 2.5974,
+      "scale_bar_vs_kml_pct": 6.2,
+      "width_m": 3873,
+      "length_m": 2742,
+      "width_length_source": "foxconn zhengzhou google earth.kml: east-west and north-south extent of the traced polygon, local equirectangular projection."
+    },
+    "apple_park": {
+      "image": "apple_cutout.png",
+      "image_px": [
+        852,
+        1344
+      ],
+      "outline_bbox_px": [
+        12,
+        12,
+        828,
+        1320
+      ],
+      "m_per_px": 0.9457,
+      "m_per_px_scale_bar": 0.9646,
+      "scale_bar_vs_kml_pct": 2.0,
+      "width_m": 780,
+      "length_m": 1253,
+      "width_length_source": "apple hq 2.kml (placemark \"apple campus\"): east-west and north-south extent of the traced polygon, local equirectangular projection."
+    }
+  }
+}

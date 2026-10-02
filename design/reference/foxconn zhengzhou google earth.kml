@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document id="document">
+	<name>Untitled map project</name>
+	<gx:CascadingStyle kml:id="__managed_style_02950A86E5422F907CF4_highlight">
+		<Style>
+			<IconStyle>
+				<scale>1.2</scale>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>3</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>40ffffff</color>
+			</PolyStyle>
+			<BalloonStyle>
+				<displayMode>hide</displayMode>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<gx:CascadingStyle kml:id="__managed_style_02950A86E5422F907CF4_normal">
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>2</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>40ffffff</color>
+			</PolyStyle>
+			<BalloonStyle>
+				<displayMode>hide</displayMode>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<StyleMap id="__managed_style_02950A86E5422F907CF4">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_02950A86E5422F907CF4_normal</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_02950A86E5422F907CF4_highlight</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Placemark id="0497163219422F907CE4">
+		<name>Foxconn Zhengzhou airpot zone</name>
+		<LookAt>
+			<longitude>113.8569145537457</longitude>
+			<latitude>34.55193994361972</latitude>
+			<altitude>140.3233829712025</altitude>
+			<heading>3.587492158236962e-06</heading>
+			<tilt>11.70491251550644</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>8687.921011343133</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_02950A86E5422F907CF4</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						113.8303414620437,34.54967095785683,0 113.8382954029238,34.54820036569001,0 113.8705733982957,34.53685171251189,0 113.8722888561383,34.54051004414835,0 113.8695801595178,34.54143913052588,0 113.8702598905472,34.54331350459164,0 113.8726316629837,34.55216408833476,0 113.8701881282676,34.55528774105917,0 113.8333444723014,34.56151437479075,0 113.8303414620437,34.54967095785683,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+</Document>
+</kml>

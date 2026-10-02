@@ -1,0 +1,41 @@
+{
+  "foxconn": {
+    "crop_box_xyxy": [
+      933,
+      735,
+      2630,
+      1953
+    ],
+    "scale_bar_px": 385,
+    "m_per_px_scale_bar": 2.5974,
+    "m_per_px_from_kml_area": 2.456,
+    "enclosed_px": 997224,
+    "kml_area_m2": 6015125.9,
+    "cross_check_pct_diff": -5.44
+  },
+  "apple": {
+    "source_image": "apple campus 2.png",
+    "crop_box_xyxy": [
+      1307,
+      512,
+      2201,
+      1936
+    ],
+    "scale_bar_px": 311,
+    "m_per_px_scale_bar": 0.9646,
+    "enclosed_px": 773160,
+    "note": "This screenshot's drawn outline closes fully in pixel space (same label-crossing-gap bridging as Foxconn's), unlike the first Apple screenshot used in the prior pass \u2014 so the crop and dimmed-outside fill come directly from this outline. Area is still NOT derived from it: Apple's size in campus_sizes.json is the published 175-acre figure, per instruction. 'apple hq 2.kml' is reference only and is not used in any calculation here."
+  },
+  "shared_scale": {
+    "target_m_per_px": 2.5974,
+    "apple_resample_factor": 0.3714,
+    "apple_resampled_size": [
+      332,
+      529
+    ],
+    "foxconn_size": [
+      1697,
+      1218
+    ]
+  }
+}

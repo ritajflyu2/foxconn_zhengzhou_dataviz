@@ -5,7 +5,12 @@ import { dotsToBars } from './transitions/dotsToBars.js';
 import { postsToLegend } from './transitions/postsToLegend.js';
 import { fireBurn } from './transitions/fireBurn.js';
 
+// Returns null (not a default scene id) when the hash belongs to another page
+// (e.g. the Introduction page's #intro-N) — only an empty hash or a Labor
+// #scene-N hash is this page's to act on; see introManager.js's idFromHash
+// for the mirror of this on its own prefix.
 const idFromHash = () => {
+  if (window.location.hash && !window.location.hash.startsWith('#scene-')) return null;
   const match = /^#scene-(\d+)$/.exec(window.location.hash);
   const id = match ? Number(match[1]) : NaN;
   return scenes.some((s) => s.id === id) ? id : scenes[0].id;
@@ -45,9 +50,11 @@ function createArrows(nav, getCurrent) {
   label.setAttribute('aria-live', 'polite');
   nav.append(prev, label, next);
 
-  // Arrow keys too — except while a slider or text field has focus (they use them).
+  // Arrow keys too — except while a slider or text field has focus (they use
+  // them), or while another page (e.g. Introduction) is the one showing.
   document.addEventListener('keydown', (e) => {
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if (window.location.hash.startsWith('#intro-')) return;
     if (e.target.closest?.('input, textarea, select, [contenteditable], [role="slider"]')) return;
     if (e.key === 'ArrowRight') go(getCurrent() + 1);
     else if (e.key === 'ArrowLeft') go(getCurrent() - 1);
@@ -74,7 +81,7 @@ export function createSceneManager({ nav, root, pageGrid }) {
   const updateArrows = createArrows(nav, () => currentId);
 
   async function show(id) {
-    if (id === currentId) return;
+    if (id == null || id === currentId) return;
     const token = ++navToken;
 
     // A running transition jumps to its end state before the next scene loads.
@@ -117,7 +124,21 @@ export function createSceneManager({ nav, root, pageGrid }) {
     }
   }
 
-  window.addEventListener('hashchange', () => show(idFromHash()));
+  window.addEventListener('hashchange', () => {
+    const id = idFromHash();
+    if (id != null) show(id);
+  });
 
-  return { start: () => show(idFromHash()) };
+  return {
+    start: () => {
+      const id = idFromHash();
+      if (id != null) show(id);
+    },
+    // Called by main.js's page router when another page (Introduction) has
+    // taken over #scene-root — without this, returning here would no-op
+    // (id === currentId) even though the DOM no longer shows this scene.
+    invalidate: () => {
+      currentId = null;
+    },
+  };
 }
