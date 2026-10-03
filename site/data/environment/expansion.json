@@ -1,0 +1,204 @@
+{
+ "image": "zone_map.webp",
+ "image_px": [
+  555,
+  1129
+ ],
+ "unit": "t/year",
+ "animation": {
+  "seconds_per_year": 0.8
+ },
+ "zones": [
+  {
+   "id": "a",
+   "label": "A",
+   "year_approved": null,
+   "approximate": false,
+   "path": "M348,58L348,187L210,187L210,58Z"
+  },
+  {
+   "id": "d",
+   "label": "D",
+   "year_approved": 2013,
+   "approximate": false,
+   "path": "M524,58L524,187L384,187L384,58Z"
+  },
+  {
+   "id": "b",
+   "label": "B",
+   "year_approved": 2014,
+   "approximate": false,
+   "path": "M348,219L348,305L310,305L310,362L209,362L209,219Z"
+  },
+  {
+   "id": "e",
+   "label": "E",
+   "year_approved": 2014,
+   "approximate": false,
+   "path": "M524,219L524,286L524,362L425,362L425,360L423,360L423,305L384,305L384,219Z"
+  },
+  {
+   "id": "c",
+   "label": "C",
+   "year_approved": 2012,
+   "approximate": false,
+   "path": "M348,409L348,537L250,537L250,412L253,412L253,409Z"
+  },
+  {
+   "id": "f",
+   "label": "F",
+   "year_approved": 2011,
+   "approximate": false,
+   "path": "M524,409L524,537L426,537L426,536L423,536L423,481L384,481L384,411L387,411L387,409Z"
+  },
+  {
+   "id": "x",
+   "label": "X",
+   "year_approved": null,
+   "approximate": false,
+   "path": "M511,592L511,669L403,669L403,649L426,649L426,602L403,602L403,592Z"
+  },
+  {
+   "id": "gs",
+   "label": "G South",
+   "year_approved": 2017,
+   "approximate": true,
+   "path": "M174,700L174,823L102,823L102,822L98,822L98,700Z"
+  },
+  {
+   "id": "gn",
+   "label": "G North",
+   "year_approved": 2017,
+   "approximate": true,
+   "path": "M346,700L346,738L349,738L349,743L353,743L353,823L217,823L217,822L194,822L194,700Z"
+  },
+  {
+   "id": "k",
+   "label": "K",
+   "year_approved": 2010,
+   "approximate": false,
+   "path": "M525,700L525,822L445,822L445,768L384,768L384,700Z"
+  },
+  {
+   "id": "h",
+   "label": "H",
+   "year_approved": null,
+   "approximate": false,
+   "path": "M353,842L353,977L200,977L200,975L194,975L194,842Z"
+  },
+  {
+   "id": "l",
+   "label": "L",
+   "year_approved": 2012,
+   "approximate": false,
+   "path": "M525,846L525,974L384,974L384,902L422,902L422,846Z"
+  },
+  {
+   "id": "j",
+   "label": "J",
+   "year_approved": null,
+   "approximate": false,
+   "path": "M353,993L353,1111L215,1111L215,1110L201,1110L201,1109L194,1109L194,993Z"
+  },
+  {
+   "id": "m",
+   "label": "M",
+   "year_approved": null,
+   "approximate": false,
+   "path": "M525,996L525,1064L479,1064L479,1108L384,1108L384,996Z"
+  }
+ ],
+ "years": [
+  {
+   "year": 2010,
+   "cum_nmhc": 150.5,
+   "cum_cod": 30.0,
+   "add_nmhc": 150.5,
+   "add_cod": 30.0,
+   "zones": [
+    "k"
+   ],
+   "new_approval": true
+  },
+  {
+   "year": 2011,
+   "cum_nmhc": 301.0,
+   "cum_cod": 60.0,
+   "add_nmhc": 150.5,
+   "add_cod": 30.0,
+   "zones": [
+    "f"
+   ],
+   "new_approval": true
+  },
+  {
+   "year": 2012,
+   "cum_nmhc": 381.4,
+   "cum_cod": 105.0,
+   "add_nmhc": 80.4,
+   "add_cod": 45.0,
+   "zones": [
+    "c",
+    "l"
+   ],
+   "new_approval": true
+  },
+  {
+   "year": 2013,
+   "cum_nmhc": 462.6,
+   "cum_cod": 120.0,
+   "add_nmhc": 81.2,
+   "add_cod": 15.0,
+   "zones": [
+    "d"
+   ],
+   "new_approval": true
+  },
+  {
+   "year": 2014,
+   "cum_nmhc": 561.18,
+   "cum_cod": 151.95,
+   "add_nmhc": 98.58,
+   "add_cod": 31.95,
+   "zones": [
+    "b",
+    "e"
+   ],
+   "new_approval": true
+  },
+  {
+   "year": 2015,
+   "cum_nmhc": 561.18,
+   "cum_cod": 151.95,
+   "add_nmhc": 0.0,
+   "add_cod": 0.0,
+   "zones": [],
+   "new_approval": false
+  },
+  {
+   "year": 2016,
+   "cum_nmhc": 561.18,
+   "cum_cod": 151.95,
+   "add_nmhc": 0.0,
+   "add_cod": 0.0,
+   "zones": [],
+   "new_approval": false
+  },
+  {
+   "year": 2017,
+   "cum_nmhc": 600.18,
+   "cum_cod": 158.34,
+   "add_nmhc": 39.0,
+   "add_cod": 6.39,
+   "zones": [
+    "gn",
+    "gs"
+   ],
+   "new_approval": true
+  }
+ ],
+ "source": "Hongfujin's assembly-project environmental impact assessments (EIAs), 2010-2017, summed in approval order (environment analysis table D4)",
+ "g_note": "The 2017 filing names zone G without saying North or South, so both G blocks are lit and marked approximate.",
+ "no_approval_note": "No new assembly-project approval this year; the totals carry over unchanged.",
+ "caveat": "Approved design capacity from each project's EIA, not measured emissions. Zones without an assembly-project EIA in the record stay unlit; that does not mean they emit nothing. The map is an illustrative campus plan."
+}

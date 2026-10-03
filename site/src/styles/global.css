@@ -1818,3 +1818,163 @@ svg.is-hovering .floor-index__floor.is-hovered image {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* --- Waste and Water Processing: Expansion (styled after Labor Scene 3) ---- */
+.env-counters {
+  margin-top: 1.5rem;
+}
+
+.env-counter__swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 0.4rem;
+  vertical-align: 0.05em;
+}
+
+.env-counter__unit {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+  letter-spacing: 0;
+}
+
+/* Scene 3's two-column layout; the map column is as wide as the map at its
+   chart-matched height. */
+.env-layout {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 3.5rem; /* room between the map and the charts */
+  align-items: start;
+  margin-top: 2.75rem; /* and between the running totals and both */
+}
+
+@media (max-width: 760px) {
+  .env-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.env-map {
+  margin: 0;
+}
+
+/* Height is set from the charts beside it (expansion.js); width follows. */
+.env-map svg {
+  display: block;
+  width: auto;
+}
+
+/* Not yet approved (or no record): a sand wash over the plan, which shows
+   through faintly. Fills change at Scene 3's reveal pace. */
+.env-zone {
+  fill: var(--surface);
+  fill-opacity: 0.62;
+  stroke: none;
+  transition: fill 320ms ease, fill-opacity 320ms ease;
+  cursor: default;
+  outline: none;
+}
+
+.env-zone.is-on {
+  fill: var(--color-env-nmhc);
+  fill-opacity: 0.7;
+}
+
+.env-zone:focus-visible {
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+
+/* Approved this year: an outline pulse (within one year's step), then it
+   settles into the fill. */
+.env-zone.is-new {
+  stroke: var(--color-env-nmhc);
+  animation: env-zone-pulse 700ms ease-out both;
+}
+
+@keyframes env-zone-pulse {
+  0% { stroke-width: 10; stroke-opacity: 1; fill-opacity: 0.85; }
+  100% { stroke-width: 0; stroke-opacity: 0; fill-opacity: 0.7; }
+}
+
+.env-legend {
+  margin-top: 0.75rem;
+  max-width: 16rem;
+}
+
+.env-legend__swatch {
+  border-radius: 3px;
+}
+
+.env-legend__swatch--on {
+  background: color-mix(in srgb, var(--color-env-nmhc) 70%, #74b4ea);
+}
+
+.env-legend__swatch--off {
+  background: color-mix(in srgb, #74b4ea 38%, var(--surface));
+}
+
+.env-charts {
+  max-width: 30rem; /* charts at their drawn size; the map takes its height from them */
+}
+
+.env-chart-figure + .env-chart-figure {
+  margin-top: 0.75rem;
+}
+
+.env-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.env-chart__name {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  fill: var(--ink-secondary);
+}
+
+.env-chart__future {
+  fill: none;
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+  opacity: 0.35;
+}
+
+.env-chart__line {
+  fill: none;
+  stroke-width: 2;
+}
+
+.env-chart__area {
+  opacity: 0.14;
+}
+
+/* Each year's exact cumulative value: revealed with its year, like Scene 3's bars. */
+.env-chart__value {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  fill: var(--ink-secondary);
+  opacity: 0;
+  transition: opacity 320ms ease;
+}
+
+.env-chart__value.revealed {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .env-zone,
+  .env-chart__value {
+    transition: none;
+  }
+  .env-zone.is-new {
+    animation: none;
+  }
+}

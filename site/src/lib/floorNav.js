@@ -6,6 +6,15 @@ const imageUrl = (name) => floorImages[`../../assets/labor/${name}`];
 
 const PITCH = 0.47; // vertical step between floors, as a share of a floor's height
 const PAGE_FLOOR = '1F'; // the Labor page is the assembly-line floor
+// Floors that open a page of the site: clicking one goes there.
+const FLOOR_LINKS = { '1F': '#scene-3', '4F': '#env-1' };
+const pageOfHash = (hash) => (hash.startsWith('#env-') ? '#env-' : hash.startsWith('#scene-') || !hash ? '#scene-' : hash);
+let activate = null;
+
+// Lets the page router mark the floor of the page now showing.
+export function setFloorActive(id) {
+  activate?.(id);
+}
 
 // Floors stacked 1F at the bottom, upper floors drawn in front (as in the
 // exploded reference view). Positions in viewBox units, top-left of each image.
@@ -34,6 +43,7 @@ export const INDEX_1F = (() => {
 //
 // Every floor is clickable (or Tab + Enter): the clicked floor becomes active,
 // drawn in front with the others faded, and its name sits under the stack.
+// 1F opens Labor (Scene 3) and 4F opens Waste and Water Processing.
 // Hovering a floor fades everything else further and shows a legend for it
 // on the left (floor number, a leader line, the name), only while hovered.
 export function mountFloorNav(root) {
@@ -131,14 +141,21 @@ export function mountFloorNav(root) {
       .get(f.id)
       .on('pointerenter focus', () => showHover(f))
       .on('pointerleave blur', hideHover)
-      .on('click', () => setActive(f.id))
+      .on('click', () => choose(f.id))
       .on('keydown', (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
-          setActive(f.id);
+          choose(f.id);
         }
       });
   }
+  // A floor with a page of its own opens it (unless it is already showing).
+  function choose(id) {
+    setActive(id);
+    const link = FLOOR_LINKS[id];
+    if (link && pageOfHash(window.location.hash) !== pageOfHash(link)) window.location.hash = link.slice(1);
+  }
+  activate = setActive;
   setActive(PAGE_FLOOR);
 
   return aside;
