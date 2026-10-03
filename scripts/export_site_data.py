@@ -6,7 +6,9 @@ writes site/data/labor/*.json. The site reads only these JSON files, never the
 Excel workbooks.
 
 Display rules (see design/LABOR_STORYBOARD.md):
-- Every string meant for display is English. No Chinese text is exported.
+- Every string meant for display is English. No Chinese text is exported,
+  except the word cloud's "zh" field (each word's Chinese original, shown
+  beside its English gloss at the user's request).
 - Money is stored in RMB (the source unit) together with the USD value at
   FX_CNY_PER_USD. The site shows USD first, e.g. "$3.73 (¥25)".
 - Private individuals are never named: they are exported as "Individual".
@@ -450,8 +452,8 @@ write("scene4_pay_model.json", {
 import jieba
 jieba.setLogLevel(60)
 POST_WORDS = {  # 中文 -> (English gloss, theme)
-    "返费": ("rebate", "pay"), "小时工": ("hourly worker", "pay"), "补贴": ("subsidy", "pay"),
-    "返费工": ("rebate worker", "pay"), "高价": ("high price", "pay"), "最高价": ("top price", "pay"),
+    "返费": ("rebate", "pay"), "补贴": ("subsidy", "pay"),
+    "高价": ("high price", "pay"), "最高价": ("top price", "pay"),
     "价格": ("price", "pay"), "薪资": ("pay", "pay"), "待遇": ("perks", "pay"), "底薪": ("base pay", "pay"),
     "奖金": ("bonus", "pay"), "涨价": ("price rise", "pay"), "政策": ("policy", "pay"), "模式": ("pay scheme", "pay"),
     "赶紧": ("hurry", "urgency"), "名额": ("spots", "urgency"), "名额有限": ("limited spots", "urgency"),
@@ -464,18 +466,24 @@ POST_WORDS = {  # 中文 -> (English gloss, theme)
     "直招": ("direct hire", "screening"), "中介": ("middleman", "screening"),
     "工友": ("fellow workers", "people"), "大家": ("everyone", "people"), "小伙伴": ("buddies", "people"),
     "求职者": ("job seekers", "people"), "普工": ("general worker", "people"), "暑假工": ("summer worker", "people"),
-    "寒假工": ("winter-break worker", "people"), "学生工": ("student worker", "people"), "短期": ("short-term", "people"),
+    "寒假工": ("winter-break worker", "people"), "短期": ("short-term", "people"),
     "进厂": ("enter the factory", "work"), "苹果": ("Apple", "work"), "组装": ("assembly", "work"),
     "测试": ("testing", "work"), "无尘": ("clean room", "work"), "加班": ("overtime", "work"),
+    "工资": ("wages", "pay"), "含税": ("before tax", "pay"), "下调": ("price cut", "pay"),
+    "暴涨": ("price surge", "pay"), "同工同酬": ("equal pay for equal work", "pay"),
+    "要求": ("requirements", "screening"), "试用期": ("probation", "screening"),
+    "关键工站": ("key workstation", "work"), "培训": ("training", "work"),
 }
-for w in [*POST_WORDS, "事业群", "招聘网", "不容错过", "零配件"]:
+# Job-type labels (hourly worker, rebate worker, student worker) are left out of
+# the cloud as uninformative, but stay in the dictionary so segmentation is
+# unchanged (e.g. 返费工 is not split into 返费 + 工, which would inflate "rebate").
+for w in [*POST_WORDS, "小时工", "返费工", "学生工", "事业群", "招聘网", "不容错过", "零配件"]:
     jieba.add_word(w, freq=100000)
-# Colour layer: each word is tagged with the post group (Scene 3's groups that
-# carry a worker-type colour; "not stated" posts are left out) whose posts use
-# it most, as a share of that group's own posts so the small student group is
-# not drowned out.
+# Colour layer: each word is tagged with the post group (Scene 3's four groups,
+# "not stated" included) whose posts use it most, as a share of that group's
+# own posts so the small student group is not drowned out.
 post_type = post_group_of
-WORD_TYPES = {k: (k, POST_GROUPS[k]) for k in ["regular", "dispatch", "student"]}
+WORD_TYPES = {k: (k, POST_GROUPS[k]) for k in POST_GROUPS}
 type_total = {k: int((post_type == k).sum()) for k in WORD_TYPES}
 doc_freq, mentions = {w: 0 for w in POST_WORDS}, {w: 0 for w in POST_WORDS}
 by_type = {w: {k: 0 for k in WORD_TYPES} for w in POST_WORDS}
@@ -506,14 +514,14 @@ write("scene4_post_words.json", {
     "year_range": [int(years[0]), int(years[-1])],
     "types": [{"key": key, "label": label, "posts": type_total[k]} for k, (key, label) in WORD_TYPES.items()],
     "words": sorted(
-        ({"word": en, "theme": theme, "posts": doc_freq[zh], "share": round(doc_freq[zh] / len(post_raw), 4), "mentions": mentions[zh], **top_type(zh)}
+        ({"word": en, "zh": zh, "theme": theme, "posts": doc_freq[zh], "share": round(doc_freq[zh] / len(post_raw), 4), "mentions": mentions[zh], **top_type(zh)}
          for zh, (en, theme) in POST_WORDS.items()),
         key=lambda d: -d["posts"]),
-    "color_rule": "Each word is coloured by the post group (direct hire, dispatch, student) whose posts use it most, as a share of that group's own posts (needing at least 8 of them; otherwise the group with the most posts using it). Posts that state no worker type are left out of the colouring.",
+    "color_rule": "Each word is coloured by the post group (direct hire, dispatch, student, not stated) whose posts use it most, as a share of that group's own posts (needing at least 8 of them; otherwise the group with the most posts using it).",
     "source": "Summaries of recruitment posts scraped from fskzpw.com (a labor-agency site), translated to English",
-    "method": "Each post's summary was split into words (jieba, a Chinese word segmenter). A word's size is the share of all posts whose summary uses it. Generic words (Foxconn, Zhengzhou, recruit, sign up, website, we/you, dates, numbers) are left out; the words shown were picked from the most frequent for what they say about pay, urgency, screening and the work.",
+    "method": "Each post's summary was split into words (jieba, a Chinese word segmenter); each word is shown with its Chinese original. A word's size is the share of all posts whose summary uses it. Generic words (Foxconn, Zhengzhou, recruit, sign up, website, we/you, dates, numbers) and job-type labels (hourly worker, rebate worker, student worker) are left out; the words shown were picked from the most frequent for what they say about pay, urgency, screening and the work.",
     "caveat": "Agency posts, not Foxconn's own: they show how workers are recruited, not what the job is. Summaries are short (about 100 characters) and translations are approximate.",
-})
+}, allow=("zh",))
 
 # ---------------------------------------------------------------- scene 5: hearings
 src = LEGAL_SCRIPT.read_text(encoding="utf-8")

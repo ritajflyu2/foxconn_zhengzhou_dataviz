@@ -7,7 +7,8 @@ import { createPostWords } from './postWords.js';
 // Transition 3 → 4: the recruitment-post groups that match Scene 4's worker
 // types rise out of the posts chart into one cluster each — direct hire
 // (blue), dispatch (orange), student (green); the rest of Scene 3 dims and the
-// "not stated" posts fade away. Each cluster is labelled (worker type and
+// "not stated" posts rise too, as a grey cluster that stays behind (it has no
+// pay row) and fades when Scene 4 comes in. Each cluster is labelled (worker type and
 // contract from scene4_pay_model.json; the dispatch cluster with its post group
 // name and the two dispatch types), so the viewer reads what each color means.
 // Then Scene 4 fades in: the orange cluster splits in two, each half turning to
@@ -35,9 +36,10 @@ const DESCEND_MS = [950, 1150];
 const ROW_STAGGER_MS = 110;
 const SCENE_IN_MS = 500;
 const CLUSTER_MAX_R = 46;
+const CLUSTER_MAX_R_WORDS = 36; // smaller when the words need the room below
 const CLUSTER_MIN_R = 14;
 const CLUSTER_Y = 0.38; // cluster row, as a fraction of the window height (no words layer)
-const CLUSTER_Y_WORDS = 0.16; // higher when the words fill the space below
+const CLUSTER_Y_WORDS = 0.12; // higher when the words fill the space below
 const SPIN = 0.00035; // slow turn of each cluster while it is being read (rad/ms)
 const SPLIT_MS = 650; // the dispatch cluster parts into its two shades before dropping
 const SPLIT_GAP = 1.05; // how far apart the two halves sit, in cluster radii (each side)
@@ -113,8 +115,11 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
       if (!g) groups.push((g = { kind: key, workers: [] }));
       g.workers.push(w);
     }
+    const postGroups = raw.scene3_posts_by_year?.categories ?? [];
+    const groupLabel = Object.fromEntries(postGroups.map((c) => [c.key, c.label]));
+    // Post groups with no pay row (not stated) get a cluster too; it stays behind.
+    for (const c of postGroups) if (!groups.some((g) => g.kind === c.key)) groups.push({ kind: c.key, workers: [] });
     const kinds = groups.map((g) => g.kind);
-    const groupLabel = Object.fromEntries((raw.scene3_posts_by_year?.categories ?? []).map((c) => [c.key, c.label]));
     const sources = postDots(fromEl);
     const rng = seededRandom(31);
 
@@ -134,6 +139,7 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
     anims.push(veil.animate([{ opacity: 0 }, { opacity: veilTo }], { duration: reduced ? 0 : DIM_MS, easing: 'ease-out', fill: 'forwards' }));
 
     const clusterY = window.innerHeight * (wordsData ? CLUSTER_Y_WORDS : CLUSTER_Y);
+    const maxR = wordsData ? CLUSTER_MAX_R_WORDS : CLUSTER_MAX_R;
 
     // One cluster per Scene 4 worker type, in Scene 4's row order, across a
     // column centred in the window (a transition screen, so not offset for the
@@ -144,25 +150,27 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
     const maxCount = Math.max(1, ...counts);
     const clusters = groups.map((g, i) => {
       const n = counts[i];
-      const r = Math.max(CLUSTER_MIN_R, CLUSTER_MAX_R * Math.sqrt(n / maxCount));
+      const r = Math.max(CLUSTER_MIN_R, maxR * Math.sqrt(n / maxCount));
       const [w] = g.workers;
       const label =
         g.workers.length === 1
           ? clusterLabel(w.label, w.contract)
-          : clusterLabel(groupLabel[g.kind] ?? g.kind, g.workers.map((d) => d.label).join(' or '));
+          : g.workers.length === 0
+            ? clusterLabel(groupLabel[g.kind] ?? g.kind, 'The post names no worker type')
+            : clusterLabel(groupLabel[g.kind] ?? g.kind, g.workers.map((d) => d.label).join(' or '));
       overlay.wrap.append(label);
       return {
         kind: g.kind,
         rows: g.workers.map((d) => d.color_key),
         cx: content.left + (content.width * (i + 0.5)) / groups.length,
-        cy: Math.max(CLUSTER_MAX_R + 24, clusterY),
+        cy: Math.max(maxR + 24, clusterY),
         r,
         n,
         label,
       };
     });
     for (const c of clusters) {
-      Object.assign(c.label.style, { left: `${c.cx}px`, top: `${c.cy + CLUSTER_MAX_R + 14}px` });
+      Object.assign(c.label.style, { left: `${c.cx}px`, top: `${c.cy + maxR + 14}px` });
       c.labelIn = c.label.animate([{ opacity: 0, transform: 'translate(-50%, 6px)' }, { opacity: 1, transform: 'translate(-50%, 0)' }], {
         duration: reduced ? 0 : LABEL_IN_MS,
         delay: reduced ? 0 : LABEL_IN_AT,
@@ -180,14 +188,14 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
       const dotR = mine[0]?.r ?? 2;
       mine.forEach((s, k) => {
         const f = (k + 0.5) / mine.length;
-        const row = c.rows[k % c.rows.length];
+        const row = c.rows.length ? c.rows[k % c.rows.length] : null;
         dots.push({
           cluster: c,
           from: s,
           color: s.color,
           fromColor: s.color,
           row,
-          rowColor: colorFor(row),
+          rowColor: row ? colorFor(row) : s.color,
           side: c.rows.length > 1 ? (c.rows.indexOf(row) === 0 ? -1 : 1) : 0,
           slotR: c.r * Math.sqrt(f),
           slotA: k * GOLDEN,
@@ -216,7 +224,7 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
     if (wordsData) {
       const labelBottom = Math.max(...clusters.map((c) => c.label.getBoundingClientRect().bottom));
       const top = labelBottom + 18;
-      const box = { left: content.left + 32, top, width: content.width - 64, height: window.innerHeight - WORDS_BOTTOM_PX - top };
+      const box = { left: content.left, top, width: content.width, height: window.innerHeight - WORDS_BOTTOM_PX - top };
       // Laid out while the clusters form; shown once both are ready.
       createPostWords(overlay.wrap, wordsData, box)
         .then((w) => {
@@ -316,6 +324,8 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
             home.y += (c.cy - home.y) * 0.3 * sp;
             d.color = interpolateRgb(d.fromColor, d.rowColor)(sp);
           }
+          // A cluster with no pay row stays where it is and fades with Scene 3.
+          if (descend && !c.rows.length) d.a = 1 - Math.min(1, (t - descend.start) / SCENE_IN_MS);
           if (!descend || !d.target || t < c.start) {
             const u = easeCubicInOut(Math.min(1, Math.max(0, (t - d.delay) / d.dur)));
             const p = bezier(
@@ -359,6 +369,12 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
         // split cluster's label fades as it parts (its rows have their own names).
         if (descend) {
           for (const c of clusters) {
+            if (!c.rows.length) {
+              c.labelIn?.cancel();
+              c.labelIn = null;
+              c.label.style.opacity = String(1 - Math.min(1, (t - descend.start) / SCENE_IN_MS));
+              continue;
+            }
             if (c.split) {
               const sp = splitAt(c, t);
               if (sp > 0) {
@@ -376,7 +392,7 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
             const u = easeCubicInOut(s);
             const nr = c.target.name.getBoundingClientRect();
             const x0 = c.cx;
-            const y0 = c.cy + CLUSTER_MAX_R + 14;
+            const y0 = c.cy + maxR + 14;
             const x1 = nr.left + c.label.offsetWidth / 2;
             const y1 = nr.top;
             c.label.style.left = `${lerp(x0, x1, u)}px`;

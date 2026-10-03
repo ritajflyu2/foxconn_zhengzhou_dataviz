@@ -19,11 +19,17 @@
    "key": "student",
    "label": "Student / summer",
    "posts": 30
+  },
+  {
+   "key": "not_stated",
+   "label": "Not stated",
+   "posts": 161
   }
  ],
  "words": [
   {
    "word": "rebate",
+   "zh": "返费",
    "theme": "pay",
    "posts": 140,
    "share": 0.3118,
@@ -36,6 +42,7 @@
   },
   {
    "word": "policy",
+   "zh": "政策",
    "theme": "pay",
    "posts": 138,
    "share": 0.3073,
@@ -48,30 +55,20 @@
   },
   {
    "word": "interview",
+   "zh": "面试",
    "theme": "screening",
    "posts": 135,
    "share": 0.3007,
    "mentions": 201,
-   "type": "student",
-   "type_label": "Student / summer",
-   "type_posts": 11,
-   "type_total": 30,
-   "type_share": 0.3667
-  },
-  {
-   "word": "hourly worker",
-   "theme": "pay",
-   "posts": 116,
-   "share": 0.2584,
-   "mentions": 167,
-   "type": "dispatch",
-   "type_label": "Dispatch (agency)",
-   "type_posts": 107,
-   "type_total": 251,
-   "type_share": 0.4263
+   "type": "not_stated",
+   "type_label": "Not stated",
+   "type_posts": 80,
+   "type_total": 161,
+   "type_share": 0.4969
   },
   {
    "word": "subsidy",
+   "zh": "补贴",
    "theme": "pay",
    "posts": 107,
    "share": 0.2383,
@@ -83,19 +80,8 @@
    "type_share": 0.3745
   },
   {
-   "word": "rebate worker",
-   "theme": "pay",
-   "posts": 104,
-   "share": 0.2316,
-   "mentions": 144,
-   "type": "dispatch",
-   "type_label": "Dispatch (agency)",
-   "type_posts": 103,
-   "type_total": 251,
-   "type_share": 0.4104
-  },
-  {
    "word": "pay scheme",
+   "zh": "模式",
    "theme": "pay",
    "posts": 92,
    "share": 0.2049,
@@ -108,6 +94,7 @@
   },
   {
    "word": "start work",
+   "zh": "入职",
    "theme": "screening",
    "posts": 72,
    "share": 0.1604,
@@ -120,6 +107,7 @@
   },
   {
    "word": "hurry",
+   "zh": "赶紧",
    "theme": "urgency",
    "posts": 69,
    "share": 0.1537,
@@ -132,6 +120,7 @@
   },
   {
    "word": "everyone",
+   "zh": "大家",
    "theme": "people",
    "posts": 68,
    "share": 0.1514,
@@ -144,6 +133,7 @@
   },
   {
    "word": "spots",
+   "zh": "名额",
    "theme": "urgency",
    "posts": 62,
    "share": 0.1381,
@@ -156,18 +146,20 @@
   },
   {
    "word": "fellow workers",
+   "zh": "工友",
    "theme": "people",
    "posts": 60,
    "share": 0.1336,
    "mentions": 64,
-   "type": "dispatch",
-   "type_label": "Dispatch (agency)",
-   "type_posts": 35,
-   "type_total": 251,
-   "type_share": 0.1394
+   "type": "not_stated",
+   "type_label": "Not stated",
+   "type_posts": 24,
+   "type_total": 161,
+   "type_share": 0.1491
   },
   {
    "word": "opportunity",
+   "zh": "机会",
    "theme": "urgency",
    "posts": 57,
    "share": 0.1269,
@@ -180,6 +172,7 @@
   },
   {
    "word": "high price",
+   "zh": "高价",
    "theme": "pay",
    "posts": 55,
    "share": 0.1225,
@@ -191,7 +184,21 @@
    "type_share": 0.1992
   },
   {
+   "word": "requirements",
+   "zh": "要求",
+   "theme": "screening",
+   "posts": 54,
+   "share": 0.1203,
+   "mentions": 58,
+   "type": "not_stated",
+   "type_label": "Not stated",
+   "type_posts": 33,
+   "type_total": 161,
+   "type_share": 0.205
+  },
+  {
    "word": "sign up early",
+   "zh": "提前报名",
    "theme": "urgency",
    "posts": 53,
    "share": 0.118,
@@ -204,18 +211,20 @@
   },
   {
    "word": "age",
+   "zh": "年龄",
    "theme": "screening",
    "posts": 52,
    "share": 0.1158,
    "mentions": 57,
-   "type": "dispatch",
-   "type_label": "Dispatch (agency)",
-   "type_posts": 18,
-   "type_total": 251,
-   "type_share": 0.0717
+   "type": "not_stated",
+   "type_label": "Not stated",
+   "type_posts": 27,
+   "type_total": 161,
+   "type_share": 0.1677
   },
   {
    "word": "still on the job",
+   "zh": "在职",
    "theme": "screening",
    "posts": 44,
    "share": 0.098,
@@ -228,18 +237,20 @@
   },
   {
    "word": "limited spots",
+   "zh": "名额有限",
    "theme": "urgency",
    "posts": 42,
    "share": 0.0935,
    "mentions": 44,
-   "type": "dispatch",
-   "type_label": "Dispatch (agency)",
-   "type_posts": 7,
-   "type_total": 251,
-   "type_share": 0.0279
+   "type": "not_stated",
+   "type_label": "Not stated",
+   "type_posts": 31,
+   "type_total": 161,
+   "type_share": 0.1925
   },
   {
    "word": "job seekers",
+   "zh": "求职者",
    "theme": "people",
    "posts": 41,
    "share": 0.0913,
@@ -252,6 +263,7 @@
   },
   {
    "word": "pay",
+   "zh": "薪资",
    "theme": "pay",
    "posts": 40,
    "share": 0.0891,
@@ -264,6 +276,7 @@
   },
   {
    "word": "price",
+   "zh": "价格",
    "theme": "pay",
    "posts": 39,
    "share": 0.0869,
@@ -276,6 +289,7 @@
   },
   {
    "word": "summer worker",
+   "zh": "暑假工",
    "theme": "people",
    "posts": 37,
    "share": 0.0824,
@@ -288,18 +302,20 @@
   },
   {
    "word": "ID card",
+   "zh": "身份证",
    "theme": "screening",
    "posts": 36,
    "share": 0.0802,
    "mentions": 44,
-   "type": "dispatch",
-   "type_label": "Dispatch (agency)",
-   "type_posts": 8,
-   "type_total": 251,
-   "type_share": 0.0319
+   "type": "not_stated",
+   "type_label": "Not stated",
+   "type_posts": 24,
+   "type_total": 161,
+   "type_share": 0.1491
   },
   {
    "word": "enter the factory",
+   "zh": "进厂",
    "theme": "work",
    "posts": 36,
    "share": 0.0802,
@@ -312,6 +328,7 @@
   },
   {
    "word": "direct hire",
+   "zh": "直招",
    "theme": "screening",
    "posts": 34,
    "share": 0.0757,
@@ -324,18 +341,20 @@
   },
   {
    "word": "perks",
+   "zh": "待遇",
    "theme": "pay",
    "posts": 33,
    "share": 0.0735,
    "mentions": 33,
-   "type": "dispatch",
-   "type_label": "Dispatch (agency)",
-   "type_posts": 17,
-   "type_total": 251,
-   "type_share": 0.0677
+   "type": "not_stated",
+   "type_label": "Not stated",
+   "type_posts": 12,
+   "type_total": 161,
+   "type_share": 0.0745
   },
   {
    "word": "lose no time",
+   "zh": "抓紧时间",
    "theme": "urgency",
    "posts": 32,
    "share": 0.0713,
@@ -347,31 +366,60 @@
    "type_share": 0.0717
   },
   {
+   "word": "key workstation",
+   "zh": "关键工站",
+   "theme": "work",
+   "posts": 29,
+   "share": 0.0646,
+   "mentions": 29,
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 26,
+   "type_total": 251,
+   "type_share": 0.1036
+  },
+  {
    "word": "base pay",
+   "zh": "底薪",
    "theme": "pay",
    "posts": 28,
    "share": 0.0624,
    "mentions": 34,
-   "type": "dispatch",
-   "type_label": "Dispatch (agency)",
-   "type_posts": 10,
-   "type_total": 251,
-   "type_share": 0.0398
+   "type": "not_stated",
+   "type_label": "Not stated",
+   "type_posts": 11,
+   "type_total": 161,
+   "type_share": 0.0683
   },
   {
    "word": "Apple",
+   "zh": "苹果",
    "theme": "work",
    "posts": 27,
    "share": 0.0601,
    "mentions": 27,
-   "type": "dispatch",
-   "type_label": "Dispatch (agency)",
-   "type_posts": 3,
-   "type_total": 251,
-   "type_share": 0.012
+   "type": "not_stated",
+   "type_label": "Not stated",
+   "type_posts": 24,
+   "type_total": 161,
+   "type_share": 0.1491
+  },
+  {
+   "word": "wages",
+   "zh": "工资",
+   "theme": "pay",
+   "posts": 27,
+   "share": 0.0601,
+   "mentions": 38,
+   "type": "not_stated",
+   "type_label": "Not stated",
+   "type_posts": 9,
+   "type_total": 161,
+   "type_share": 0.0559
   },
   {
    "word": "buddies",
+   "zh": "小伙伴",
    "theme": "people",
    "posts": 26,
    "share": 0.0579,
@@ -384,6 +432,7 @@
   },
   {
    "word": "short-term",
+   "zh": "短期",
    "theme": "people",
    "posts": 26,
    "share": 0.0579,
@@ -396,18 +445,20 @@
   },
   {
    "word": "urgent notice",
+   "zh": "紧急通知",
    "theme": "urgency",
    "posts": 25,
    "share": 0.0557,
    "mentions": 25,
-   "type": "dispatch",
-   "type_label": "Dispatch (agency)",
-   "type_posts": 3,
-   "type_total": 251,
-   "type_share": 0.012
+   "type": "not_stated",
+   "type_label": "Not stated",
+   "type_posts": 19,
+   "type_total": 161,
+   "type_share": 0.118
   },
   {
    "word": "be sure to",
+   "zh": "务必",
    "theme": "urgency",
    "posts": 25,
    "share": 0.0557,
@@ -419,19 +470,8 @@
    "type_share": 0.0956
   },
   {
-   "word": "student worker",
-   "theme": "people",
-   "posts": 25,
-   "share": 0.0557,
-   "mentions": 30,
-   "type": "student",
-   "type_label": "Student / summer",
-   "type_posts": 16,
-   "type_total": 30,
-   "type_share": 0.5333
-  },
-  {
    "word": "bonus",
+   "zh": "奖金",
    "theme": "pay",
    "posts": 24,
    "share": 0.0535,
@@ -444,6 +484,7 @@
   },
   {
    "word": "winter-break worker",
+   "zh": "寒假工",
    "theme": "people",
    "posts": 24,
    "share": 0.0535,
@@ -456,6 +497,7 @@
   },
   {
    "word": "top price",
+   "zh": "最高价",
    "theme": "pay",
    "posts": 22,
    "share": 0.049,
@@ -468,6 +510,7 @@
   },
   {
    "word": "general worker",
+   "zh": "普工",
    "theme": "people",
    "posts": 21,
    "share": 0.0468,
@@ -480,6 +523,7 @@
   },
   {
    "word": "lock in",
+   "zh": "锁定",
    "theme": "urgency",
    "posts": 20,
    "share": 0.0445,
@@ -492,6 +536,7 @@
   },
   {
    "word": "limited time",
+   "zh": "限时",
    "theme": "urgency",
    "posts": 19,
    "share": 0.0423,
@@ -504,6 +549,7 @@
   },
   {
    "word": "clock in",
+   "zh": "打卡",
    "theme": "screening",
    "posts": 19,
    "share": 0.0423,
@@ -516,30 +562,33 @@
   },
   {
    "word": "middleman",
+   "zh": "中介",
    "theme": "screening",
    "posts": 18,
    "share": 0.0401,
    "mentions": 18,
-   "type": "dispatch",
-   "type_label": "Dispatch (agency)",
-   "type_posts": 6,
-   "type_total": 251,
-   "type_share": 0.0239
+   "type": "not_stated",
+   "type_label": "Not stated",
+   "type_posts": 9,
+   "type_total": 161,
+   "type_share": 0.0559
   },
   {
    "word": "testing",
+   "zh": "测试",
    "theme": "work",
    "posts": 18,
    "share": 0.0401,
    "mentions": 21,
-   "type": "dispatch",
-   "type_label": "Dispatch (agency)",
-   "type_posts": 3,
-   "type_total": 251,
-   "type_share": 0.012
+   "type": "not_stated",
+   "type_label": "Not stated",
+   "type_posts": 14,
+   "type_total": 161,
+   "type_share": 0.087
   },
   {
    "word": "price rise",
+   "zh": "涨价",
    "theme": "pay",
    "posts": 17,
    "share": 0.0379,
@@ -552,18 +601,20 @@
   },
   {
    "word": "assembly",
+   "zh": "组装",
    "theme": "work",
    "posts": 17,
    "share": 0.0379,
    "mentions": 18,
-   "type": "dispatch",
-   "type_label": "Dispatch (agency)",
-   "type_posts": 4,
-   "type_total": 251,
-   "type_share": 0.0159
+   "type": "not_stated",
+   "type_label": "Not stated",
+   "type_posts": 12,
+   "type_total": 161,
+   "type_share": 0.0745
   },
   {
    "word": "rare chance",
+   "zh": "机会难得",
    "theme": "urgency",
    "posts": 16,
    "share": 0.0356,
@@ -576,6 +627,7 @@
   },
   {
    "word": "good news",
+   "zh": "好消息",
    "theme": "urgency",
    "posts": 16,
    "share": 0.0356,
@@ -588,6 +640,7 @@
   },
   {
    "word": "big news",
+   "zh": "重磅",
    "theme": "urgency",
    "posts": 16,
    "share": 0.0356,
@@ -600,18 +653,46 @@
   },
   {
    "word": "clean room",
+   "zh": "无尘",
    "theme": "work",
    "posts": 16,
    "share": 0.0356,
    "mentions": 16,
+   "type": "not_stated",
+   "type_label": "Not stated",
+   "type_posts": 13,
+   "type_total": 161,
+   "type_share": 0.0807
+  },
+  {
+   "word": "before tax",
+   "zh": "含税",
+   "theme": "pay",
+   "posts": 16,
+   "share": 0.0356,
+   "mentions": 33,
    "type": "dispatch",
    "type_label": "Dispatch (agency)",
-   "type_posts": 3,
+   "type_posts": 14,
    "type_total": 251,
-   "type_share": 0.012
+   "type_share": 0.0558
+  },
+  {
+   "word": "price cut",
+   "zh": "下调",
+   "theme": "pay",
+   "posts": 16,
+   "share": 0.0356,
+   "mentions": 19,
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 12,
+   "type_total": 251,
+   "type_share": 0.0478
   },
   {
    "word": "miss out",
+   "zh": "错过",
    "theme": "urgency",
    "posts": 15,
    "share": 0.0334,
@@ -624,6 +705,7 @@
   },
   {
    "word": "hiring paused",
+   "zh": "停招",
    "theme": "urgency",
    "posts": 14,
    "share": 0.0312,
@@ -636,6 +718,7 @@
   },
   {
    "word": "overtime",
+   "zh": "加班",
    "theme": "work",
    "posts": 14,
    "share": 0.0312,
@@ -645,10 +728,62 @@
    "type_posts": 7,
    "type_total": 251,
    "type_share": 0.0279
+  },
+  {
+   "word": "training",
+   "zh": "培训",
+   "theme": "work",
+   "posts": 14,
+   "share": 0.0312,
+   "mentions": 14,
+   "type": "not_stated",
+   "type_label": "Not stated",
+   "type_posts": 14,
+   "type_total": 161,
+   "type_share": 0.087
+  },
+  {
+   "word": "price surge",
+   "zh": "暴涨",
+   "theme": "pay",
+   "posts": 12,
+   "share": 0.0267,
+   "mentions": 19,
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 11,
+   "type_total": 251,
+   "type_share": 0.0438
+  },
+  {
+   "word": "equal pay for equal work",
+   "zh": "同工同酬",
+   "theme": "pay",
+   "posts": 12,
+   "share": 0.0267,
+   "mentions": 21,
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 12,
+   "type_total": 251,
+   "type_share": 0.0478
+  },
+  {
+   "word": "probation",
+   "zh": "试用期",
+   "theme": "screening",
+   "posts": 10,
+   "share": 0.0223,
+   "mentions": 13,
+   "type": "not_stated",
+   "type_label": "Not stated",
+   "type_posts": 8,
+   "type_total": 161,
+   "type_share": 0.0497
   }
  ],
- "color_rule": "Each word is coloured by the post group (direct hire, dispatch, student) whose posts use it most, as a share of that group's own posts (needing at least 8 of them; otherwise the group with the most posts using it). Posts that state no worker type are left out of the colouring.",
+ "color_rule": "Each word is coloured by the post group (direct hire, dispatch, student, not stated) whose posts use it most, as a share of that group's own posts (needing at least 8 of them; otherwise the group with the most posts using it).",
  "source": "Summaries of recruitment posts scraped from fskzpw.com (a labor-agency site), translated to English",
- "method": "Each post's summary was split into words (jieba, a Chinese word segmenter). A word's size is the share of all posts whose summary uses it. Generic words (Foxconn, Zhengzhou, recruit, sign up, website, we/you, dates, numbers) are left out; the words shown were picked from the most frequent for what they say about pay, urgency, screening and the work.",
+ "method": "Each post's summary was split into words (jieba, a Chinese word segmenter); each word is shown with its Chinese original. A word's size is the share of all posts whose summary uses it. Generic words (Foxconn, Zhengzhou, recruit, sign up, website, we/you, dates, numbers) and job-type labels (hourly worker, rebate worker, student worker) are left out; the words shown were picked from the most frequent for what they say about pay, urgency, screening and the work.",
  "caveat": "Agency posts, not Foxconn's own: they show how workers are recruited, not what the job is. Summaries are short (about 100 characters) and translations are approximate."
 }

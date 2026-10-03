@@ -867,6 +867,7 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 
 .post-words__head {
   position: absolute;
+  z-index: 4; /* above the cloud, so the method note opens over the words */
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -893,6 +894,31 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--ink-muted);
+}
+
+.post-words__how {
+  pointer-events: auto;
+  margin-top: 0.3rem;
+  max-width: 44rem;
+  font-size: 0.75rem;
+  color: var(--ink-secondary);
+}
+
+.post-words__how summary {
+  cursor: pointer;
+  color: var(--ink-muted);
+}
+
+/* Opens over the cloud rather than pushing it down. */
+.post-words__how p {
+  position: absolute;
+  z-index: 3;
+  margin: 0.3rem 0 0;
+  max-width: 44rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--surface-raised);
+  border: 1px solid var(--grid);
+  border-radius: 6px;
 }
 
 .post-words__cloud {
