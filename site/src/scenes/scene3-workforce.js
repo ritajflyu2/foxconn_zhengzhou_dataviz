@@ -350,13 +350,6 @@ function buildWorkforceChart(container, workforce) {
 function buildPostsChart(container, posts) {
   const years = posts.years;
   const categories = posts.categories;
-  const colorKeyFor = {
-    regular: 'regular',
-    rebate_dispatch: 'rebate-dispatch',
-    hourly_dispatch: 'hourly-dispatch',
-    student: 'student',
-    short_term: 'short-term',
-  };
 
   const yMax = max(years, (y) => y.total);
   const x = scaleBand()
@@ -411,7 +404,7 @@ function buildPostsChart(container, posts) {
       const dotsSoFar = Math.min(grid.capacity, Math.round(cumulative / unit));
       segments.push({
         count: Math.max(0, dotsSoFar - prevDots),
-        fill: colorFor(colorKeyFor[cat.key]),
+        fill: colorFor(cat.key),
         kind: cat.key,
         card: () => singleValueCard(String(y.year), cat.label, `${count(y[cat.key] ?? 0)} posts`),
       });
@@ -564,12 +557,11 @@ export default {
     const rightLegend = document.createElement('ul');
     rightLegend.className = 'legend';
     for (const cat of posts.categories) {
-      const keyMap = { regular: 'regular', rebate_dispatch: 'rebate-dispatch', hourly_dispatch: 'hourly-dispatch', student: 'student', short_term: 'short-term' };
       const li = document.createElement('li');
       li.className = 'legend__item';
       const sw = document.createElement('span');
       sw.className = 'legend__swatch';
-      sw.style.background = colorFor(keyMap[cat.key]);
+      sw.style.background = colorFor(cat.key);
       const label = document.createElement('span');
       label.textContent = cat.label;
       li.append(sw, label);
@@ -596,6 +588,7 @@ export default {
     addMethodNote(el, 'Reading the left chart', [
       'Each dot stands for an equal share of the bar\'s value — not a fixed headcount like Scene 2\'s dots, just the same visual unit reused so a bar reads as a cluster, not a block. Solid dots are insured headcount (measured); ring (outline-only) dots are the gap to China Labor Watch\'s campus-wide estimate (inferred dispatch, student and other uninsured workers). Faint dots are unfilled capacity, for scale. Hover either part of a bar for its own number; a dashed tick with no ring dots marks an off-season CLW estimate, where no gap is drawn because the two figures are not comparable (a trough estimate vs. a year-end count).',
       'Posts cannot size the workforce (right chart) — early years have as few as 7-9 posts total. The right chart\'s dots are not padded to a fixed capacity, so a bar\'s height is just its own total.',
+      `How posts are grouped (right chart): ${posts.rule}`,
     ]);
 
     addCaveat(el, workforce.caveat, posts.caveat);

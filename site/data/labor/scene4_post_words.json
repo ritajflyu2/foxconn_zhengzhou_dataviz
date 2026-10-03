@@ -7,18 +7,13 @@
  "types": [
   {
    "key": "regular",
-   "label": "Regular / unspecified",
-   "posts": 217
+   "label": "Direct hire (stated)",
+   "posts": 7
   },
   {
-   "key": "rebate_dispatch",
-   "label": "Rebate-type dispatch",
-   "posts": 61
-  },
-  {
-   "key": "hourly_dispatch",
-   "label": "Hourly-type dispatch",
-   "posts": 139
+   "key": "dispatch",
+   "label": "Dispatch (agency)",
+   "posts": 251
   },
   {
    "key": "student",
@@ -33,11 +28,11 @@
    "posts": 140,
    "share": 0.3118,
    "mentions": 183,
-   "type": "rebate_dispatch",
-   "type_label": "Rebate-type dispatch",
-   "type_posts": 45,
-   "type_total": 61,
-   "type_share": 0.7377
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 136,
+   "type_total": 251,
+   "type_share": 0.5418
   },
   {
    "word": "policy",
@@ -45,11 +40,11 @@
    "posts": 138,
    "share": 0.3073,
    "mentions": 181,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 68,
-   "type_total": 139,
-   "type_share": 0.4892
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 106,
+   "type_total": 251,
+   "type_share": 0.4223
   },
   {
    "word": "interview",
@@ -57,11 +52,11 @@
    "posts": 135,
    "share": 0.3007,
    "mentions": 201,
-   "type": "regular",
-   "type_label": "Regular / unspecified",
-   "type_posts": 95,
-   "type_total": 217,
-   "type_share": 0.4378
+   "type": "student",
+   "type_label": "Student / summer",
+   "type_posts": 11,
+   "type_total": 30,
+   "type_share": 0.3667
   },
   {
    "word": "hourly worker",
@@ -69,11 +64,11 @@
    "posts": 116,
    "share": 0.2584,
    "mentions": 167,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 86,
-   "type_total": 139,
-   "type_share": 0.6187
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 107,
+   "type_total": 251,
+   "type_share": 0.4263
   },
   {
    "word": "subsidy",
@@ -81,11 +76,11 @@
    "posts": 107,
    "share": 0.2383,
    "mentions": 138,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 69,
-   "type_total": 139,
-   "type_share": 0.4964
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 94,
+   "type_total": 251,
+   "type_share": 0.3745
   },
   {
    "word": "rebate worker",
@@ -93,11 +88,11 @@
    "posts": 104,
    "share": 0.2316,
    "mentions": 144,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 90,
-   "type_total": 139,
-   "type_share": 0.6475
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 103,
+   "type_total": 251,
+   "type_share": 0.4104
   },
   {
    "word": "pay scheme",
@@ -105,11 +100,11 @@
    "posts": 92,
    "share": 0.2049,
    "mentions": 103,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 58,
-   "type_total": 139,
-   "type_share": 0.4173
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 86,
+   "type_total": 251,
+   "type_share": 0.3426
   },
   {
    "word": "start work",
@@ -117,11 +112,11 @@
    "posts": 72,
    "share": 0.1604,
    "mentions": 94,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 23,
-   "type_total": 139,
-   "type_share": 0.1655
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 43,
+   "type_total": 251,
+   "type_share": 0.1713
   },
   {
    "word": "hurry",
@@ -129,11 +124,11 @@
    "posts": 69,
    "share": 0.1537,
    "mentions": 77,
-   "type": "rebate_dispatch",
-   "type_label": "Rebate-type dispatch",
-   "type_posts": 13,
-   "type_total": 61,
-   "type_share": 0.2131
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 41,
+   "type_total": 251,
+   "type_share": 0.1633
   },
   {
    "word": "everyone",
@@ -141,11 +136,11 @@
    "posts": 68,
    "share": 0.1514,
    "mentions": 70,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 50,
-   "type_total": 139,
-   "type_share": 0.3597
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 59,
+   "type_total": 251,
+   "type_share": 0.2351
   },
   {
    "word": "spots",
@@ -153,11 +148,11 @@
    "posts": 62,
    "share": 0.1381,
    "mentions": 71,
-   "type": "rebate_dispatch",
-   "type_label": "Rebate-type dispatch",
-   "type_posts": 14,
-   "type_total": 61,
-   "type_share": 0.2295
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 45,
+   "type_total": 251,
+   "type_share": 0.1793
   },
   {
    "word": "fellow workers",
@@ -165,11 +160,11 @@
    "posts": 60,
    "share": 0.1336,
    "mentions": 64,
-   "type": "regular",
-   "type_label": "Regular / unspecified",
-   "type_posts": 33,
-   "type_total": 217,
-   "type_share": 0.1521
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 35,
+   "type_total": 251,
+   "type_share": 0.1394
   },
   {
    "word": "opportunity",
@@ -177,11 +172,11 @@
    "posts": 57,
    "share": 0.1269,
    "mentions": 62,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 41,
-   "type_total": 139,
-   "type_share": 0.295
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 48,
+   "type_total": 251,
+   "type_share": 0.1912
   },
   {
    "word": "high price",
@@ -189,11 +184,11 @@
    "posts": 55,
    "share": 0.1225,
    "mentions": 55,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 39,
-   "type_total": 139,
-   "type_share": 0.2806
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 50,
+   "type_total": 251,
+   "type_share": 0.1992
   },
   {
    "word": "sign up early",
@@ -201,11 +196,11 @@
    "posts": 53,
    "share": 0.118,
    "mentions": 58,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 31,
-   "type_total": 139,
-   "type_share": 0.223
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 36,
+   "type_total": 251,
+   "type_share": 0.1434
   },
   {
    "word": "age",
@@ -213,11 +208,11 @@
    "posts": 52,
    "share": 0.1158,
    "mentions": 57,
-   "type": "regular",
-   "type_label": "Regular / unspecified",
-   "type_posts": 34,
-   "type_total": 217,
-   "type_share": 0.1567
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 18,
+   "type_total": 251,
+   "type_share": 0.0717
   },
   {
    "word": "still on the job",
@@ -225,11 +220,11 @@
    "posts": 44,
    "share": 0.098,
    "mentions": 46,
-   "type": "rebate_dispatch",
-   "type_label": "Rebate-type dispatch",
-   "type_posts": 14,
-   "type_total": 61,
-   "type_share": 0.2295
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 35,
+   "type_total": 251,
+   "type_share": 0.1394
   },
   {
    "word": "limited spots",
@@ -237,11 +232,11 @@
    "posts": 42,
    "share": 0.0935,
    "mentions": 44,
-   "type": "regular",
-   "type_label": "Regular / unspecified",
-   "type_posts": 33,
-   "type_total": 217,
-   "type_share": 0.1521
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 7,
+   "type_total": 251,
+   "type_share": 0.0279
   },
   {
    "word": "job seekers",
@@ -249,11 +244,11 @@
    "posts": 41,
    "share": 0.0913,
    "mentions": 46,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 22,
-   "type_total": 139,
-   "type_share": 0.1583
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 28,
+   "type_total": 251,
+   "type_share": 0.1116
   },
   {
    "word": "pay",
@@ -261,11 +256,11 @@
    "posts": 40,
    "share": 0.0891,
    "mentions": 41,
-   "type": "rebate_dispatch",
-   "type_label": "Rebate-type dispatch",
-   "type_posts": 9,
-   "type_total": 61,
-   "type_share": 0.1475
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 28,
+   "type_total": 251,
+   "type_share": 0.1116
   },
   {
    "word": "price",
@@ -273,11 +268,11 @@
    "posts": 39,
    "share": 0.0869,
    "mentions": 89,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 36,
-   "type_total": 139,
-   "type_share": 0.259
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 39,
+   "type_total": 251,
+   "type_share": 0.1554
   },
   {
    "word": "summer worker",
@@ -297,11 +292,11 @@
    "posts": 36,
    "share": 0.0802,
    "mentions": 44,
-   "type": "regular",
-   "type_label": "Regular / unspecified",
-   "type_posts": 26,
-   "type_total": 217,
-   "type_share": 0.1198
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 8,
+   "type_total": 251,
+   "type_share": 0.0319
   },
   {
    "word": "enter the factory",
@@ -309,11 +304,11 @@
    "posts": 36,
    "share": 0.0802,
    "mentions": 42,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 12,
-   "type_total": 139,
-   "type_share": 0.0863
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 21,
+   "type_total": 251,
+   "type_share": 0.0837
   },
   {
    "word": "direct hire",
@@ -321,11 +316,11 @@
    "posts": 34,
    "share": 0.0757,
    "mentions": 52,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 18,
-   "type_total": 139,
-   "type_share": 0.1295
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 30,
+   "type_total": 251,
+   "type_share": 0.1195
   },
   {
    "word": "perks",
@@ -333,11 +328,11 @@
    "posts": 33,
    "share": 0.0735,
    "mentions": 33,
-   "type": "rebate_dispatch",
-   "type_label": "Rebate-type dispatch",
-   "type_posts": 9,
-   "type_total": 61,
-   "type_share": 0.1475
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 17,
+   "type_total": 251,
+   "type_share": 0.0677
   },
   {
    "word": "lose no time",
@@ -345,11 +340,11 @@
    "posts": 32,
    "share": 0.0713,
    "mentions": 34,
-   "type": "rebate_dispatch",
-   "type_label": "Rebate-type dispatch",
-   "type_posts": 9,
-   "type_total": 61,
-   "type_share": 0.1475
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 18,
+   "type_total": 251,
+   "type_share": 0.0717
   },
   {
    "word": "base pay",
@@ -357,11 +352,11 @@
    "posts": 28,
    "share": 0.0624,
    "mentions": 34,
-   "type": "regular",
-   "type_label": "Regular / unspecified",
-   "type_posts": 15,
-   "type_total": 217,
-   "type_share": 0.0691
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 10,
+   "type_total": 251,
+   "type_share": 0.0398
   },
   {
    "word": "Apple",
@@ -369,11 +364,11 @@
    "posts": 27,
    "share": 0.0601,
    "mentions": 27,
-   "type": "regular",
-   "type_label": "Regular / unspecified",
-   "type_posts": 24,
-   "type_total": 217,
-   "type_share": 0.1106
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 3,
+   "type_total": 251,
+   "type_share": 0.012
   },
   {
    "word": "buddies",
@@ -381,11 +376,11 @@
    "posts": 26,
    "share": 0.0579,
    "mentions": 26,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 18,
-   "type_total": 139,
-   "type_share": 0.1295
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 23,
+   "type_total": 251,
+   "type_share": 0.0916
   },
   {
    "word": "short-term",
@@ -393,11 +388,11 @@
    "posts": 26,
    "share": 0.0579,
    "mentions": 34,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 17,
-   "type_total": 139,
-   "type_share": 0.1223
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 20,
+   "type_total": 251,
+   "type_share": 0.0797
   },
   {
    "word": "urgent notice",
@@ -405,11 +400,11 @@
    "posts": 25,
    "share": 0.0557,
    "mentions": 25,
-   "type": "regular",
-   "type_label": "Regular / unspecified",
-   "type_posts": 19,
-   "type_total": 217,
-   "type_share": 0.0876
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 3,
+   "type_total": 251,
+   "type_share": 0.012
   },
   {
    "word": "be sure to",
@@ -417,11 +412,11 @@
    "posts": 25,
    "share": 0.0557,
    "mentions": 25,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
    "type_posts": 24,
-   "type_total": 139,
-   "type_share": 0.1727
+   "type_total": 251,
+   "type_share": 0.0956
   },
   {
    "word": "student worker",
@@ -441,11 +436,11 @@
    "posts": 24,
    "share": 0.0535,
    "mentions": 27,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 8,
-   "type_total": 139,
-   "type_share": 0.0576
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 15,
+   "type_total": 251,
+   "type_share": 0.0598
   },
   {
    "word": "winter-break worker",
@@ -465,11 +460,11 @@
    "posts": 22,
    "share": 0.049,
    "mentions": 44,
-   "type": "rebate_dispatch",
-   "type_label": "Rebate-type dispatch",
-   "type_posts": 8,
-   "type_total": 61,
-   "type_share": 0.1311
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 21,
+   "type_total": 251,
+   "type_share": 0.0837
   },
   {
    "word": "general worker",
@@ -477,11 +472,11 @@
    "posts": 21,
    "share": 0.0468,
    "mentions": 25,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 11,
-   "type_total": 139,
-   "type_share": 0.0791
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 13,
+   "type_total": 251,
+   "type_share": 0.0518
   },
   {
    "word": "lock in",
@@ -489,11 +484,11 @@
    "posts": 20,
    "share": 0.0445,
    "mentions": 21,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 16,
-   "type_total": 139,
-   "type_share": 0.1151
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 17,
+   "type_total": 251,
+   "type_share": 0.0677
   },
   {
    "word": "limited time",
@@ -501,11 +496,11 @@
    "posts": 19,
    "share": 0.0423,
    "mentions": 20,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
    "type_posts": 18,
-   "type_total": 139,
-   "type_share": 0.1295
+   "type_total": 251,
+   "type_share": 0.0717
   },
   {
    "word": "clock in",
@@ -513,11 +508,11 @@
    "posts": 19,
    "share": 0.0423,
    "mentions": 20,
-   "type": "rebate_dispatch",
-   "type_label": "Rebate-type dispatch",
-   "type_posts": 15,
-   "type_total": 61,
-   "type_share": 0.2459
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 18,
+   "type_total": 251,
+   "type_share": 0.0717
   },
   {
    "word": "middleman",
@@ -525,11 +520,11 @@
    "posts": 18,
    "share": 0.0401,
    "mentions": 18,
-   "type": "regular",
-   "type_label": "Regular / unspecified",
-   "type_posts": 11,
-   "type_total": 217,
-   "type_share": 0.0507
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 6,
+   "type_total": 251,
+   "type_share": 0.0239
   },
   {
    "word": "testing",
@@ -537,11 +532,11 @@
    "posts": 18,
    "share": 0.0401,
    "mentions": 21,
-   "type": "regular",
-   "type_label": "Regular / unspecified",
-   "type_posts": 17,
-   "type_total": 217,
-   "type_share": 0.0783
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 3,
+   "type_total": 251,
+   "type_share": 0.012
   },
   {
    "word": "price rise",
@@ -549,11 +544,11 @@
    "posts": 17,
    "share": 0.0379,
    "mentions": 23,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 9,
-   "type_total": 139,
-   "type_share": 0.0647
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 15,
+   "type_total": 251,
+   "type_share": 0.0598
   },
   {
    "word": "assembly",
@@ -561,11 +556,11 @@
    "posts": 17,
    "share": 0.0379,
    "mentions": 18,
-   "type": "regular",
-   "type_label": "Regular / unspecified",
-   "type_posts": 16,
-   "type_total": 217,
-   "type_share": 0.0737
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 4,
+   "type_total": 251,
+   "type_share": 0.0159
   },
   {
    "word": "rare chance",
@@ -573,11 +568,11 @@
    "posts": 16,
    "share": 0.0356,
    "mentions": 16,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 7,
-   "type_total": 139,
-   "type_share": 0.0504
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 11,
+   "type_total": 251,
+   "type_share": 0.0438
   },
   {
    "word": "good news",
@@ -585,11 +580,11 @@
    "posts": 16,
    "share": 0.0356,
    "mentions": 16,
-   "type": "regular",
-   "type_label": "Regular / unspecified",
-   "type_posts": 5,
-   "type_total": 217,
-   "type_share": 0.023
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 10,
+   "type_total": 251,
+   "type_share": 0.0398
   },
   {
    "word": "big news",
@@ -597,11 +592,11 @@
    "posts": 16,
    "share": 0.0356,
    "mentions": 16,
-   "type": "hourly_dispatch",
-   "type_label": "Hourly-type dispatch",
-   "type_posts": 8,
-   "type_total": 139,
-   "type_share": 0.0576
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 13,
+   "type_total": 251,
+   "type_share": 0.0518
   },
   {
    "word": "clean room",
@@ -609,11 +604,11 @@
    "posts": 16,
    "share": 0.0356,
    "mentions": 16,
-   "type": "regular",
-   "type_label": "Regular / unspecified",
-   "type_posts": 15,
-   "type_total": 217,
-   "type_share": 0.0691
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 3,
+   "type_total": 251,
+   "type_share": 0.012
   },
   {
    "word": "miss out",
@@ -621,11 +616,11 @@
    "posts": 15,
    "share": 0.0334,
    "mentions": 15,
-   "type": "rebate_dispatch",
-   "type_label": "Rebate-type dispatch",
-   "type_posts": 6,
-   "type_total": 61,
-   "type_share": 0.0984
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 11,
+   "type_total": 251,
+   "type_share": 0.0438
   },
   {
    "word": "hiring paused",
@@ -633,11 +628,11 @@
    "posts": 14,
    "share": 0.0312,
    "mentions": 14,
-   "type": "regular",
-   "type_label": "Regular / unspecified",
-   "type_posts": 6,
-   "type_total": 217,
-   "type_share": 0.0276
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 9,
+   "type_total": 251,
+   "type_share": 0.0359
   },
   {
    "word": "overtime",
@@ -645,14 +640,14 @@
    "posts": 14,
    "share": 0.0312,
    "mentions": 18,
-   "type": "regular",
-   "type_label": "Regular / unspecified",
-   "type_posts": 9,
-   "type_total": 217,
-   "type_share": 0.0415
+   "type": "dispatch",
+   "type_label": "Dispatch (agency)",
+   "type_posts": 7,
+   "type_total": 251,
+   "type_share": 0.0279
   }
  ],
- "color_rule": "Each word is coloured by the worker type whose posts use it most, as a share of that type's own posts (needing at least 8 of them; otherwise the type with the most posts using it).",
+ "color_rule": "Each word is coloured by the post group (direct hire, dispatch, student) whose posts use it most, as a share of that group's own posts (needing at least 8 of them; otherwise the group with the most posts using it). Posts that state no worker type are left out of the colouring.",
  "source": "Summaries of recruitment posts scraped from fskzpw.com (a labor-agency site), translated to English",
  "method": "Each post's summary was split into words (jieba, a Chinese word segmenter). A word's size is the share of all posts whose summary uses it. Generic words (Foxconn, Zhengzhou, recruit, sign up, website, we/you, dates, numbers) are left out; the words shown were picked from the most frequent for what they say about pay, urgency, screening and the work.",
  "caveat": "Agency posts, not Foxconn's own: they show how workers are recruited, not what the job is. Summaries are short (about 100 characters) and translations are approximate."

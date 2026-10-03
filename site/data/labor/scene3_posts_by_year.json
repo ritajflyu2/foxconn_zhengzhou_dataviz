@@ -2,117 +2,104 @@
  "categories": [
   {
    "key": "regular",
-   "label": "Regular / unspecified"
+   "label": "Direct hire (stated)"
   },
   {
-   "key": "rebate_dispatch",
-   "label": "Rebate-type dispatch"
-  },
-  {
-   "key": "hourly_dispatch",
-   "label": "Hourly-type dispatch"
+   "key": "dispatch",
+   "label": "Dispatch (agency)"
   },
   {
    "key": "student",
    "label": "Student / summer"
   },
   {
-   "key": "short_term",
-   "label": "Short-term"
+   "key": "not_stated",
+   "label": "Not stated"
   }
  ],
  "years": [
   {
    "year": 2016,
-   "regular": 8,
-   "rebate_dispatch": 0,
-   "hourly_dispatch": 0,
+   "regular": 1,
+   "dispatch": 0,
    "student": 0,
-   "short_term": 0,
+   "not_stated": 7,
    "total": 8
   },
   {
    "year": 2017,
-   "regular": 9,
-   "rebate_dispatch": 0,
-   "hourly_dispatch": 0,
+   "regular": 0,
+   "dispatch": 0,
    "student": 0,
-   "short_term": 0,
+   "not_stated": 9,
    "total": 9
   },
   {
    "year": 2018,
-   "regular": 7,
-   "rebate_dispatch": 0,
-   "hourly_dispatch": 0,
+   "regular": 0,
+   "dispatch": 1,
    "student": 0,
-   "short_term": 0,
+   "not_stated": 6,
    "total": 7
   },
   {
    "year": 2019,
-   "regular": 15,
-   "rebate_dispatch": 4,
-   "hourly_dispatch": 0,
+   "regular": 0,
+   "dispatch": 6,
    "student": 6,
-   "short_term": 0,
+   "not_stated": 13,
    "total": 25
   },
   {
    "year": 2020,
-   "regular": 21,
-   "rebate_dispatch": 20,
-   "hourly_dispatch": 0,
+   "regular": 0,
+   "dispatch": 25,
    "student": 3,
-   "short_term": 0,
+   "not_stated": 16,
    "total": 44
   },
   {
    "year": 2021,
-   "regular": 10,
-   "rebate_dispatch": 10,
-   "hourly_dispatch": 1,
+   "regular": 1,
+   "dispatch": 14,
    "student": 4,
-   "short_term": 0,
+   "not_stated": 6,
    "total": 25
   },
   {
    "year": 2022,
-   "regular": 16,
-   "rebate_dispatch": 6,
-   "hourly_dispatch": 3,
+   "regular": 0,
+   "dispatch": 17,
    "student": 7,
-   "short_term": 0,
+   "not_stated": 8,
    "total": 32
   },
   {
    "year": 2023,
-   "regular": 8,
-   "rebate_dispatch": 7,
-   "hourly_dispatch": 3,
+   "regular": 1,
+   "dispatch": 15,
    "student": 3,
-   "short_term": 1,
+   "not_stated": 3,
    "total": 22
   },
   {
    "year": 2024,
-   "regular": 29,
-   "rebate_dispatch": 14,
-   "hourly_dispatch": 7,
+   "regular": 0,
+   "dispatch": 40,
    "student": 4,
-   "short_term": 1,
+   "not_stated": 11,
    "total": 55
   },
   {
    "year": 2025,
-   "regular": 5,
-   "rebate_dispatch": 0,
-   "hourly_dispatch": 91,
+   "regular": 0,
+   "dispatch": 96,
    "student": 1,
-   "short_term": 0,
+   "not_stated": 0,
    "total": 97
   }
  ],
- "source": "Recruitment posts from fskzpw.com (a labor-agency site), classified in scripts/labor_data.py",
- "caveat": "Small samples in early years (8, 9 and 7 posts in 2016-2018). Posts cannot size the workforce."
+ "rule": "Dispatch: a rebate or hourly pay figure, or the post names an agency scheme (rebate, hourly worker, wage difference, dispatch, short-term, day pay). Student: student, summer or winter-break workers. Direct hire: the post explicitly says regular worker or direct hire. Not stated: none of these.",
+ "source": "Recruitment posts from fskzpw.com (a labor-agency site); pay fields from scripts/labor_data.py, groups assigned in scripts/export_site_data.py",
+ "caveat": "Small samples in early years (8, 9 and 7 posts in 2016-2018). Posts cannot size the workforce. Every post is from a labor-agency site, so \"direct hire\" is the post's own claim, and most \"not stated\" posts are likely agency recruiting too."
 }

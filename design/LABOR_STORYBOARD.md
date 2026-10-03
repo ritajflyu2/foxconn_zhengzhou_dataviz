@@ -7,7 +7,7 @@ This file is the build brief for the Labor page. It lists every scene, what data
 Reference images live in `design/reference/`:
 
 - `storyboard_sketch.jpg`: hand sketch of the scene flow
-- `factory_exploded.png`: 4-floor exploded factory (1F = labor floor, used as the index in Scene 3)
+- `factory_exploded.png`: 4-floor exploded factory (1F = labor floor); the original Scene 3 index, now replaced by the separate floors in `index stack/`
 - `floorplan_1F.png`: empty isometric 1F assembly floor with a loading dock (left), two workbench lines (center), a forklift, pallets and shelving. Transparent background, 719×440. This is the Scene 2 floor plan.
 - `wage_calculator_ref.png`: layout reference for Scene 4
 - `cube_grid_ref.webp`: high-contrast cube reference for Scene 5
@@ -54,7 +54,8 @@ Consequences for the build:
   - Rebate-type dispatch: orange (light step)
   - Hourly-type dispatch: orange (dark step). Rebate and hourly are both dispatch, so they share a hue family and are told apart by lightness plus labels.
   - Student / summer: **aqua**
-  - Short-term: **muted grey-violet**
+  - Short-term: **muted grey-violet** (no longer used: short-term posts count as dispatch, see Scene 3)
+  - Recruitment posts that state no worker type: **light grey** ("Not stated", `--color-not-stated`), a deliberate neutral, not a worker type
   - Legal cap: **red, outline only**. Red is reserved for "over the legal limit" and is never a worker fill.
 - **Every chart shows its caveat in place**, not in a footnote the viewer never sees.
 - **Estimates look different from measurements**: estimated quantities use a hatched or dotted fill, measured ones a solid fill. This carries through all scenes.
@@ -138,7 +139,7 @@ Cross-check to display: the airport-zone estimated total at 57% is ~124k, below 
 - Data: `scene2_floor.json` (line and bed coordinates, counts, sources, caveats); optimized images in `site/assets/labor/`, both from `export_site_data.py`.
 - **Caveat:** one worker's account of her own line, applied to every line; the floor and room are illustrative stand-ins; the insured / dispatch mix is the campus-wide average; the dorm size is the design standard, not a measured Foxconn room.
 
-**Transition to Scene 3:** the assembly-floor image shrinks and slides to the left edge, becoming 1F of the floor index (the dorm fades with the rest of Scene 2), while all the dots, lines and beds, lift off into their own band of space opened between Scene 3's summary and its charts, keeping the floor's shape at a smaller size (nothing is covered; the band closes once the last dot lands). Waiting and flying dots are drawn in page coordinates, so they scroll with the page instead of covering the text. As Scene 3's autoplay reaches each year, that year's dots stream out of the band into **both** charts, so each year's pair of bars builds together (**decision:** the stacking rides the autoplay, ~0.8s per year). Workforce chart: insured → solid dots, dispatch → ring dots. Recruitment chart: insured → "regular" posts, dispatch → rebate- and hourly-type dispatch posts (shifting to each one's own orange in flight); student and short-term posts have no floor dots, so they just appear in place. The dots are a motif that carries across the screen, not a one-to-one count: a Scene 3 dot is not 100 workers, so dots may fade in or out on the way.
+**Transition to Scene 3:** the assembly-floor image shrinks and slides to the left edge, becoming 1F of the floor index (the dorm fades with the rest of Scene 2), while all the dots, lines and beds, lift off into their own band of space opened between Scene 3's summary and its charts, keeping the floor's shape at a smaller size (nothing is covered; the band closes once the last dot lands). Waiting and flying dots are drawn in page coordinates, so they scroll with the page instead of covering the text. As Scene 3's autoplay reaches each year, that year's dots stream out of the band into **both** charts, so each year's pair of bars builds together (**decision:** the stacking rides the autoplay, ~0.8s per year). Workforce chart: insured → solid dots, dispatch → ring dots. Recruitment chart: insured → "direct hire (stated)" posts, dispatch → dispatch posts; student and "not stated" posts have no floor dots, so they just appear in place. The dots are a motif that carries across the screen, not a one-to-one count: a Scene 3 dot is not 100 workers, so dots may fade in or out on the way.
 
 ---
 
@@ -146,7 +147,7 @@ Cross-check to display: the airport-zone estimated total at 57% is ~124k, below 
 
 **Layout:** two charts side by side, plus the floor index. The floor index is always on the **left** of the content (Scenes 3–5), never the right.
 
-- **Left edge:** the exploded-factory image as a small index (`factory_exploded.png`) , showing where the viewer is in the building.
+- **Left edge:** the floor index, showing where the viewer is in the building: the four floors from `design/reference/index stack/` stacked 1F (bottom) to 4F, upper floors in front (copies and hover outlines written by `export_site_data.py` to `floor_index.json` / `site/assets/labor/floor_*.webp`). Floors: 1F Assembly Line, 2F Automation Equipment, 3F Management, 4F Waste and Water Processing. Every floor is clickable (and Tab + Enter): the clicked floor becomes active, drawn in front at full colour with the others faded, and its number and name sit under the stack (default 1F). Hovering a floor fades all the others further and shows a legend on the left, level with the floor: big bold floor number, a short line to the floor, the name below (plain text, no box; style after `index stack/design reference.png`, in ink rather than blue, since blue is the insured colour). A faint grey divider runs beside the index, from the top floor down to the floor name.
 - **Left chart, workforce composition by year:** modeled on `outputs/labor_analysis_output/charts/A1_insured_workers_vs_total_workforce.png`. The dots from Scene 2 settle into the bars.
 - **Right chart, recruitment posts by type:** modeled on `outputs/labor_analysis_output/charts/C1_post_type_counts_over_time.png`.
 
@@ -175,14 +176,22 @@ Cross-check to display: the airport-zone estimated total at 57% is ~124k, below 
 - Henan Fuchi reports 1 insured worker for 2020, a reporting gap. Show as a gap, not a real drop.
 - Source files: `outputs/labor_analysis_output/tables/A1_insured_workers_by_entity_annual.csv`, `outputs/labor_analysis_output/tables/A1_total_workforce_point_estimates.csv`.
 
-**Right chart data:** `outputs/labor_analysis_output/tables/C1_post_type_counts_by_year.csv`, 2016–2025, stacked counts by post type (hourly-type dispatch, rebate-type dispatch, regular/unspecified, student/summer, short-term).
+**Right chart data:** `scene3_posts_by_year.json`, 2016–2025, stacked counts in four groups. **Decision (regrouping):** labor_data.py's C1 table called any post with an hourly-pay field "hourly-type", but 122 of its 139 "hourly" posts list both the rebate and the hourly scheme (menu posts, mostly 2025), and its "regular/unspecified" bucket was really "nothing stated". `export_site_data.py` now re-sorts every post from C1's pay-field flags plus the post text (title + summary, plus the body unless the site later overwrote it), in this order:
+  1. **Dispatch (orange):** a rebate or hourly pay field.
+  2. **Student / summer (aqua):** student, summer or winter-break workers (kept as their own group).
+  3. **Dispatch (orange):** the text names an agency scheme: rebate, hourly worker, wage difference, dispatch, short-term, day pay. Rebate, hourly and short-term are all one dispatch group.
+  4. **Direct hire, stated (blue):** the text explicitly says regular worker (正式工) or direct hire (直招).
+  5. **Not stated (light grey):** everything else.
 
-- Colors match the shared mapping, so "regular" (blue) lines up visually with "insured" in the left chart.
-- Caveat to show: post counts are small in early years (8, 9 and 7 posts in 2016–2018), so shares in those years rest on very few posts.
+  Totals over all 449 posts: dispatch 251, student 30, direct hire 7, not stated 161. 2025 is 96 of 97 dispatch; 2016–2018 are nearly all "not stated".
 
-**Transition to Scene 4:** the post-type colors carry over. The rest of Scene 3 dims and the four colors that match Scene 4's worker types are pulled out of the right chart into four clusters, one per type (short-term, which has no Scene 4 row, fades away). Each cluster is labelled with its Scene 4 name and contract so the viewer reads what each color means.
-- **Words layer (decision):** below the clusters, a word cloud of the most-used words in the summaries (摘要) of all 449 scraped hiring posts (2010–2026, not split by type) fills the screen. Size = share of posts using the word; colour = the worker type whose posts use it most (as a share of that type's own posts, needing ≥ 8 of them), shown in the type's hue darkened as needed to read as text. Generic words (Foxconn, Zhengzhou, recruit, sign up, website, we/you, dates, numbers) are left out; 52 words chosen for what they say about pay, urgency, screening and the work. Hover/focus a word: posts using it, share of all posts, mentions, share of its type's posts. Data: `scene4_post_words.json` (from `export_site_data.py`, jieba segmentation, English glosses only). The transition **holds here until the viewer presses Continue**; Skip/Esc still jump to Scene 4. Reduced motion: clusters, labels and words appear in place, and Continue goes straight to Scene 4.
-- Then the clusters drop into Scene 4 and become the legend dots of the four pay rows.
+- Colors match the shared mapping, so "direct hire" (blue) lines up visually with "insured" in the left chart.
+- The method note spells out the rule (`rule` in the JSON). Caveat to show: post counts are small in early years (8, 9 and 7 posts in 2016–2018); every post comes from a labor-agency site, so "direct hire" is the post's own claim and most "not stated" posts are likely agency recruiting too.
+- The charts that labor_data.py saved in `outputs/` still use its original categories.
+
+**Transition to Scene 4:** the post-group colors carry over. The rest of Scene 3 dims and three clusters rise out of the right chart: blue (direct hire, labelled with Scene 4's "Full-time (insured)" name and contract), orange (labelled "Dispatch (agency)", rebate-type or hourly-type dispatch) and green (student). "Not stated" dots fade away.
+- **Words layer (decision):** below the clusters, a word cloud of the most-used words in the summaries (摘要) of all 449 scraped hiring posts (2010–2026, not split by type) fills the screen. Size = share of posts using the word; colour = the post group (direct hire, dispatch, student) whose posts use it most (as a share of that group's own posts, needing ≥ 8 of them; "not stated" posts are left out), shown in the group's hue darkened as needed to read as text. With the regrouping almost every word is orange; "interview" and the student words are green. Generic words (Foxconn, Zhengzhou, recruit, sign up, website, we/you, dates, numbers) are left out; 52 words chosen for what they say about pay, urgency, screening and the work. Hover/focus a word: posts using it, share of all posts, mentions, share of its type's posts. Data: `scene4_post_words.json` (from `export_site_data.py`, jieba segmentation, English glosses only). The transition **holds here until the viewer presses the next arrow** in the bottom bar (or →); there is no Continue button, and a hint line under the subtitle says to use the arrow. Pressing next before the words are up, or again during the drop, jumps to the finished Scene 4 (never past it). Skip/Esc still jump to Scene 4. Reduced motion: clusters, labels and words appear in place, and the next arrow goes straight to Scene 4.
+- Then Scene 4 fades in. The orange cluster first splits into two halves that turn to the rebate-type and hourly-type shades (its label fades as it parts), and every cluster drops into its pay row's legend dot: blue → full-time, the two orange halves → rebate-type and hourly-type, green → student. The orange dots are split evenly between the two rows (a visual split: the posts do not say which scheme each worker took).
 
 ---
 

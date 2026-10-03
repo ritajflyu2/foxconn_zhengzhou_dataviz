@@ -11,10 +11,9 @@ import { seededRandom, lerp, bezier, toScreen, createOverlay, snapshot, scrollTo
 // year at a time; once the last dot lands the band closes:
 //   - workforce chart: insured (blue) → solid insured dots; dispatch (orange)
 //     → ring "gap" dots;
-//   - recruitment-post chart: insured (blue) → "regular" posts; dispatch
-//     (orange) → rebate- and hourly-type dispatch posts, shifting to each
-//     one's own orange on the way. Post types the floor has no dots for
-//     (student, short-term) just appear in place.
+//   - recruitment-post chart: insured (blue) → "direct hire (stated)" posts;
+//     dispatch (orange) → dispatch posts. Groups the floor has no dots for
+//     (student, not stated) just appear in place.
 // The dots are a motif, not a count: spare floor dots fade from the band a
 // few each year (so the shape empties evenly), and missing ones fade in as they
 // leave it.
@@ -37,7 +36,7 @@ const ARC_PX = [20, 70];
 const APPEAR_MS = 350; // in-place dots (no floor type) fade in
 
 // Which floor-dot type feeds each recruitment-post type (null = none: appears in place).
-const POST_SOURCE = { regular: 'insured', rebate_dispatch: 'dispatch', hourly_dispatch: 'dispatch', student: null, short_term: null };
+const POST_SOURCE = { regular: 'insured', dispatch: 'dispatch', student: null, not_stated: null };
 
 // Every dot of every `.floor-dots` layer: the assembly lines and the dorm beds.
 function floorDots(sceneEl) {

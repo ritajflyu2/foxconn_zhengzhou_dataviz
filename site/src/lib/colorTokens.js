@@ -8,6 +8,7 @@ const WORKER_TYPES = [
   'hourly-dispatch',
   'student',
   'short-term',
+  'not-stated',
   'legal-cap',
   'comparison',
   'estimate-range',

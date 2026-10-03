@@ -1,14 +1,18 @@
-import { easeCubicInOut } from 'd3';
+import { easeCubicInOut, interpolateRgb } from 'd3';
+import { colorFor } from '../lib/colorTokens.js';
 import { seededRandom, lerp, bezier, toScreen, createOverlay, snapshot, scrollToScene } from './common.js';
 import { raw } from '../lib/dataLoader.js';
 import { createPostWords } from './postWords.js';
 
-// Transition 3 → 4: the recruitment-post colors that match Scene 4's worker
-// types are pulled out of the posts chart into one cluster per type (the rest
-// of Scene 3 dims; types with no Scene 4 row fade away). Each cluster is
-// labelled with that worker type's name and contract from scene4_pay_model.json,
-// so the viewer reads what each color means. Then Scene 4 fades in and every
-// cluster drops into its row's legend dot, its label settling onto the row name.
+// Transition 3 → 4: the recruitment-post groups that match Scene 4's worker
+// types rise out of the posts chart into one cluster each — direct hire
+// (blue), dispatch (orange), student (green); the rest of Scene 3 dims and the
+// "not stated" posts fade away. Each cluster is labelled (worker type and
+// contract from scene4_pay_model.json; the dispatch cluster with its post group
+// name and the two dispatch types), so the viewer reads what each color means.
+// Then Scene 4 fades in: the orange cluster splits in two, each half turning to
+// its own shade (rebate-type, hourly-type), and every cluster drops into its
+// row's legend dot, single-row labels settling onto the row name.
 //
 // In between, a word cloud of the most-used words in all the hiring posts
 // (scene4_post_words.json) fills the screen below the clusters, each word in
@@ -35,6 +39,8 @@ const CLUSTER_MIN_R = 14;
 const CLUSTER_Y = 0.38; // cluster row, as a fraction of the window height (no words layer)
 const CLUSTER_Y_WORDS = 0.16; // higher when the words fill the space below
 const SPIN = 0.00035; // slow turn of each cluster while it is being read (rad/ms)
+const SPLIT_MS = 650; // the dispatch cluster parts into its two shades before dropping
+const SPLIT_GAP = 1.05; // how far apart the two halves sit, in cluster radii (each side)
 const GOLDEN = Math.PI * (3 - Math.sqrt(5));
 
 function postDots(sceneEl) {
@@ -52,18 +58,22 @@ function postDots(sceneEl) {
   return out;
 }
 
-function clusterLabel(worker) {
+function clusterLabel(title, text) {
   const el = document.createElement('div');
   el.className = 'transition-label';
   const name = document.createElement('p');
   name.className = 'transition-label__name';
-  name.textContent = worker.label;
+  name.textContent = title;
   const meaning = document.createElement('p');
   meaning.className = 'transition-label__meaning';
-  meaning.textContent = worker.contract;
+  meaning.textContent = text;
   el.append(name, meaning);
   return el;
 }
+
+// Scene 3's post group for a Scene 4 worker type: both dispatch types come
+// from the one dispatch group.
+const groupOf = (colorKey) => (colorKey.endsWith('_dispatch') ? 'dispatch' : colorKey);
 
 function draw(ctx, dots) {
   ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
@@ -95,7 +105,16 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
   const run = async () => {
     const fromEl = root.querySelector('.scene');
     const workers = Object.values(toData.workers);
-    const kinds = workers.map((w) => w.color_key);
+    // One cluster per post group, in Scene 4's row order; each lists its rows.
+    const groups = [];
+    for (const w of workers) {
+      const key = groupOf(w.color_key);
+      let g = groups.find((d) => d.kind === key);
+      if (!g) groups.push((g = { kind: key, workers: [] }));
+      g.workers.push(w);
+    }
+    const kinds = groups.map((g) => g.kind);
+    const groupLabel = Object.fromEntries((raw.scene3_posts_by_year?.categories ?? []).map((c) => [c.key, c.label]));
     const sources = postDots(fromEl);
     const rng = seededRandom(31);
 
@@ -123,14 +142,19 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
     const content = { left: (window.innerWidth - colW) / 2, width: colW };
     const counts = kinds.map((k) => sources.filter((s) => s.kind === k).length);
     const maxCount = Math.max(1, ...counts);
-    const clusters = workers.map((w, i) => {
+    const clusters = groups.map((g, i) => {
       const n = counts[i];
       const r = Math.max(CLUSTER_MIN_R, CLUSTER_MAX_R * Math.sqrt(n / maxCount));
-      const label = clusterLabel(w);
+      const [w] = g.workers;
+      const label =
+        g.workers.length === 1
+          ? clusterLabel(w.label, w.contract)
+          : clusterLabel(groupLabel[g.kind] ?? g.kind, g.workers.map((d) => d.label).join(' or '));
       overlay.wrap.append(label);
       return {
-        kind: w.color_key,
-        cx: content.left + (content.width * (i + 0.5)) / workers.length,
+        kind: g.kind,
+        rows: g.workers.map((d) => d.color_key),
+        cx: content.left + (content.width * (i + 0.5)) / groups.length,
         cy: Math.max(CLUSTER_MAX_R + 24, clusterY),
         r,
         n,
@@ -147,17 +171,24 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
       });
     }
 
-    // Each dot gets a slot on its cluster's sunflower spiral; types with no row fade out.
+    // Each dot gets a slot on its cluster's sunflower spiral, and a Scene 4 row
+    // (the dispatch cluster's dots alternate between its two rows); groups with
+    // no row fade out.
     const dots = [];
     for (const c of clusters) {
       const mine = sources.filter((s) => s.kind === c.kind);
       const dotR = mine[0]?.r ?? 2;
       mine.forEach((s, k) => {
         const f = (k + 0.5) / mine.length;
+        const row = c.rows[k % c.rows.length];
         dots.push({
           cluster: c,
           from: s,
           color: s.color,
+          fromColor: s.color,
+          row,
+          rowColor: colorFor(row),
+          side: c.rows.length > 1 ? (c.rows.indexOf(row) === 0 ? -1 : 1) : 0,
           slotR: c.r * Math.sqrt(f),
           slotA: k * GOLDEN,
           r: dotR,
@@ -236,12 +267,18 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
 
       descend = { start: t, scroll0, scroll1, targets, total: 0 };
       clusters.forEach((c, i) => {
-        c.target = targets[c.kind];
-        c.start = t + i * ROW_STAGGER_MS;
+        c.target = targets[c.rows[0]];
+        c.split = c.rows.length > 1;
+        // A split cluster parts into its shades first, then drops.
+        c.start = t + i * ROW_STAGGER_MS + (c.split ? SPLIT_MS : 0);
         c.dur = lerp(DESCEND_MS[0], DESCEND_MS[1], rng());
         descend.total = Math.max(descend.total, c.start - t + c.dur);
       });
+      for (const d of dots) if (d.cluster) d.target = targets[d.row];
     };
+
+    // How far the split has gone (0 → 1) for a split cluster once the drop begins.
+    const splitAt = (c, t) => (descend && c.split ? easeCubicInOut(Math.min(1, Math.max(0, (t - descend.start) / SPLIT_MS))) : 0);
 
     let descending = null; // the mount promise, once the drop has begun
     await new Promise((resolve) => {
@@ -271,7 +308,15 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
           }
           const c = d.cluster;
           const home = slot(d, t);
-          if (!descend || !c.target || t < c.start) {
+          // The dispatch cluster parting: each half slides to its side, a
+          // little tighter, and turns to its own row's shade.
+          const sp = splitAt(c, t);
+          if (sp > 0) {
+            home.x += d.side * SPLIT_GAP * c.r * sp + (c.cx - home.x) * 0.3 * sp;
+            home.y += (c.cy - home.y) * 0.3 * sp;
+            d.color = interpolateRgb(d.fromColor, d.rowColor)(sp);
+          }
+          if (!descend || !d.target || t < c.start) {
             const u = easeCubicInOut(Math.min(1, Math.max(0, (t - d.delay) / d.dur)));
             const p = bezier(
               {
@@ -284,7 +329,7 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
             );
             d.x = p.x;
             d.y = p.y;
-            if (descend && c.target) finished = false;
+            if (descend && d.target) finished = false;
             continue;
           }
           // Drop into the row's legend dot: the whole cluster condenses to it.
@@ -292,8 +337,8 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
           const s = Math.min(1, (t - c.start) / c.dur);
           if (s < 1) finished = false;
           const u = easeCubicInOut(s);
-          const tx = c.target.x;
-          const ty = c.target.y - window.scrollY;
+          const tx = d.target.x;
+          const ty = d.target.y - window.scrollY;
           const p = bezier(
             {
               p0: d.descendFrom,
@@ -305,13 +350,24 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
           );
           d.x = p.x;
           d.y = p.y;
-          d.r = lerp(d.descendFrom.r, c.target.r, u);
-          if (s >= 1 && c.target.dot.style.visibility === 'hidden') c.target.dot.style.visibility = '';
+          d.r = lerp(d.descendFrom.r, d.target.r, u);
+          d.color = interpolateRgb(d.color, d.rowColor)(u);
+          if (s >= 1 && d.target.dot.style.visibility === 'hidden') d.target.dot.style.visibility = '';
         }
 
-        // Labels ride down with their cluster and settle onto the row name.
+        // Labels ride down with their cluster and settle onto the row name; a
+        // split cluster's label fades as it parts (its rows have their own names).
         if (descend) {
           for (const c of clusters) {
+            if (c.split) {
+              const sp = splitAt(c, t);
+              if (sp > 0) {
+                c.labelIn?.cancel();
+                c.labelIn = null;
+                c.label.style.opacity = String(1 - sp);
+              }
+              continue;
+            }
             if (!c.target?.name || t < c.start) continue;
             // The fade-in's held end state would override the opacity set below.
             c.labelIn?.cancel();
@@ -330,7 +386,7 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
           }
         }
 
-        draw(overlay.ctx, dots.filter((d) => !d.cluster?.target || t < d.cluster.start + d.cluster.dur));
+        draw(overlay.ctx, dots.filter((d) => !d.target || t < d.cluster.start + d.cluster.dur));
         if (finished) resolve();
         else requestAnimationFrame(step);
       };

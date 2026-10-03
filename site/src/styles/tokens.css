@@ -14,6 +14,10 @@
   --color-hourly-dispatch: #a8431c;
   --color-student: #1baf7a;
   --color-short-term: #9a5fa8;
+  /* Recruitment posts that state no worker type: a deliberate neutral (the
+     validator flags its chroma as "reads gray", which is the point), set
+     apart from the four worker hues by a clear lightness / hue step. */
+  --color-not-stated: #8f8a81;
 
   /* Red is reserved for the legal cap, and only ever as a stroke. Deeper than
      the project's usual #e34948: against the dispatch orange it sits right

@@ -17,9 +17,9 @@ const FONT_WEIGHT = 600;
 const TEXT_CONTRAST = 4.5; // normal text
 const LARGE_TEXT_CONTRAST = 3; // WCAG large text: ≥ 18.66px bold — most of the cloud
 const LARGE_TEXT_PX = 18.66;
-// Hourly-type's brown is set a step darker as text, so it stays apart from the
-// darkened rebate-type orange next to it.
-const MIN_CONTRAST_BY_TYPE = { hourly_dispatch: 6.5 };
+// Per-type floor on text contrast, for a type whose darkened text shade would
+// sit too close to another's (none needed with the current groups).
+const MIN_CONTRAST_BY_TYPE = {};
 
 const pct = format('.0%');
 const count = format(',');

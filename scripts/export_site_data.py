@@ -334,19 +334,58 @@ write("scene3_workforce_by_year.json", {
 })
 
 # ---------------------------------------------------------------- scene 3: posts by year
-posts = pd.read_csv(LT / "C1_post_type_counts_by_year.csv")
-posts = posts[posts["year"].between(2016, 2025)]
-KEYS = {"regular/unspecified": ("regular", "Regular / unspecified"),
-        "rebate-type dispatch": ("rebate_dispatch", "Rebate-type dispatch"),
-        "hourly-type dispatch": ("hourly_dispatch", "Hourly-type dispatch"),
-        "student/summer": ("student", "Student / summer"),
-        "short-term": ("short_term", "Short-term")}
+# Each post is re-sorted here from labor_data.py's C1 table (its pay-field flags)
+# plus the post text, into four groups. C1 put any post with an hourly field
+# under "hourly", but most of those list both the rebate and the hourly scheme,
+# and its "regular" bucket was really "nothing stated". Rules, in order:
+#   1. dispatch: a rebate or hourly pay field
+#   2. student: student / summer / winter-break worker (kept as its own group,
+#      as in C1, even when the post also mentions an agency scheme)
+#   3. dispatch: the text names an agency scheme (rebate, hourly worker, wage
+#      difference, dispatch, short-term, day pay ...)
+#   4. direct hire: the text explicitly says regular worker or direct hire
+#   5. not stated: everything else
+# Text = title + summary, plus the body unless the site later overwrote it with
+# a template (C1's body_contaminated flag, LABOR_DATA.md rule).
+POSTS_JSON = BASE / "data" / "原始文件_抓取数据" / "招聘帖全文抓取_fskzpw_2010-2026.json"
+post_raw = json.loads(POSTS_JSON.read_text(encoding="utf-8"))["posts"]
+DISPATCH_TEXT = ["返费", "小时工", "差价", "派遣", "劳务外包", "外包", "短期工", "短工", "日结", "临时工", "钟点工"]
+STUDENT_TEXT = ["学生工", "暑假工", "寒假工", "暑期工", "学生兼职", "大学生", "假期工"]
+DIRECT_TEXT = ["正式工", "直招", "官方直招", "厂方直招", "工厂直招"]
+POST_GROUPS = {  # key -> label; key doubles as the colour key
+    "regular": "Direct hire (stated)", "dispatch": "Dispatch (agency)",
+    "student": "Student / summer", "not_stated": "Not stated"}
+c1 = pd.read_csv(LT / "C1_post_type_classification.csv", dtype={"文章ID": str})
+
+
+def post_text(r):
+    p = post_raw.get(r["文章ID"], {})
+    return f"{p.get('title', '')} {p.get('desc', '')}" + ("" if r["body_contaminated"] else f" {p.get('body', '')}")
+
+
+def post_group(r):
+    text = post_text(r)
+    if r["has_rebate_field"] or r["has_hourly_field"]:
+        return "dispatch"
+    if any(k in text for k in STUDENT_TEXT):
+        return "student"
+    if any(k in text for k in DISPATCH_TEXT):
+        return "dispatch"
+    if any(k in text for k in DIRECT_TEXT):
+        return "regular"
+    return "not_stated"
+
+
+c1["group"] = c1.apply(post_group, axis=1)
+post_group_of = c1.set_index("文章ID")["group"]
+by_year = pd.crosstab(c1["year"], c1["group"]).reindex(columns=list(POST_GROUPS), fill_value=0)
+by_year = by_year[(by_year.index >= 2016) & (by_year.index <= 2025)]
 write("scene3_posts_by_year.json", {
-    "categories": [{"key": k, "label": l} for k, l in KEYS.values()],
-    "years": [{"year": int(r["year"]), **{k: int(r[src]) for src, (k, _) in KEYS.items()},
-               "total": int(sum(r[src] for src in KEYS))} for _, r in posts.iterrows()],
-    "source": "Recruitment posts from fskzpw.com (a labor-agency site), classified in scripts/labor_data.py",
-    "caveat": "Small samples in early years (8, 9 and 7 posts in 2016-2018). Posts cannot size the workforce.",
+    "categories": [{"key": k, "label": l} for k, l in POST_GROUPS.items()],
+    "years": [{"year": int(y), **{k: int(r[k]) for k in POST_GROUPS}, "total": int(r.sum())} for y, r in by_year.iterrows()],
+    "rule": "Dispatch: a rebate or hourly pay figure, or the post names an agency scheme (rebate, hourly worker, wage difference, dispatch, short-term, day pay). Student: student, summer or winter-break workers. Direct hire: the post explicitly says regular worker or direct hire. Not stated: none of these.",
+    "source": "Recruitment posts from fskzpw.com (a labor-agency site); pay fields from scripts/labor_data.py, groups assigned in scripts/export_site_data.py",
+    "caveat": "Small samples in early years (8, 9 and 7 posts in 2016-2018). Posts cannot size the workforce. Every post is from a labor-agency site, so \"direct hire\" is the post's own claim, and most \"not stated\" posts are likely agency recruiting too.",
 })
 
 # ---------------------------------------------------------------- scene 4: pay model (RMB source values + USD)
@@ -410,7 +449,6 @@ write("scene4_pay_model.json", {
 # Only the English gloss is exported.
 import jieba
 jieba.setLogLevel(60)
-POSTS_JSON = BASE / "data" / "原始文件_抓取数据" / "招聘帖全文抓取_fskzpw_2010-2026.json"
 POST_WORDS = {  # 中文 -> (English gloss, theme)
     "返费": ("rebate", "pay"), "小时工": ("hourly worker", "pay"), "补贴": ("subsidy", "pay"),
     "返费工": ("rebate worker", "pay"), "高价": ("high price", "pay"), "最高价": ("top price", "pay"),
@@ -432,12 +470,12 @@ POST_WORDS = {  # 中文 -> (English gloss, theme)
 }
 for w in [*POST_WORDS, "事业群", "招聘网", "不容错过", "零配件"]:
     jieba.add_word(w, freq=100000)
-post_raw = json.loads(POSTS_JSON.read_text(encoding="utf-8"))["posts"]
-# Colour layer: each word is tagged with the worker type (one of Scene 4's four
-# rows, from the C1 post classification) whose posts use it most, as a share of
-# that type's own posts so the small student group is not drowned out.
-post_type = pd.read_csv(LT / "C1_post_type_classification.csv", dtype={"文章ID": str}).set_index("文章ID")["post_type"]
-WORD_TYPES = {k: KEYS[k] for k in ["regular/unspecified", "rebate-type dispatch", "hourly-type dispatch", "student/summer"]}
+# Colour layer: each word is tagged with the post group (Scene 3's groups that
+# carry a worker-type colour; "not stated" posts are left out) whose posts use
+# it most, as a share of that group's own posts so the small student group is
+# not drowned out.
+post_type = post_group_of
+WORD_TYPES = {k: (k, POST_GROUPS[k]) for k in ["regular", "dispatch", "student"]}
 type_total = {k: int((post_type == k).sum()) for k in WORD_TYPES}
 doc_freq, mentions = {w: 0 for w in POST_WORDS}, {w: 0 for w in POST_WORDS}
 by_type = {w: {k: 0 for k in WORD_TYPES} for w in POST_WORDS}
@@ -471,7 +509,7 @@ write("scene4_post_words.json", {
         ({"word": en, "theme": theme, "posts": doc_freq[zh], "share": round(doc_freq[zh] / len(post_raw), 4), "mentions": mentions[zh], **top_type(zh)}
          for zh, (en, theme) in POST_WORDS.items()),
         key=lambda d: -d["posts"]),
-    "color_rule": "Each word is coloured by the worker type whose posts use it most, as a share of that type's own posts (needing at least 8 of them; otherwise the type with the most posts using it).",
+    "color_rule": "Each word is coloured by the post group (direct hire, dispatch, student) whose posts use it most, as a share of that group's own posts (needing at least 8 of them; otherwise the group with the most posts using it). Posts that state no worker type are left out of the colouring.",
     "source": "Summaries of recruitment posts scraped from fskzpw.com (a labor-agency site), translated to English",
     "method": "Each post's summary was split into words (jieba, a Chinese word segmenter). A word's size is the share of all posts whose summary uses it. Generic words (Foxconn, Zhengzhou, recruit, sign up, website, we/you, dates, numbers) are left out; the words shown were picked from the most frequent for what they say about pay, urgency, screening and the work.",
     "caveat": "Agency posts, not Foxconn's own: they show how workers are recruited, not what the job is. Summaries are short (about 100 characters) and translations are approximate.",
