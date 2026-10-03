@@ -24,6 +24,8 @@
      wear the NMHC orange, the page's accent. */
   --color-env-nmhc: #eb6834;
   --color-env-cod: #2a78d6;
+  /* Ammonia nitrogen, the second water stream (the preview's green). */
+  --color-env-nh3: #1b7c61;
 
   /* Red is reserved for the legal cap, and only ever as a stroke. Deeper than
      the project's usual #e34948: against the dispatch orange it sits right

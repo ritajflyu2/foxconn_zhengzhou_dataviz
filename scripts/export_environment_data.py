@@ -6,6 +6,11 @@ Writes:
                                          campus zones traced on the cropped map
   site/assets/environment/zone_map.webp  the cropped campus map
                                          (from design/assets/foxconn-zone-cropped.png)
+  site/data/environment/approved_reported.json
+                                         the "Approved and reported" scene:
+                                         Hongfujin's reported COD, VOCs and
+                                         ammonia nitrogen by year against the
+                                         approved design budget
 
 Run from the project root: .venv/bin/python scripts/export_environment_data.py
 
@@ -25,6 +30,14 @@ from scipy import ndimage as ndi
 
 ROOT = Path(__file__).resolve().parent.parent
 D4 = ROOT / "outputs" / "environment_analysis_output" / "tables" / "D4_hongfujin_cumulative_approved_by_zone.csv"
+# Approved (cumulative EIA budget, t/a) vs reported (permit annual execution
+# reports, t) by year, written by environment_data.py.
+D2 = ROOT / "outputs" / "environment_analysis_output" / "tables" / "D2_hongfujin_approved_vs_actual.csv"
+D2_STREAMS = [  # key, label, medium, approved column, reported column (display order: the two water streams together)
+    ("cod", "COD", "Water", "累计环评核定COD（t/a）", "实际COD（执行报告，t）"),
+    ("nh3", "Ammonia nitrogen", "Water", "累计环评核定氨氮（t/a）", "实际氨氮（执行报告，t）"),
+    ("voc", "VOCs", "Air", "累计环评核定VOCs/NMHC（t/a）", "实际VOCs（执行报告，t）"),
+]
 MAP_SRC = ROOT / "design" / "assets" / "foxconn-zone-cropped.png"
 # Play speed is Labor Scene 3's (written by export_site_data.py), so the two
 # year-by-year players run at the same pace.
@@ -139,6 +152,29 @@ def main():
     path = DATA_OUT / "expansion.json"
     path.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n")
     print(f"wrote {path.relative_to(ROOT)}  ({len(zones)} zones, {years[0]['year']}-{years[-1]['year']})")
+
+    # --- Approved and reported: the years with a permit execution report.
+    d2 = pd.read_csv(D2, encoding="utf-8-sig")
+    rep = d2.dropna(subset=[c[4] for c in D2_STREAMS])
+    years2 = [int(y) for y in rep["年份"]]
+    streams = []
+    for key, label, medium, ap_col, rp_col in D2_STREAMS:
+        approved = rep[ap_col].unique()
+        assert len(approved) == 1, (key, approved)  # the budget is flat after 2018
+        streams.append({"key": key, "label": label, "medium": medium, "approved": round(float(approved[0]), 4),
+                        "reported": [round(float(v), 4) for v in rep[rp_col]]})
+    out2 = {
+        "years": years2,
+        "unit": "t/year",
+        "animation": out["animation"],
+        "streams": streams,
+        "voc_note": "The approvals set the air budget as NMHC (non-methane hydrocarbons); the reports give VOCs. Both measure volatile organic air pollutants, so they are compared directly.",
+        "source": "Approved: Hongfujin's seven assembly-project EIAs (2010-2017), cumulative. Reported: Hongfujin's pollution-permit annual execution reports, 2020-2025 (environment analysis table D2).",
+        "caveat": "Approved figures cover production wastewater and emissions from individual projects; reported figures are whole-plant totals that may include domestic sewage. This compares two records, not a finding of a permit violation.",
+    }
+    path = DATA_OUT / "approved_reported.json"
+    path.write_text(json.dumps(out2, indent=1, ensure_ascii=False) + "\n")
+    print(f"wrote {path.relative_to(ROOT)}  ({len(streams)} streams, {years2[0]}-{years2[-1]})")
 
 
 if __name__ == "__main__":

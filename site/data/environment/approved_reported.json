@@ -1,0 +1,61 @@
+{
+ "years": [
+  2020,
+  2021,
+  2022,
+  2023,
+  2024,
+  2025
+ ],
+ "unit": "t/year",
+ "animation": {
+  "seconds_per_year": 0.8
+ },
+ "streams": [
+  {
+   "key": "cod",
+   "label": "COD",
+   "medium": "Water",
+   "approved": 161.72,
+   "reported": [
+    150.4,
+    63.613,
+    285.648,
+    180.046,
+    446.47,
+    485.222
+   ]
+  },
+  {
+   "key": "nh3",
+   "label": "Ammonia nitrogen",
+   "medium": "Water",
+   "approved": 15.84,
+   "reported": [
+    31.0,
+    0.264,
+    24.804,
+    30.244,
+    58.98,
+    98.747
+   ]
+  },
+  {
+   "key": "voc",
+   "label": "VOCs",
+   "medium": "Air",
+   "approved": 600.18,
+   "reported": [
+    57.4,
+    80.8,
+    28.82,
+    22.43,
+    21.487,
+    22.142
+   ]
+  }
+ ],
+ "voc_note": "The approvals set the air budget as NMHC (non-methane hydrocarbons); the reports give VOCs. Both measure volatile organic air pollutants, so they are compared directly.",
+ "source": "Approved: Hongfujin's seven assembly-project EIAs (2010-2017), cumulative. Reported: Hongfujin's pollution-permit annual execution reports, 2020-2025 (environment analysis table D2).",
+ "caveat": "Approved figures cover production wastewater and emissions from individual projects; reported figures are whole-plant totals that may include domestic sewage. This compares two records, not a finding of a permit violation."
+}

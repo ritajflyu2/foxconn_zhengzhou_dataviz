@@ -2,6 +2,7 @@ import { select, scaleLinear, scaleBand, line, area, curveStepAfter, format, max
 import { addCaveat, addMethodNote } from '../../lib/sceneShell.js';
 import { createTooltip } from '../../lib/tooltip.js';
 import { cssVar } from '../../lib/colorTokens.js';
+import { two, reducedMotion, createScene, playerControls, counter } from '../shared.js';
 import data from '../../../data/environment/expansion.json';
 
 const mapImages = import.meta.glob('../../../assets/environment/*.webp', { eager: true, query: '?url', import: 'default' });
@@ -11,137 +12,7 @@ const mapImages = import.meta.glob('../../../assets/environment/*.webp', { eager
 // One slider drives everything (copied from Labor Scene 3's player): it
 // autoplays once the scene is in view and can be scrubbed by hand.
 
-const TWEEN_MS = 500; // shorter than one year's step (Scene 3's pace, from the JSON)
-const two = format(',.2~f');
 
-const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-
-function createScene() {
-  const el = document.createElement('section');
-  el.className = 'scene';
-  el.id = 'env-scene-1';
-  const head = document.createElement('div');
-  head.innerHTML = '<p class="scene__index">Waste and Water Processing</p><h2></h2><p class="scene__summary"></p>';
-  const body = document.createElement('div');
-  body.className = 'scene__body';
-  el.append(head, body);
-  return { el, head, body };
-}
-
-// Labor Scene 3's play / pause + year scrubber, copied as is; the one change is
-// that it starts when the scene scrolls into view instead of on mount.
-function playerControls(container, { years, secondsPerYear, onReveal }) {
-  const row = document.createElement('div');
-  row.className = 'player-row';
-
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.className = 'player-btn';
-
-  const scrubber = document.createElement('input');
-  scrubber.type = 'range';
-  scrubber.min = '0';
-  scrubber.max = String(years.length - 1);
-  scrubber.className = 'player-scrubber';
-  scrubber.setAttribute('aria-label', 'Year');
-
-  const yearReadout = document.createElement('span');
-  yearReadout.className = 'player-year';
-
-  row.append(button, scrubber, yearReadout);
-  container.append(row);
-
-  let revealCount = reducedMotion() ? years.length : 0;
-  let playing = false;
-  let timer = null;
-
-  function sync() {
-    scrubber.value = String(Math.max(0, revealCount - 1));
-    scrubber.setAttribute('aria-valuetext', revealCount > 0 ? String(years[revealCount - 1].year) : `Before ${years[0].year}`);
-    yearReadout.textContent = revealCount > 0 ? String(years[Math.min(revealCount, years.length) - 1].year) : String(years[0].year);
-    button.textContent = playing ? 'Pause' : revealCount >= years.length ? 'Replay' : 'Play';
-    onReveal(revealCount, playing);
-  }
-
-  function stop() {
-    playing = false;
-    if (timer) clearInterval(timer);
-    timer = null;
-  }
-
-  function tick() {
-    revealCount += 1;
-    if (revealCount >= years.length) {
-      revealCount = years.length;
-      stop();
-    }
-    sync();
-  }
-
-  function play() {
-    if (revealCount >= years.length) revealCount = 0;
-    playing = true;
-    sync();
-    timer = setInterval(tick, secondsPerYear * 1000);
-  }
-
-  button.addEventListener('click', () => {
-    if (playing) {
-      stop();
-      sync();
-    } else {
-      play();
-    }
-  });
-
-  scrubber.addEventListener('input', () => {
-    stop();
-    revealCount = Number(scrubber.value) + 1;
-    sync();
-  });
-
-  sync();
-  return { play, stop };
-}
-
-function counter(parent, label, color) {
-  const wrap = document.createElement('div');
-  const l = document.createElement('p');
-  l.className = 'prod-counter__label';
-  const sw = document.createElement('span');
-  sw.className = 'env-counter__swatch';
-  sw.style.background = color;
-  l.append(sw, document.createTextNode(label));
-  const v = document.createElement('p');
-  v.className = 'prod-counter__value';
-  const num = document.createElement('span');
-  const unit = document.createElement('small');
-  unit.className = 'env-counter__unit';
-  unit.textContent = ` ${data.unit}`;
-  v.append(num, unit);
-  wrap.append(l, v);
-  parent.append(wrap);
-  // Tweens to each new value (jumps under reduced motion).
-  let shown = 0;
-  let raf = null;
-  return (target) => {
-    cancelAnimationFrame(raf);
-    if (reducedMotion()) {
-      shown = target;
-      num.textContent = two(target);
-      return;
-    }
-    const from = shown;
-    const t0 = performance.now();
-    const step = (now) => {
-      const k = Math.min(1, (now - t0) / TWEEN_MS);
-      shown = from + (target - from) * (1 - (1 - k) ** 3);
-      num.textContent = two(shown);
-      if (k < 1) raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-  };
-}
 
 // One step chart per measure (cumulative, t/year), sharing the year axis: two
 // measures on two charts, never one chart with two y-scales. Axis, gridlines,
@@ -215,7 +86,7 @@ export default {
     const first = years[0];
     const last = years[years.length - 1];
     const lit = data.zones.filter((z) => z.year_approved != null);
-    const { el, head, body } = createScene();
+    const { el, head, body } = createScene(1);
     head.querySelector('h2').textContent = 'Production grew. So did its approved environmental capacity.';
     head.querySelector('.scene__summary').textContent = `Each assembly project on the campus needed an environmental approval, and each approval set how much NMHC (a measure of volatile air pollutants) and COD (a measure of water pollution) it was designed to emit. From ${first.year} to ${last.year}, ${lit.length} of the map's ${data.zones.length} zones were approved this way, and the approved totals grew to ${two(last.cum_nmhc)} t of NMHC and ${two(last.cum_cod)} t of COD a year.`;
 
@@ -226,8 +97,8 @@ export default {
     const counters = document.createElement('div');
     counters.className = 'prod-counters env-counters';
     body.append(counters);
-    const setNmhc = counter(counters, 'Cumulative NMHC approved', nmhcColor);
-    const setCod = counter(counters, 'Cumulative COD approved', codColor);
+    const setNmhc = counter(counters, 'Cumulative NMHC approved', nmhcColor, data.unit);
+    const setCod = counter(counters, 'Cumulative COD approved', codColor, data.unit);
 
     // 2. The zone map beside the footprint charts.
     const layout = document.createElement('div');

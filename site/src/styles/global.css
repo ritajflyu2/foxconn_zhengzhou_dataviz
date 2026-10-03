@@ -1969,10 +1969,128 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   opacity: 1;
 }
 
+/* --- Approved and reported --------------------------------------------- */
+.env-counter__note {
+  margin: 0.15rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--ink-secondary);
+}
+
+/* Three forms side by side, no dividers. */
+.env-streams {
+  display: grid;
+  /* Column widths are set from each form's own width (approvedReported.js). */
+  grid-template-columns: repeat(3, minmax(0, 17rem));
+  justify-content: start;
+  gap: 2.5rem;
+  margin-top: 2.75rem;
+}
+
+@media (max-width: 760px) {
+  .env-streams {
+    grid-template-columns: 1fr;
+  }
+}
+
+.env-form__key {
+  margin: 0;
+  min-height: 2.8em; /* two lines for every form, so the three drawings start level */
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ink-muted);
+}
+
+.env-form {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.env-form__tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  fill: var(--ink);
+}
+
+.env-form__tag--muted {
+  fill: var(--ink-secondary);
+}
+
+.env-form__ratio {
+  font-family: var(--font-title);
+  font-size: 30px;
+  fill: var(--ink);
+}
+
+.env-tank {
+  fill: var(--surface-raised);
+  stroke-width: 1.25;
+}
+
+/* A beyond-approval tank appears once the year reaches it. */
+.env-tank-g,
+.env-tank__bracket,
+.env-form__tag {
+  transition: opacity 320ms ease;
+}
+
+.env-tank-g.is-hidden,
+.env-tank__bracket.is-hidden,
+.env-form__tag.is-hidden,
+.env-form__tag--faint.is-hidden {
+  opacity: 0;
+}
+
+/* Approved | beyond approval, as in the environment preview. */
+.env-tank__sep {
+  stroke: var(--grid);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+
+.env-tank__bracket {
+  fill: none;
+  stroke: var(--ink-muted);
+  stroke-width: 1;
+}
+
+.env-form__tag--strong {
+  font-weight: 600;
+}
+
+.env-form__tag--faint {
+  fill: var(--ink-muted);
+  opacity: 0.8;
+}
+
+/* Moving water surface (the preview's wave). */
+.env-wave {
+  animation: env-wave 2.6s linear infinite;
+}
+
+@keyframes env-wave {
+  to { transform: translateX(40px); }
+}
+
+.env-cloud__budget {
+  fill: none;
+  stroke-width: 1.25;
+  stroke-dasharray: 5 5;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .env-zone,
-  .env-chart__value {
+  .env-chart__value,
+  .env-tank-g,
+  .env-tank__bracket,
+  .env-form__tag {
     transition: none;
+  }
+  .env-wave {
+    animation: none;
   }
   .env-zone.is-new {
     animation: none;
