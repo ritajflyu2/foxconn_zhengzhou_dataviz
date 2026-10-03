@@ -21,9 +21,10 @@ const pageSwitcherEl = document.querySelector('#page-switcher');
 // (see their own idFromHash guards), so this router just owns the page-level
 // chrome: title, the switcher, which arrow bar shows, and Labor-only state
 // (the floor nav, the dark ground) left over when leaving Labor.
+// Tab order: Introduction first.
 const PAGES = {
-  labor: { label: 'Labor', title: 'Behind the Line — Labor' },
   intro: { label: 'Introduction', title: 'Introduction' },
+  labor: { label: 'Labor', title: 'Behind the Line — Labor' },
   env: { label: 'Waste and Water Processing', title: 'Waste and Water Processing' },
 };
 const pageOf = (hash) => (hash.startsWith('#intro-') ? 'intro' : hash.startsWith('#env-') ? 'env' : 'labor');
@@ -44,6 +45,9 @@ function buildPageSwitcher(onSelect) {
     for (const [k, btn] of buttons) btn.setAttribute('aria-current', String(k === key));
   };
 }
+
+// With no screen in the address, the site opens on the first tab.
+if (!window.location.hash) history.replaceState(null, '', '#intro-1');
 
 try {
   assertDataLoaded();
