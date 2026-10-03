@@ -1,5 +1,6 @@
 import { easeCubicInOut, interpolateRgb } from 'd3';
 import { colorFor } from '../lib/colorTokens.js';
+import { INDEX_1F } from '../lib/floorNav.js';
 import { seededRandom, lerp, bezier, toScreen, createOverlay, snapshot, scrollToScene } from './common.js';
 
 // Transition 2 → 3: the floor plan shrinks into 1F of the floor index on the
@@ -34,8 +35,6 @@ const PULL_MS = [650, 900];
 const PULL_STAGGER_MS = 260; // bottom dots of a bar land first, so it stacks upward
 const ARC_PX = [20, 70];
 const APPEAR_MS = 350; // in-place dots (no floor type) fade in
-// 1F's slab in factory_exploded.png, as fractions of the image box.
-const INDEX_1F = { cx: 0.5, cy: 0.835, width: 0.9 };
 
 // Which floor-dot type feeds each recruitment-post type (null = none: appears in place).
 const POST_SOURCE = { regular: 'insured', rebate_dispatch: 'dispatch', hourly_dispatch: 'dispatch', student: null, short_term: null };

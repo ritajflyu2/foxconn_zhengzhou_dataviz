@@ -33,14 +33,20 @@ const go = (id) => {
   if (scenes.some((s) => s.id === id)) window.location.hash = `scene-${id}`;
 };
 
-// Previous / next arrows with "Scene n of 5 · label" between them.
-function createArrows(nav, getCurrent) {
+// Previous / next arrows with "Scene n of 5 · label" between them. A running
+// transition that holds for the viewer (3 → 4's word cloud) takes the next
+// press itself through its `next()`; otherwise next goes to the next scene.
+function createArrows(nav, getCurrent, getActive) {
+  const forward = () => {
+    if (getActive()?.next?.()) return;
+    go(getCurrent() + 1);
+  };
   const arrow = (dir, glyph) => {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = `scene-arrows__btn scene-arrows__btn--${dir}`;
     b.textContent = glyph;
-    b.addEventListener('click', () => go(getCurrent() + (dir === 'next' ? 1 : -1)));
+    b.addEventListener('click', () => (dir === 'next' ? forward() : go(getCurrent() - 1)));
     return b;
   };
   const prev = arrow('prev', '←');
@@ -56,7 +62,7 @@ function createArrows(nav, getCurrent) {
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
     if (window.location.hash.startsWith('#intro-')) return;
     if (e.target.closest?.('input, textarea, select, [contenteditable], [role="slider"]')) return;
-    if (e.key === 'ArrowRight') go(getCurrent() + 1);
+    if (e.key === 'ArrowRight') forward();
     else if (e.key === 'ArrowLeft') go(getCurrent() - 1);
   });
 
@@ -78,7 +84,7 @@ export function createSceneManager({ nav, root, pageGrid }) {
   let currentId = null;
   let navToken = 0;
   let active = null;
-  const updateArrows = createArrows(nav, () => currentId);
+  const updateArrows = createArrows(nav, () => currentId, () => active);
 
   async function show(id) {
     if (id == null || id === currentId) return;

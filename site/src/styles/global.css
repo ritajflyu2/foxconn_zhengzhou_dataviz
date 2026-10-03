@@ -138,7 +138,7 @@ body {
 }
 
 /* The page grid: scenes 1-2 are a single full-width column; scenes 3-5 add the
-   floor-nav column at exactly 1/5 of the row (a plain `1fr` grid track, so it
+   floor-nav column at 1.2 / 5.2 of the row (a plain `fr` grid track, so it
    scales with the viewport automatically — no hardcoded width or position).
    When the nav is present, .scene-root drops its own auto-centering (that
    would otherwise float it in the middle of the now-wider content column,
@@ -150,7 +150,7 @@ body {
 }
 
 .page-grid.has-floor-nav {
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1.2fr 4fr;
 }
 
 .floor-nav-slot {
@@ -159,7 +159,7 @@ body {
 
 .page-grid.has-floor-nav .floor-nav-slot {
   display: block;
-  padding: 2rem 0 2rem 2rem;
+  padding: 2rem 0 2rem 1rem;
 }
 
 .page-grid.has-floor-nav .scene-root {
@@ -626,36 +626,133 @@ body {
    any scene's content column. Its own (smaller) left margin is independent of
    the page's content margins. Hidden below the width where it would start
    overlapping the centered content (real responsive handling is later). */
+.floor-index__image {
+  position: relative;
+}
+
+/* The stack takes the right part of the column; the hover legend the left. */
 .floor-index__image svg {
-  width: 100%;
+  width: 72%;
+  margin-left: auto;
   height: auto;
   display: block;
+  overflow: visible;
 }
 
-.floor-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  margin-top: 0.5rem;
+.floor-index__floor {
+  outline: none;
 }
 
-.floor-nav__item {
-  font: inherit;
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  padding: 0.4rem 0;
-  border: 1px solid var(--grid);
-  border-radius: 4px;
-  background: var(--surface-raised);
-  color: var(--ink-muted);
-  cursor: not-allowed;
+.floor-index__floor image {
+  pointer-events: none;
+  transition: opacity 180ms ease, filter 180ms ease;
 }
 
-.floor-nav__item--active {
-  border-color: var(--ink);
+.floor-index__hit {
+  fill: transparent;
+  pointer-events: all;
+  cursor: pointer;
+}
+
+/* At rest: the active floor in full, the others faded. */
+.floor-index__floor:not(.is-active) image {
+  opacity: 0.6;
+  filter: grayscale(0.5);
+}
+
+.floor-index__floor.is-active image {
+  filter: drop-shadow(0 6px 10px rgb(40 30 20 / 0.28));
+}
+
+/* Hovering: only the hovered floor in full, everything else further back. */
+svg.is-hovering .floor-index__floor image {
+  opacity: 0.3;
+  filter: grayscale(0.9);
+}
+
+svg.is-hovering .floor-index__floor.is-hovered image {
+  opacity: 1;
+  filter: drop-shadow(0 6px 10px rgb(40 30 20 / 0.28));
+}
+
+.floor-index__floor:focus-visible .floor-index__hit {
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+
+/* Floor legend: big floor number, then its name; plain text, no box. */
+.floor-legend {
+  font-family: var(--font-body);
   color: var(--ink);
+  pointer-events: none;
+}
+
+.floor-legend__head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.floor-legend__id {
+  font-size: 1.5rem;
   font-weight: 700;
-  cursor: default;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.floor-legend__name {
+  margin: 0.2rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.25;
+}
+
+/* Hover: on the left, level with the floor, a leader line pointing at it. */
+.floor-legend--hover {
+  position: absolute;
+  left: 0;
+  right: 70%;
+  text-align: right; /* flush against the stack, so the short line reaches the floor */
+  transform: translateY(-0.75rem); /* the line sits level with the floor; the name runs below */
+  z-index: 2;
+}
+
+
+.floor-legend__line {
+  flex: none;
+  width: 1.25rem;
+  height: 0;
+  border-top: 1.5px solid var(--ink);
+}
+
+.floor-legend--hover .floor-legend__head {
+  justify-content: flex-end;
+}
+
+.floor-legend--hover .floor-legend__name {
+  font-size: 0.75rem;
+}
+
+.floor-legend--hover[hidden] {
+  display: none;
+}
+
+/* Active: under the stack. */
+.floor-legend--active {
+  width: 72%;
+  margin-left: auto;
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
+.floor-legend--active .floor-legend__head {
+  justify-content: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floor-index__floor image {
+    transition: none;
+  }
 }
 
 .player-row {
@@ -755,7 +852,7 @@ body {
   pointer-events: none;
 }
 
-/* 3 → 4: word cloud of the hiring posts, held until Continue. */
+/* 3 → 4: word cloud of the hiring posts, held until the next arrow. */
 .post-words {
   position: absolute;
   inset: 0;
@@ -785,9 +882,11 @@ body {
   color: var(--ink-secondary);
 }
 
-.post-words__continue {
-  pointer-events: auto;
-  flex: none;
+.post-words__hint {
+  margin: 0.35rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-muted);
 }
 
 .post-words__cloud {

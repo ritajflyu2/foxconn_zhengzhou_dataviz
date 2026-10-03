@@ -71,7 +71,7 @@ async function layout(words, width, height) {
 }
 
 // Builds the layer inside `parent` (the fixed transition overlay).
-export async function createPostWords(parent, data, box, { onContinue }) {
+export async function createPostWords(parent, data, box) {
   const el = document.createElement('div');
   el.className = 'post-words';
   el.style.opacity = '0';
@@ -86,13 +86,11 @@ export async function createPostWords(parent, data, box, { onContinue }) {
   const sub = document.createElement('p');
   sub.className = 'post-words__sub';
   sub.textContent = `The most-used words in the summaries of all ${count(data.total_posts)} hiring posts, ${data.year_range[0]}–${data.year_range[1]}, sized by the share of posts that use them and coloured by the worker type above whose posts use them most. Hover a word for its count.`;
-  titles.append(title, sub);
-  const cont = document.createElement('button');
-  cont.type = 'button';
-  cont.className = 'player-btn post-words__continue';
-  cont.textContent = 'Continue →';
-  cont.addEventListener('click', onContinue);
-  head.append(titles, cont);
+  const hint = document.createElement('p');
+  hint.className = 'post-words__hint';
+  hint.textContent = 'Use the → arrow below to continue to Scene 4.';
+  titles.append(title, sub, hint);
+  head.append(titles);
 
   const caveat = document.createElement('p');
   caveat.className = 'post-words__caveat';
@@ -182,7 +180,6 @@ export async function createPostWords(parent, data, box, { onContinue }) {
       texts.each(function (_d, i) {
         fade(this, 250 + i * 30);
       });
-      cont.focus({ preventScroll: true });
     },
     hide() {
       tooltip.hide();

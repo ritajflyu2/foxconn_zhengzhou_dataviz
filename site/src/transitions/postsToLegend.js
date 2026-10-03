@@ -13,9 +13,10 @@ import { createPostWords } from './postWords.js';
 // In between, a word cloud of the most-used words in all the hiring posts
 // (scene4_post_words.json) fills the screen below the clusters, each word in
 // the colour of the worker type whose posts use it most. The transition holds
-// there until the viewer presses Continue. Reduced motion: no movement — the
-// clusters, labels and words appear in place, and Continue goes straight to
-// Scene 4.
+// there until the viewer moves on with the next arrow in the bottom bar (or the
+// → key): sceneManager hands that press to `next()` instead of skipping ahead.
+// Reduced motion: no movement — the clusters, labels and words appear in place,
+// and the next arrow goes straight to Scene 4.
 
 const DIM_MS = 500;
 const DIM_TO = 0.12; // Scene 3 stays faintly visible while the clusters are read
@@ -88,6 +89,8 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
   const onKey = (e) => {
     if (e.key === 'Escape') skip();
   };
+  // Set while the word cloud holds; the next arrow calls it to move on.
+  let advance = null;
 
   const run = async () => {
     const fromEl = root.querySelector('.scene');
@@ -184,14 +187,16 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
       const top = labelBottom + 18;
       const box = { left: content.left + 32, top, width: content.width - 64, height: window.innerHeight - WORDS_BOTTOM_PX - top };
       // Laid out while the clusters form; shown once both are ready.
-      createPostWords(overlay.wrap, wordsData, box, {
-        onContinue: async () => {
-          if (reduced) return skip();
-          await words.hide();
-          continued = true;
-        },
-      })
-        .then((w) => (words = w))
+      createPostWords(overlay.wrap, wordsData, box)
+        .then((w) => {
+          words = w;
+          advance = async () => {
+            advance = null;
+            if (reduced) return skip();
+            await words.hide();
+            continued = true;
+          };
+        })
         .catch((err) => {
           console.error('Words layer failed; continuing without it.', err);
           continued = true;
@@ -248,7 +253,7 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
           wordsShown = true;
           words.show(reduced);
         }
-        // Hold on the words until Continue; without them, drop after a short read.
+        // Hold on the words until the next arrow; without them, drop after a short read.
         if (!descending && (continued || (!wordsData && t >= HOLD_UNTIL_MS))) descending = startDescend(t);
 
         if (descend) {
@@ -352,7 +357,15 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
       for (const el of rowDots) el.style.visibility = '';
     });
 
-  return { done, finish: skip };
+  // The next arrow: moves on from the word cloud once it holds; before that,
+  // or once the drop is under way, it skips to Scene 4 (never past it).
+  const next = () => {
+    if (advance) advance();
+    else skip();
+    return true;
+  };
+
+  return { done, finish: skip, next };
 }
 
 postsToLegend.hasReducedMotion = true;

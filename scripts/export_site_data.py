@@ -245,6 +245,56 @@ write("scene2_floor.json", {
     "shift_note": "Plants run 3 x 8-hour shifts, so roughly one third of the headcount is on the floor at any moment.",
 })
 
+# ---------------------------------------------------------------- floor index
+# The site-wide floor index (left column): the four floors of the illustrative
+# factory, from design/reference/index stack/, stacked 1F at the bottom. Each
+# floor gets a resized copy and the convex hull of its opaque pixels (in the
+# copy's px), so only the floor itself, not its transparent box, takes hover.
+FLOOR_INDEX_W = 480  # px wide per floor copy (the column is ~ 250 css px)
+FLOORS = [  # id, source image, name
+    ("1F", "labor f1.png", "Assembly Line"),
+    ("2F", "automation f2.png", "Automation Equipment"),
+    ("3F", "management f3.png", "Management"),
+    ("4F", "enviornmental f4.png", "Waste and Water Processing"),
+]
+
+
+def convex_hull(points):
+    pts = sorted(set(points))
+    def cross(o, a, b):
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+    lower, upper = [], []
+    for p in pts:
+        while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0:
+            lower.pop()
+        lower.append(p)
+    for p in reversed(pts):
+        while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0:
+            upper.pop()
+        upper.append(p)
+    return lower[:-1] + upper[:-1]
+
+
+floor_index = []
+for fid, src, name in FLOORS:
+    im = Image.open(REF / "index stack" / src).convert("RGBA")
+    im = im.crop(im.getchannel("A").getbbox())
+    im = im.resize((FLOOR_INDEX_W, round(im.height * FLOOR_INDEX_W / im.width)), Image.LANCZOS)
+    out = f"floor_{fid.lower()}.webp"
+    im.save(ASSET_OUT / out, "WEBP", quality=86, method=6)
+    a = im.getchannel("A").load()
+    edge = []  # the leftmost and rightmost opaque pixel of every row
+    for y in range(im.height):
+        xs = [x for x in range(im.width) if a[x, y] > 128]
+        if xs:
+            edge += [(xs[0], y), (xs[-1], y)]
+    floor_index.append({"id": fid, "name": name, "image": out, "image_px": list(im.size), "hull": [list(p) for p in convex_hull(edge)]})
+
+write("floor_index.json", {
+    "floors": floor_index,
+    "note": "Illustrative floors of one factory building, not a measured Foxconn layout. The Labor page is on 1F, the assembly line.",
+})
+
 # ---------------------------------------------------------------- scene 3: workforce by year
 YEARS = list(range(2016, 2026))
 wf = pd.read_csv(LT / "A1_total_workforce_point_estimates.csv")
