@@ -308,10 +308,13 @@ function buildWorkforceChart(container, workforce) {
 
   // Legal line (red, dashed, as in Scene 1): the 10% dispatch cap read off
   // every comparable CLW estimate (not the off-season ones) — regular workers
-  // should be at least 90% of it. On a range year it sits at the low end,
-  // Scene 1's default.
+  // should be at least 90% of it. It is read off the same total the bar is
+  // drawn to (CLW's high end on a range year, 2025), so line and bar agree;
+  // the hover gives the range.
   const capPct = Math.round(workforce.legal_cap_share * 100);
   const capYears = years.filter((y) => y.clw_total?.gap_shown);
+  const capAt = (y) => y.clw_total.legal_regular_floor_high;
+  const range = (lo, hi) => (lo !== hi ? `${count(lo)}–${count(hi)}` : count(hi));
   const capLine = (sel, cls) =>
     sel
       .selectAll(`.${cls}`)
@@ -321,23 +324,26 @@ function buildWorkforceChart(container, workforce) {
       .attr('data-reveal', (y) => y.year)
       .attr('x1', (y) => x(y.year) - 5)
       .attr('x2', (y) => x(y.year) + x.bandwidth() + 5)
-      .attr('y1', (y) => yScale(y.clw_total.legal_regular_floor_low))
-      .attr('y2', (y) => yScale(y.clw_total.legal_regular_floor_low));
+      .attr('y1', (y) => yScale(capAt(y)))
+      .attr('y2', (y) => yScale(capAt(y)));
   capLine(svg, 'bar-cap-line');
   // A wider invisible twin takes the hover.
   capLine(svg, 'bar-cap-hit')
     .on('pointerenter', (event, y) => {
-      const short = y.clw_total.legal_regular_floor_low - y.airport_insured;
+      const c = y.clw_total;
+      const floor = range(c.legal_regular_floor_low, c.legal_regular_floor_high);
+      const shortLo = c.legal_regular_floor_low - y.airport_insured;
+      const shortHi = c.legal_regular_floor_high - y.airport_insured;
       tooltip.show(
         singleValueCard(
           String(y.year),
           `Legal line: ${100 - capPct}% of CLW's total`,
-          count(y.clw_total.legal_regular_floor_low),
-          `Dispatch may be at most ${capPct}% of the workforce, so regular workers should reach ${count(y.clw_total.legal_regular_floor_low)} (${100 - capPct}% of CLW's ${y.clw_total.season_label} estimate of ${count(y.clw_total.low)}). ${
-            short > 0 ? `Insured workers fall ${count(short)} short.` : 'Insured workers are above it.'
+          floor,
+          `Dispatch may be at most ${capPct}% of the workforce, so regular workers should reach ${floor} (${100 - capPct}% of CLW's ${c.season_label} estimate of ${range(c.low, c.high)}). ${
+            shortHi > 0 ? `Insured workers fall ${range(Math.max(0, shortLo), shortHi)} short.` : 'Insured workers are above it.'
           }`
         ),
-        scaleAt(x(y.year) + x.bandwidth() / 2, yScale(y.clw_total.legal_regular_floor_low))
+        scaleAt(x(y.year) + x.bandwidth() / 2, yScale(capAt(y)))
       );
     })
     .on('pointerleave', () => tooltip.hide());
@@ -603,7 +609,7 @@ export default {
     });
 
     addMethodNote(el, 'Reading the left chart', [
-      `Each dot stands for an equal share of the bar's value — not a fixed headcount like Scene 2's dots, just the same visual unit reused so a bar reads as a cluster, not a block. Solid dots are insured headcount (measured); ring (outline-only) dots are the gap to China Labor Watch's campus-wide estimate (inferred dispatch, student and other uninsured workers). Faint dots are unfilled capacity, for scale. Hover either part of a bar for its own number. Off-season CLW years (no ring dots) get no gap, because the two figures are not comparable (a trough estimate vs. a year-end count); hover the bar for CLW's figure. The red dashed line on each year with a comparable CLW estimate is the legal line: dispatch may be at most ${Math.round(workforce.legal_cap_share * 100)}% of the workforce, so regular workers should reach ${100 - Math.round(workforce.legal_cap_share * 100)}% of CLW's total (the low end of the range for 2025).`,
+      `Each dot stands for an equal share of the bar's value — not a fixed headcount like Scene 2's dots, just the same visual unit reused so a bar reads as a cluster, not a block. Solid dots are insured headcount (measured); ring (outline-only) dots are the gap to China Labor Watch's campus-wide estimate (inferred dispatch, student and other uninsured workers). Faint dots are unfilled capacity, for scale. Hover either part of a bar for its own number. Off-season CLW years (no ring dots) get no gap, because the two figures are not comparable (a trough estimate vs. a year-end count); hover the bar for CLW's figure. The red dashed line on each year with a comparable CLW estimate is the legal line: dispatch may be at most ${Math.round(workforce.legal_cap_share * 100)}% of the workforce, so regular workers should reach ${100 - Math.round(workforce.legal_cap_share * 100)}% of CLW's total (for 2025, CLW's high end, the top of the bar).`,
       'Posts cannot size the workforce (right chart) — early years have as few as 7-9 posts total. The right chart\'s dots are not padded to a fixed capacity, so a bar\'s height is just its own total.',
       `How posts are grouped (right chart): ${posts.rule}`,
     ]);
