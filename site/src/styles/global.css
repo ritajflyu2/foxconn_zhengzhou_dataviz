@@ -326,6 +326,20 @@ body {
   flex: none;
 }
 
+.legend__swatch--line,
+.legend__swatch--dash {
+  height: 0;
+  width: 1rem;
+  border-radius: 0;
+  background: transparent;
+  border-top: 2px solid currentColor;
+  align-self: center;
+}
+
+.legend__swatch--dash {
+  border-top-style: dashed;
+}
+
 .legend__swatch--ring {
   background: transparent;
   border: 2px solid currentColor;
@@ -594,16 +608,33 @@ body {
 /* Each year's dot cluster and its annotations fade in on reveal; reduced-motion
    users get an instant switch via the global transition-duration override. */
 .yeardots,
-.bar-gap-tick,
-.bar-offseason-tick {
+.bar-cap-line,
+.bar-cap-hit {
   opacity: 0;
   transition: opacity 320ms ease;
 }
 
 .yeardots.revealed,
-.bar-gap-tick.revealed,
-.bar-offseason-tick.revealed {
+.bar-cap-line.revealed {
   opacity: 1;
+}
+
+/* The legal line: red (reserved for the cap), dashed, as in Scene 1. */
+.bar-cap-line {
+  stroke: var(--color-legal-cap);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+  pointer-events: none;
+}
+
+.bar-cap-hit {
+  stroke: transparent;
+  stroke-width: 10;
+  pointer-events: none;
+}
+
+.bar-cap-hit.revealed {
+  pointer-events: stroke;
 }
 
 /* Hovering one segment of a bar fades its siblings (opacity set inline per
@@ -614,17 +645,6 @@ body {
 
 .bar-dot--empty {
   opacity: 0.16;
-}
-
-.bar-gap-tick {
-  stroke: var(--ink);
-  stroke-width: 1.5;
-}
-
-.bar-offseason-tick {
-  stroke: var(--ink-muted);
-  stroke-width: 1.5;
-  stroke-dasharray: 3 2;
 }
 
 /* --- Site-level floor nav: fixed chrome, present on every scene, not part of

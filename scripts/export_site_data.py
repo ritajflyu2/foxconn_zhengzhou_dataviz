@@ -320,12 +320,16 @@ for y in YEARS:
                "source": r["source"],
                "gap_low": max(lo - airport, 0) if comparable else None,
                "gap_high": max(hi - airport, 0) if comparable else None,
-               "gap_shown": bool(comparable)}
+               "gap_shown": bool(comparable),
+               # The 10% dispatch cap read off the CLW total, as in Scene 1:
+               # regular workers should be at least 90% of it.
+               "legal_regular_floor_low": legal_fields(lo)[1], "legal_regular_floor_high": legal_fields(hi)[1]}
     rows.append({"year": y, "airport_insured": airport, "insured_by_entity": by_ent, "clw_total": est})
 write("scene3_workforce_by_year.json", {
     "scope": "Airport Economy Zone plants only (CLW's survey area). FII Precision is listed in insured_by_entity but excluded from airport_insured.",
     "entities": {v[0]: v[1] for v in ENTITIES.values()},
     "animation": {"autoplay": True, "seconds_per_year": 0.8},
+    "legal_cap_share": LEGAL_CAP,
     "years": rows,
     "flags": {
         "no_estimate": [r["year"] for r in rows if r["clw_total"] is None],

@@ -10,6 +10,7 @@
   "autoplay": true,
   "seconds_per_year": 0.8
  },
+ "legal_cap_share": 0.1,
  "years": [
   {
    "year": 2016,
@@ -39,7 +40,9 @@
     "source": "CLW 2019",
     "gap_low": 94062,
     "gap_high": 94062,
-    "gap_shown": true
+    "gap_shown": true,
+    "legal_regular_floor_low": 270000,
+    "legal_regular_floor_high": 270000
    }
   },
   {
@@ -59,7 +62,9 @@
     "source": "CLW 2019",
     "gap_low": null,
     "gap_high": null,
-    "gap_shown": false
+    "gap_shown": false,
+    "legal_regular_floor_low": 54000,
+    "legal_regular_floor_high": 54000
    }
   },
   {
@@ -79,7 +84,9 @@
     "source": "CLW 2019",
     "gap_low": 57681,
     "gap_high": 57681,
-    "gap_shown": true
+    "gap_shown": true,
+    "legal_regular_floor_low": 135000,
+    "legal_regular_floor_high": 135000
    }
   },
   {
@@ -121,7 +128,9 @@
     "source": "CLW 2023 p.48",
     "gap_low": null,
     "gap_high": null,
-    "gap_shown": false
+    "gap_shown": false,
+    "legal_regular_floor_low": 54000,
+    "legal_regular_floor_high": 63000
    }
   },
   {
@@ -141,7 +150,9 @@
     "source": "CLW 2023 p.48",
     "gap_low": 235337,
     "gap_high": 235337,
-    "gap_shown": true
+    "gap_shown": true,
+    "legal_regular_floor_low": 270000,
+    "legal_regular_floor_high": 270000
    }
   },
   {
@@ -172,7 +183,9 @@
     "source": "CLW 2025",
     "gap_low": 96792,
     "gap_high": 146792,
-    "gap_shown": true
+    "gap_shown": true,
+    "legal_regular_floor_low": 135000,
+    "legal_regular_floor_high": 180000
    }
   }
  ],

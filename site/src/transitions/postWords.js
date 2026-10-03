@@ -13,7 +13,7 @@ import { seededRandom } from './common.js';
 
 const MIN_FONT = 15;
 const MAX_FONT = 76;
-const PAD_PX = 2;
+const PAD_PX = 4; // space kept around each word (d3-cloud pads every side; mainly opens up the rows)
 // Inter has no Chinese glyphs: the CJK fallbacks set the Chinese half, and the
 // same stack is used for layout so d3-cloud measures what is drawn.
 const FONT_FAMILY = "Inter, 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans SC', 'Microsoft YaHei', sans-serif";
@@ -34,7 +34,7 @@ function runCloud(words, width, height, scale) {
       .font(FONT_FAMILY)
       .fontWeight(FONT_WEIGHT)
       .fontSize((d) => d.size)
-      .spiral('rectangular') // fills the wide box more fully than an elliptical spiral, so words can be larger
+      .spiral('archimedean') // an organic, rounded cloud rather than a filled rectangle
       .random(seededRandom(7))
       .on('end', resolve)
       .start();

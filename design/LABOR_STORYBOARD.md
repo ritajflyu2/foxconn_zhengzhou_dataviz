@@ -173,6 +173,8 @@ Cross-check to display: the airport-zone estimated total at 57% is ~124k, below 
 - Bars: solid blue = insured (measured); hatched orange stacked above = gap to the CLW total (inferred: dispatch, student and other uninsured workers).
 - **Years without a CLW estimate:** show the insured bar only, with an outlined, empty "?" cap and the label "no total estimate".
 - **Flag on 2018 and 2022:** CLW's figure is an off-season trough while the insured count is a year-end snapshot, so no gap is drawn. Show a small season tag ("peak" / "trough") on every CLW year.
+- **Legal line (decision):** on every year with a comparable CLW estimate (2017, 2019, 2023, 2025; not the off-season 2018 and 2022), a red dashed line (red as in Scene 1, but dashed) at 90% of CLW's total: the level regular workers should reach if dispatch stays within the 10% cap (`legal_regular_floor_low` / `legal_cap_share` in the JSON). On 2025's range it sits at the low end (Scene 1's default). Hover: the line's value and how far insured workers fall short. In the legend.
+- No separate line marks 2025's low end of the CLW range or the off-season CLW figures (2018, 2022); those values are in the bar's hover card.
 - Henan Fuchi reports 1 insured worker for 2020, a reporting gap. Show as a gap, not a real drop.
 - Source files: `outputs/labor_analysis_output/tables/A1_insured_workers_by_entity_annual.csv`, `outputs/labor_analysis_output/tables/A1_total_workforce_point_estimates.csv`.
 
