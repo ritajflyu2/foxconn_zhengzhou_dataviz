@@ -7,9 +7,20 @@ const imageUrl = (name) => floorImages[`../../assets/labor/${name}`];
 const PITCH = 0.47; // vertical step between floors, as a share of a floor's height
 const PAGE_FLOOR = '1F'; // the Labor page is the assembly-line floor
 // Floors that open a page of the site: clicking one goes there.
-const FLOOR_LINKS = { '1F': '#scene-3', '4F': '#env-1' };
-const pageOfHash = (hash) => (hash.startsWith('#env-') ? '#env-' : hash.startsWith('#scene-') || !hash ? '#scene-' : hash);
+const FLOOR_LINKS = { '1F': '#scene-3', '3F': '#mgmt-1', '4F': '#env-1' };
+const pageOfHash = (hash) => {
+  for (const p of ['#env-', '#mgmt-', '#intro-']) if (hash.startsWith(p)) return p;
+  return '#scene-';
+};
 let activate = null;
+// Where a floor was last clicked (screen rect), so the page it opens can fly
+// that floor from the index into place. Read once.
+let clicked = null;
+export function lastFloorClick(id) {
+  const c = clicked && clicked.id === id && performance.now() - clicked.at < 2000 ? clicked.rect : null;
+  clicked = null;
+  return c;
+}
 
 // Lets the page router mark the floor of the page now showing.
 export function setFloorActive(id) {
@@ -43,7 +54,7 @@ export const INDEX_1F = (() => {
 //
 // Every floor is clickable (or Tab + Enter): the clicked floor becomes active,
 // drawn in front with the others faded, and its name sits under the stack.
-// 1F opens Labor (Scene 3) and 4F opens Waste and Water Processing.
+// 1F opens Labor (Scene 3), 3F Management and 4F Waste and Water Processing.
 // Hovering a floor fades everything else further and shows a legend for it
 // on the left (floor number, a leader line, the name), only while hovered.
 export function mountFloorNav(root) {
@@ -153,7 +164,10 @@ export function mountFloorNav(root) {
   function choose(id) {
     setActive(id);
     const link = FLOOR_LINKS[id];
-    if (link && pageOfHash(window.location.hash) !== pageOfHash(link)) window.location.hash = link.slice(1);
+    if (link && pageOfHash(window.location.hash) !== pageOfHash(link)) {
+      clicked = { id, rect: floorG.get(id).node().getBoundingClientRect(), at: performance.now() };
+      window.location.hash = link.slice(1);
+    }
   }
   activate = setActive;
   setActive(PAGE_FLOOR);

@@ -1,0 +1,189 @@
+{
+ "posts_total": 745,
+ "post_years": [
+  2016,
+  2025
+ ],
+ "pay_years": [
+  2021,
+  2025
+ ],
+ "pay_posts_by_year": {
+  "2021": 152,
+  "2022": 86,
+  "2023": 28,
+  "2024": 6,
+  "2025": 1
+ },
+ "pay_hours_per_week": 40,
+ "categories": [
+  {
+   "key": "tech",
+   "label": "Tech & Engineering",
+   "posts": 531,
+   "share": 0.7128,
+   "top_titles": [
+    {
+     "title": "Embedded software engineer",
+     "posts": 41
+    },
+    {
+     "title": "Test development engineer",
+     "posts": 30
+    },
+    {
+     "title": "Mechanical design engineer",
+     "posts": 26
+    },
+    {
+     "title": "Hardware engineer",
+     "posts": 22
+    },
+    {
+     "title": "Software engineer",
+     "posts": 13
+    }
+   ],
+   "pay_median_monthly_cny": 10500,
+   "pay_n": 188,
+   "small_sample": false
+  },
+  {
+   "key": "hr",
+   "label": "HR & Training",
+   "posts": 74,
+   "share": 0.0993,
+   "top_titles": [
+    {
+     "title": "Talent development specialist",
+     "posts": 11
+    },
+    {
+     "title": "Human resources coordinator",
+     "posts": 10
+    },
+    {
+     "title": "Training coordinator",
+     "posts": 7
+    },
+    {
+     "title": "Recruitment coordinator",
+     "posts": 6
+    },
+    {
+     "title": "Staffing specialist",
+     "posts": 4
+    }
+   ],
+   "pay_median_monthly_cny": 9000,
+   "pay_n": 39,
+   "small_sample": false
+  },
+  {
+   "key": "mgmt",
+   "label": "Management & Operations",
+   "posts": 58,
+   "share": 0.0779,
+   "top_titles": [
+    {
+     "title": "Project engineer",
+     "posts": 15
+    },
+    {
+     "title": "Production planner",
+     "posts": 4
+    },
+    {
+     "title": "Commodity buyer",
+     "posts": 4
+    },
+    {
+     "title": "Materials planner",
+     "posts": 4
+    },
+    {
+     "title": "Business project manager",
+     "posts": 4
+    }
+   ],
+   "pay_median_monthly_cny": 9292,
+   "pay_n": 28,
+   "small_sample": false
+  },
+  {
+   "key": "finance",
+   "label": "Finance & Accounting",
+   "posts": 42,
+   "share": 0.0564,
+   "top_titles": [
+    {
+     "title": "Key account manager",
+     "posts": 5
+    },
+    {
+     "title": "Paralegal",
+     "posts": 5
+    },
+    {
+     "title": "Legal counsel",
+     "posts": 3
+    },
+    {
+     "title": "Accountant",
+     "posts": 3
+    },
+    {
+     "title": "Financial analyst",
+     "posts": 3
+    }
+   ],
+   "pay_median_monthly_cny": 7500,
+   "pay_n": 12,
+   "small_sample": true
+  },
+  {
+   "key": "sales",
+   "label": "Sales & Marketing",
+   "posts": 40,
+   "share": 0.0537,
+   "top_titles": [
+    {
+     "title": "Retail sales consultant",
+     "posts": 5
+    },
+    {
+     "title": "Media specialist",
+     "posts": 3
+    },
+    {
+     "title": "Communications specialist",
+     "posts": 3
+    },
+    {
+     "title": "Press officer",
+     "posts": 3
+    },
+    {
+     "title": "Creative designer",
+     "posts": 2
+    }
+   ],
+   "pay_median_monthly_cny": 8000,
+   "pay_n": 6,
+   "small_sample": true
+  }
+ ],
+ "headcount": {
+  "year": 2025,
+  "clw_low": 150000,
+  "clw_high": 200000,
+  "clw_season": "peak season",
+  "insured": 53208,
+  "revelio_weighted": 8113.5,
+  "revelio_raw": 4825.9
+ },
+ "category_note": "Categories come from keyword matching on job titles, so some are imperfect (for example, key-account roles sit under Finance but are really sales). Revelio's title field sometimes names a field rather than a job (e.g. \"software engineering\"); those are shown as the closest actual job title.",
+ "pay_note": "Posted pay, not pay actually received, with no overtime or bonus: the midpoint of each post's salary range, then the median per category. Posts are mostly 2021-2022 (very few after 2022).",
+ "source": "Revelio Labs job postings and career profiles (via WRDS), Hon Hai entities in the Zhengzhou metro area",
+ "caveat": "White-collar figures are posted pay from Revelio job postings, mostly engineering roles; line-worker figures come from CLW 2025 via the wage calculator. The periods differ."
+}

@@ -24,6 +24,15 @@
      wear the NMHC orange, the page's accent. */
   --color-env-nmhc: #eb6834;
   --color-env-cod: #2a78d6;
+  /* Management page: the five white-collar job families, shades of one
+     violet (largest family darkest). Five steps of one hue cannot be told
+     apart by colour alone, so every circle and bar carries its name. */
+  --color-mgmt-1: #423fad;
+  --color-mgmt-2: #6754bd;
+  --color-mgmt-3: #8c6aca;
+  --color-mgmt-4: #af80d7;
+  --color-mgmt-5: #d198e3;
+
   /* Ammonia nitrogen, the second water stream (the preview's green). */
   --color-env-nh3: #1b7c61;
 

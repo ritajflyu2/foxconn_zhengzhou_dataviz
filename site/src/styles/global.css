@@ -2096,3 +2096,417 @@ svg.is-hovering .floor-index__floor.is-hovered image {
     animation: none;
   }
 }
+
+/* --- Management page ----------------------------------------------------- */
+/* Before "Compare pay" the floor has the stage to itself; after, it shrinks
+   to a narrow column and the pay charts take the room. */
+.mgmt-stage {
+  display: grid;
+  /* the floor, with "Compare pay" on its right */
+  grid-template-columns: minmax(0, 38rem) auto;
+  gap: 2.5rem;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.mgmt-stage.is-compared {
+  grid-template-columns: minmax(0, 0.5fr) minmax(0, 1.5fr);
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .mgmt-stage.is-compared {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mgmt-floor {
+  margin: 0;
+  position: relative;
+}
+
+.mgmt-floor svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.mgmt-floor__image {
+  opacity: 0.4;
+}
+
+.mgmt-floor__image--line {
+  opacity: 0.3;
+}
+
+.mgmt-floor--line {
+  margin-top: 1.25rem;
+  animation: mgmt-fade-in 500ms ease both; /* fade only: no shift, so it lines up with the chart */
+}
+
+@keyframes mgmt-fade-in {
+  from { opacity: 0; }
+}
+
+.mgmt-floor__name {
+  margin: 0 0 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-secondary);
+}
+
+/* The floor's name only appears beside the second floor, after "Compare pay". */
+.mgmt-stage:not(.is-compared) .mgmt-floor__name {
+  display: none;
+}
+
+/* After "Compare pay" the floor is too small for the circles' labels. */
+.is-compared .mgmt-circle text {
+  display: none;
+}
+
+
+/* As in Labor Scene 1: no outline; the hovered circle stays, the others recede. */
+.mgmt-circle {
+  cursor: default;
+  outline: none;
+}
+
+.mgmt-circle circle {
+  stroke: none;
+  fill-opacity: 1;
+  transition: fill-opacity 200ms ease;
+}
+
+.mgmt-circle.is-faded circle {
+  fill-opacity: 0.18;
+}
+
+.mgmt-circle.is-faded .mgmt-circle__label {
+  opacity: 0.4;
+}
+
+.mgmt-circle:focus-visible circle {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.mgmt-circle__label {
+  font-family: var(--font-body);
+  font-size: 9.5px;
+  font-weight: 600;
+  fill: var(--ink);
+  pointer-events: none;
+  transition: opacity 200ms ease;
+}
+
+.mgmt-circle__label.is-inside {
+  font-size: 11px;
+  fill: #fff;
+}
+
+.mgmt-circle__pct {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  fill: #fff;
+  pointer-events: none;
+}
+
+.mgmt-intro {
+  margin: 0;
+}
+
+.mgmt-intro.is-done {
+  display: none;
+}
+
+/* The tooltip positions itself inside this box. */
+.mgmt-charts {
+  position: relative;
+}
+
+.mgmt-charts[hidden],
+.mgmt-headcount[hidden] {
+  display: none;
+}
+
+/* Dashed reference lines over the white-collar bars at the line workers' pay. */
+.mgmt-chart__rows {
+  position: relative;
+}
+
+.mgmt-refs {
+  position: absolute;
+  top: -0.2rem;
+  bottom: -0.2rem;
+  left: calc(11.5rem + 0.6rem);
+  right: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.mgmt-refs.is-shown {
+  opacity: 1;
+}
+
+.mgmt-ref {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 1.5px dashed var(--ref);
+}
+
+.mgmt-ref__label {
+  position: absolute;
+  bottom: 100%;
+  right: 0.2rem;
+  white-space: nowrap;
+  margin-bottom: 0.15rem;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.mgmt-chart + .mgmt-chart {
+  margin-top: 2.25rem;
+}
+
+.mgmt-chart__sub {
+  margin: -0.35rem 0 0.75rem;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+}
+
+/* (i) info marker. */
+.mgmt-info {
+  display: inline-grid;
+  place-items: center;
+  width: 0.95rem;
+  height: 0.95rem;
+  border: 1px solid var(--ink-muted);
+  border-radius: 50%;
+  font-family: var(--font-title);
+  font-size: 0.7rem;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--ink-secondary);
+  vertical-align: 0.1em;
+  cursor: help;
+}
+
+.mgmt-info:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+
+.mgmt-bar {
+  display: grid;
+  grid-template-columns: 11.5rem minmax(0, 1fr);
+  gap: 0.6rem;
+  align-items: center;
+  margin: 0.4rem 0;
+  outline: none;
+}
+
+.mgmt-bar:focus-visible .mgmt-bar__fill {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.mgmt-bar__name {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.mgmt-bar__sub {
+  display: block;
+  font-size: 0.6875rem;
+  color: var(--ink-muted);
+}
+
+/* One shared RMB scale: each bar's width is its share of the largest value. */
+.mgmt-bar__track {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.mgmt-bar__fill {
+  display: flex;
+  gap: 2px;
+  height: 1.3rem;
+  width: 0;
+  border-radius: 0 4px 4px 0;
+  overflow: hidden;
+  transition: width 600ms cubic-bezier(.3,.7,.2,1);
+  flex: none;
+}
+
+.mgmt-bar__seg {
+  background: var(--seg);
+  min-width: 2px;
+}
+
+.mgmt-bar__seg--hatch,
+.mgmt-swatch--hatch {
+  background: repeating-linear-gradient(135deg, var(--seg) 0 3px, transparent 3px 6px);
+  box-shadow: inset 0 0 0 1.5px var(--seg);
+}
+
+.mgmt-swatch {
+  background: var(--seg);
+  border-radius: 2px;
+}
+
+.mgmt-bar__value {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 320ms ease 200ms;
+}
+
+.mgmt-bar__value.is-shown {
+  opacity: 1;
+}
+
+/* Both weeks start where the bars start, so their lengths compare directly. */
+.mgmt-hours {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1.7rem 0 0 calc(11.5rem + 0.6rem);
+}
+
+.mgmt-hours__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 7px);
+  gap: 2px;
+}
+
+.mgmt-hours__cell {
+  width: 7px;
+  height: 7px;
+  border-radius: 1.5px;
+  background: var(--ink-muted);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+/* Hour by hour: about 1.8 s for a 60-hour week, during the dots' flight. */
+.mgmt-hours.is-shown .mgmt-hours__cell {
+  opacity: 0.55;
+  transition-delay: calc(var(--i) * 30ms);
+}
+
+.mgmt-hours__label {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+/* Under the assembly floor; wider than its narrow column (the space to its
+   right, under the charts, is empty). */
+.mgmt-headcount {
+  width: 23rem;
+  max-width: calc(100vw - 2rem);
+  margin-top: 2rem;
+  animation: mgmt-fade-in 500ms ease both;
+}
+
+.mgmt-headcount .chart-col__head {
+  font-size: 0.8125rem;
+  margin-bottom: 0.3rem;
+}
+
+.mgmt-hc__fig {
+  margin: 0;
+  position: relative;
+}
+
+.mgmt-hc__fig svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.mgmt-hc__fig circle,
+.mgmt-hc__label {
+  transition: opacity 200ms ease;
+}
+
+.mgmt-hc__fig .is-dim {
+  opacity: 0.25;
+}
+
+/* CLW's range: a band between its low and high estimate (an estimate, so hatched). */
+.mgmt-hc__clw-band {
+  fill: color-mix(in srgb, var(--color-estimate-range) 18%, transparent);
+  stroke: var(--color-estimate-range);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.mgmt-hc__clw-low {
+  fill: var(--surface);
+  stroke: var(--color-estimate-range);
+  stroke-width: 1;
+}
+
+.mgmt-hc__insured {
+  opacity: 0.85;
+}
+
+.mgmt-hc__weighted {
+  fill: var(--surface);
+  stroke-width: 1.75;
+}
+
+.mgmt-hc__leader {
+  stroke: var(--ink-muted);
+  stroke-width: 0.75;
+  stroke-dasharray: 2 2;
+}
+
+.mgmt-hc__label {
+  font-family: var(--font-body);
+  font-size: 9.5px;
+  fill: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mgmt-bar__fill,
+  .mgmt-bar__value {
+    transition: none;
+  }
+  .mgmt-floor--line,
+  .mgmt-headcount {
+    animation: none;
+  }
+}
+
+
+.mgmt-ref + .mgmt-ref .mgmt-ref__label {
+  right: auto;
+  left: 0.2rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mgmt-hours.is-shown .mgmt-hours__cell {
+    transition: none;
+  }
+}

@@ -2,6 +2,7 @@ import { select } from 'd3';
 import { createScene, addCaveat, addMethodNote } from '../lib/sceneShell.js';
 import { colorFor } from '../lib/colorTokens.js';
 import { count, percent } from '../lib/format.js';
+import { LINE_DOT_R, seededRandom, kinds, lineFloorDots } from '../lib/floorDots.js';
 
 import lineUrl from '../../assets/labor/production_line.webp';
 import dormUrl from '../../assets/labor/dorm.webp';
@@ -10,45 +11,8 @@ import dormUrl from '../../assets/labor/dorm.webp';
 // line gets its 120 workers along its own workbench row, every bed its
 // sleeper; the insured / dispatch mix is Scene 1's campus-wide ratio.
 
-const LINE_DOT_R = 4.6; // in production-line image px
-const LINE_ROWS = 2; // workers sit on both sides of a line
-const LINE_ROW_GAP = 15; // px between the two sides
 const BED_DOT_R = 26; // in dorm image px
 const IMAGES = { 'production_line.webp': lineUrl, 'dorm.webp': dormUrl };
-
-function seededRandom(seed = 7) {
-  let s = seed;
-  return () => {
-    s = (s * 1664525 + 1013904223) % 4294967296;
-    return s / 4294967296;
-  };
-}
-
-// Exact counts, mixed in a fixed seeded order.
-function kinds({ insured, dispatch }, rng) {
-  const out = [...Array(insured).fill('insured'), ...Array(dispatch).fill('dispatch')];
-  for (let i = out.length - 1; i > 0; i--) {
-    const k = Math.floor(rng() * (i + 1));
-    [out[i], out[k]] = [out[k], out[i]];
-  }
-  return out;
-}
-
-// n workers along a line, split over its two sides (offset up and down from
-// the line's centre), evenly spaced along it.
-function lineSeats(line, slope, n) {
-  const perRow = Math.ceil(n / LINE_ROWS);
-  const seats = [];
-  for (let row = 0; row < LINE_ROWS; row++) {
-    const off = (row - (LINE_ROWS - 1) / 2) * LINE_ROW_GAP;
-    const m = Math.min(perRow, n - row * perRow);
-    for (let i = 0; i < m; i++) {
-      const x = line.x0 + ((i + 0.5) / m) * (line.x1 - line.x0);
-      seats.push([x, slope * x + line.c + off]);
-    }
-  }
-  return seats;
-}
 
 function legendItem(color, label, value) {
   const li = document.createElement('li');
@@ -173,11 +137,7 @@ export default {
       .attr('role', 'img')
       .attr('aria-label', `${nLines} production lines with ${count(line.workers_per_line)} worker dots each, ${count(line.per_line.insured)} insured and ${count(line.per_line.dispatch)} dispatch per line`);
     floorSvg.append('image').attr('class', 'floor-plan-image').attr('href', IMAGES[line.image]).attr('width', lw).attr('height', lh);
-    const lineDots = line.lines.flatMap((ln, li) => {
-      const seats = lineSeats(ln, line.slope, line.workers_per_line);
-      const k = kinds(line.per_line, rng);
-      return seats.map(([x, y], i) => ({ x, y, kind: k[i], line: li }));
-    });
+    const lineDots = lineFloorDots(line, rng);
     // `floor-dots` + data-kind are what the 1 → 2 and 2 → 3 transitions use.
     floorSvg
       .append('g')

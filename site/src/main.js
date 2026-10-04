@@ -3,6 +3,7 @@ import { assertDataLoaded, files } from './lib/dataLoader.js';
 import { createSceneManager } from './sceneManager.js';
 import { createIntroManager } from './intro/introManager.js';
 import { createEnvManager } from './environment/envManager.js';
+import { createMgmtManager } from './management/mgmtManager.js';
 import { mountFloorNav, setFloorActive } from './lib/floorNav.js';
 
 const root = document.querySelector('#scene-root');
@@ -10,6 +11,7 @@ const pageGrid = document.querySelector('#page-grid');
 const laborArrows = document.querySelector('#scene-arrows');
 const introArrows = document.querySelector('#intro-arrows');
 const envArrows = document.querySelector('#env-arrows');
+const mgmtArrows = document.querySelector('#mgmt-arrows');
 const pageTitleEl = document.querySelector('#page-title');
 const pageSwitcherEl = document.querySelector('#page-switcher');
 
@@ -25,11 +27,13 @@ const pageSwitcherEl = document.querySelector('#page-switcher');
 const PAGES = {
   intro: { label: 'Introduction', title: 'Introduction' },
   labor: { label: 'Labor', title: 'Behind the Line — Labor' },
+  mgmt: { label: 'Management', title: 'Management' },
   env: { label: 'Waste and Water Processing', title: 'Waste and Water Processing' },
 };
-const pageOf = (hash) => (hash.startsWith('#intro-') ? 'intro' : hash.startsWith('#env-') ? 'env' : 'labor');
+const pageOf = (hash) =>
+  hash.startsWith('#intro-') ? 'intro' : hash.startsWith('#env-') ? 'env' : hash.startsWith('#mgmt-') ? 'mgmt' : 'labor';
 // The floor of the factory each page lives on, in the floor index.
-const PAGE_FLOOR = { labor: '1F', env: '4F' };
+const PAGE_FLOOR = { labor: '1F', mgmt: '3F', env: '4F' };
 
 function buildPageSwitcher(onSelect) {
   const buttons = new Map();
@@ -56,11 +60,12 @@ try {
   const laborManager = createSceneManager({ nav: laborArrows, root, pageGrid });
   const introManager = createIntroManager({ nav: introArrows, root });
   const envManager = createEnvManager({ nav: envArrows, root });
-  const managers = { labor: laborManager, intro: introManager, env: envManager };
+  const mgmtManager = createMgmtManager({ nav: mgmtArrows, root });
+  const managers = { labor: laborManager, intro: introManager, env: envManager, mgmt: mgmtManager };
 
   const setSwitcherCurrent = buildPageSwitcher((key) => {
     window.location.hash =
-      key === 'intro' ? `intro-${introManager.scenes[0].id}` : key === 'env' ? `env-${envManager.scenes[0].id}` : 'scene-1';
+      key === 'intro' ? `intro-${introManager.scenes[0].id}` : key === 'env' ? `env-${envManager.scenes[0].id}` : key === 'mgmt' ? `mgmt-${mgmtManager.scenes[0].id}` : 'scene-1';
   });
 
   let currentPage = null;
@@ -78,9 +83,10 @@ try {
     laborArrows.hidden = page !== 'labor';
     introArrows.hidden = page !== 'intro';
     envArrows.hidden = page !== 'env';
+    mgmtArrows.hidden = page !== 'mgmt';
     if (page !== 'labor') {
-      // The floor index stays beside Waste and Water Processing (its 4F).
-      pageGrid.classList.toggle('has-floor-nav', page === 'env');
+      // The floor index stays beside Management (3F) and Waste and Water (4F).
+      pageGrid.classList.toggle('has-floor-nav', page === 'env' || page === 'mgmt');
       document.body.classList.remove('theme-dark');
     }
     if (PAGE_FLOOR[page]) setFloorActive(PAGE_FLOOR[page]);
@@ -91,6 +97,7 @@ try {
   laborManager.start();
   introManager.start();
   envManager.start();
+  mgmtManager.start();
 
   console.info(`Loaded ${files.length} data files: ${files.join(', ')}`);
 } catch (error) {
