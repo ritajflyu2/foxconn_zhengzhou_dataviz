@@ -78,6 +78,7 @@ try {
     for (const [key, m] of Object.entries(managers)) if (key !== page) m.invalidate();
     currentPage = page;
     pageTitleEl.textContent = PAGES[page].title;
+    document.body.dataset.page = page;
     document.title = `Foxconn Zhengzhou — ${PAGES[page].label}`;
     setSwitcherCurrent(page);
     laborArrows.hidden = page !== 'labor';

@@ -14,8 +14,12 @@ import hw from '../../../data/intro/hazardous_waste.json';
 
 const count = format(',');
 const one = format(',.1f');
-const W = 1000;
-const H = 620;
+// Two drawings side by side: the truck lanes (left, under the counters and
+// caption) and the Eiffel Towers (right, as tall as the whole left column).
+const W = 480; // lanes
+const H = 236;
+const WT = 510; // towers + their key
+const HT = 410;
 const DAY_MS = 2600; // one day of loading
 const GAP_MS = 1800; // a short, smooth pause between the day and the year
 const YEAR_MS = 7500; // 365 days
@@ -138,35 +142,14 @@ export default {
     const { el, body } = createScene({
       index: 4,
       title: 'How much hazardous waste?',
-      summary: `At least ${count(Math.round(combined))} tonnes a year from two airport-zone plants, by their own environmental impact assessments: about ${one(
-        perDay
-      )} tonnes a day, or ${one(trucksPerDay)} truckloads. Over a year, that is about ${one(towers)} Eiffel Towers by weight.`,
+      summary: `The two airport-zone plants’ environmental impact assessments report about ${Math.round(perDay)} tonnes, or ${one(
+        trucksPerDay
+      )} truckloads of hazardous waste per day, and about ${one(towers)} Eiffel Towers by weight each year. ${hw.what_it_is}`,
     });
 
-    const what = document.createElement('p');
-    what.className = 'figure__note hw-what';
-    what.textContent = hw.what_it_is;
-    body.append(what);
 
     const colors = Object.fromEntries(plants.map((p) => [p.key, cssVar(`--color-hw-${p.key}`)]));
 
-    const legend = document.createElement('ul');
-    legend.className = 'legend';
-    for (const p of plants) {
-      const li = document.createElement('li');
-      li.className = 'legend__item';
-      const sw = document.createElement('span');
-      sw.className = 'legend__swatch';
-      sw.style.background = colors[p.key];
-      const l = document.createElement('span');
-      l.textContent = `${p.name} (${p.role})`;
-      const v = document.createElement('span');
-      v.className = 'legend__value';
-      v.textContent = `${count(Math.round(p.tonnes_per_year))} t / yr`;
-      li.append(sw, l, v);
-      legend.append(li);
-    }
-    body.append(legend);
 
     const counters = document.createElement('div');
     counters.className = 'prod-counters';
@@ -184,19 +167,37 @@ export default {
     const timeC = counter('Time');
     const tonnesC = counter('Tonnes');
     const trucksC = counter('Truckloads');
-    body.append(counters);
+    // Left column: counters, caption, lanes. Right column: the towers.
+    const stage = document.createElement('div');
+    stage.className = 'hw-stage';
+    const left = document.createElement('div');
+    left.className = 'hw-stage__left';
+    stage.append(left);
+    body.append(stage);
+    left.append(counters);
+
 
     const caption = document.createElement('p');
-    caption.className = 'prod-caption';
-    body.append(caption);
+    caption.className = 'prod-caption hw-caption';
+    left.append(caption);
 
     const figure = document.createElement('figure');
     figure.className = 'figure hw-figure';
-    body.append(figure);
-    const tooltip = createTooltip(figure);
+    left.append(figure);
+    const towerFig = document.createElement('figure');
+    towerFig.className = 'figure hw-towers';
+    stage.append(towerFig);
+    const tooltip = createTooltip(towerFig);
+    const svgT = select(towerFig)
+      .append('svg')
+      .attr('viewBox', `0 0 ${WT} ${HT}`)
+      .attr('preserveAspectRatio', 'xMinYMax meet')
+      .attr('role', 'img')
+      .attr('aria-label', `Eiffel Towers filled by one year of hazardous waste, about ${one(towers)} towers`);
     const svg = select(figure)
       .append('svg')
       .attr('viewBox', `0 0 ${W} ${H}`)
+      .attr('preserveAspectRatio', 'xMinYMin meet')
       .attr('role', 'img')
       .attr(
         'aria-label',
@@ -204,7 +205,7 @@ export default {
       );
 
     // --- one lane per plant: the truck being filled, then full trucks parked ---
-    const LANE_Y = [70, 250];
+    const LANE_Y = [44, 150];
     const LOAD_X = 150;
     const PARK_X = 245;
     const SLOT = 84;
@@ -212,57 +213,53 @@ export default {
       const g = svg.append('g').attr('transform', `translate(0, ${LANE_Y[i]})`);
       g.append('line').attr('class', 'hw-lane').attr('x1', 0).attr('x2', 470).attr('y1', 42).attr('y2', 42);
       g.append('text').attr('class', 'hw-lane__name').attr('x', 0).attr('y', 8).text(p.name);
-      g.append('text').attr('class', 'hw-lane__sub').attr('x', 0).attr('y', 26).text(`≈ ${one(p.tonnes_per_year / hw.days_per_year)} t a day`);
+      g.append('text').attr('class', 'hw-lane__sub').attr('x', 0).attr('y', 30).text(`≈ ${one(p.tonnes_per_year / hw.days_per_year)} t a day`);
       g.append('text').attr('class', 'hw-lane__sub').attr('x', LOAD_X).attr('y', 62).text('filling');
       const parkedLabel = g.append('text').attr('class', 'hw-lane__sub').attr('x', PARK_X).attr('y', 62).text('full, ready to go');
       const loading = truck(g.append('g').attr('transform', `translate(${LOAD_X}, 0)`), colors[p.key]);
       const parked = g.append('g');
-      const tally = g.append('text').attr('class', 'hw-lane__tally').attr('x', PARK_X).attr('y', 92);
-      return { p, g, loading, parked, parkedLabel, tally, y: LANE_Y[i] };
+      return { p, g, loading, parked, parkedLabel, y: LANE_Y[i] };
     });
 
-    if (missing.length) {
-      svg
-        .append('text')
-        .attr('class', 'hw-lane__sub')
-        .attr('x', 0)
-        .attr('y', 420)
-        .text(`${missing.map((p) => p.name).join(', ')}, the airport zone's third plant: no figure found, so not included.`);
-    }
-    svg.append('text').attr('class', 'hw-lane__sub').attr('x', 0).attr('y', 444).text(`${hw.truck_payload_note}.`);
 
     // --- towers, filled by plant on one tonnes scale --------------------------
-    const TOWER_H = 500;
-    const BASE = 572;
-    const HALF = 100;
-    const towerX = Array.from({ length: nTowers }, (_, i) => 640 + i * 240);
-    const defs = svg.append('defs');
+    // As tall as the truck lanes beside them (top of the first lane name to
+    // the bottom of the second lane's tally).
+    const TOWER_H = 360;
+    const BASE = 372;
+    // The real tower is 330 m tall on a 125 m square base (about 2.6 : 1),
+    // so the silhouette keeps that shape whatever its height.
+    const HALF = Math.round(TOWER_H / (330 / 125) / 2);
+    const towerX = Array.from({ length: nTowers }, (_, i) => 132 + i * (2 * HALF + 14));
+    const topY = BASE - TOWER_H;
+    const defs = svgT.append('defs');
     const levelY = (tonnes) => BASE - heightAt(tonnes / hw.eiffel_total_tonnes) * TOWER_H;
     const towerG = towerX.map((cx, i) => {
       const id = `hw-tower-${i}`;
       const d = towerOutline(cx, BASE, TOWER_H, HALF);
       defs.append('clipPath').attr('id', id).append('path').attr('d', d).attr('clip-rule', 'evenodd');
-      const g = svg.append('g');
+      const g = svgT.append('g');
       g.append('path').attr('class', 'hw-tower').attr('d', d).attr('fill-rule', 'evenodd');
       const fills = g.append('g').attr('clip-path', `url(#${id})`);
       const bands = plants.map((p) => fills.append('rect').attr('class', 'hw-band').attr('x', cx - HALF - 4).attr('width', HALF * 2 + 8).attr('fill', colors[p.key]).datum(p));
       towerDetail(g.append('g').attr('clip-path', `url(#${id})`), cx, BASE, TOWER_H, HALF);
       g.append('path').attr('class', 'hw-tower__line').attr('d', d).attr('fill-rule', 'evenodd');
-      g.append('text').attr('class', 'hw-tower__label').attr('x', cx).attr('y', BASE + 26).attr('text-anchor', 'middle').text(`Eiffel Tower ${i + 1}`);
+      g.append('text').attr('class', 'hw-tower__label').attr('x', cx).attr('y', BASE + 18).attr('text-anchor', 'middle').text(`Eiffel Tower ${i + 1}`);
+      g.append('text').attr('class', 'hw-tower__weight').attr('x', cx).attr('y', BASE + 34).attr('text-anchor', 'middle').text(`${count(hw.eiffel_total_tonnes)} t`);
       return { cx, bands };
     });
-    // Baseline: one whole tower.
-    const topY = BASE - TOWER_H;
-    const ref = svg.append('g').attr('class', 'hw-ref');
-    ref.append('line').attr('x1', towerX[0] - HALF - 10).attr('x2', towerX[towerX.length - 1] + HALF + 10).attr('y1', topY).attr('y2', topY);
-    ref
-      .append('text')
-      .attr('x', towerX[towerX.length - 1] + HALF + 10)
-      .attr('y', topY - 8)
-      .attr('text-anchor', 'end')
-      .text(`One Eiffel Tower, ${count(hw.eiffel_total_tonnes)} t`);
+    // Each plant's year, beside the towers (its colour is its share of the fill).
+    const keyX = towerX[towerX.length - 1] + HALF + 22;
+    plants.forEach((p, i) => {
+      const g = svgT.append('g').attr('class', 'hw-key').attr('transform', `translate(${keyX}, ${BASE - 150 + i * 60})`);
+      g.append('rect').attr('width', 10).attr('height', 10).attr('rx', 2).attr('y', -9).attr('fill', colors[p.key]);
+      g.append('text').attr('class', 'hw-key__name').attr('x', 16).text(p.name);
+      g.append('text').attr('class', 'hw-key__role').attr('x', 16).attr('y', 15).text(p.role);
+      g.append('text').attr('class', 'hw-key__value').attr('x', 16).attr('y', 30).text(`${count(Math.round(p.tonnes_per_year))} t / yr`);
+    });
+
     // Points at the thin first layer while the day plays.
-    const dayMark = svg
+    const dayMark = svgT
       .append('text')
       .attr('class', 'hw-lane__sub hw-daymark')
       .attr('x', towerX[0] - HALF - 6)
@@ -270,10 +267,7 @@ export default {
       .attr('text-anchor', 'end')
       .text('one day →');
 
-    const end = document.createElement('p');
-    end.className = 'prod-end hw-end';
-    end.textContent = hw.end_line.replace('{combined}', count(Math.floor(combined / 1000) * 1000)).replace('{multiple}', one(towers));
-    body.append(end);
+    const endText = hw.end_line.replace('{combined}', count(Math.floor(combined / 1000) * 1000)).replace('{multiple}', one(towers));
 
     const controls = document.createElement('div');
     controls.className = 'player-row';
@@ -288,6 +282,8 @@ export default {
     const playBtn = btn('Pause');
     const skipBtn = btn('Skip');
     const replayBtn = btn('Replay');
+    // No Play / Skip / Replay on screen: the animation plays once in view.
+    controls.hidden = true;
     body.append(controls);
 
     addMethodNote(el, 'Sources and math', [
@@ -298,6 +294,35 @@ export default {
     ]);
     addCaveat(el, hw.caveat);
     container.replaceChildren(el);
+
+    // The whole screen fits one window: the drawing is never taller than the
+    // room left once the heading, caption and notes are in place.
+    const fit = () => {
+      if (!figure.isConnected) return window.removeEventListener('resize', fit);
+      const node = svg.node();
+      node.style.maxHeight = '';
+      const r = node.getBoundingClientRect();
+      const section = figure.closest('.scene');
+      const rootPad = parseFloat(getComputedStyle(section.parentElement).paddingBottom) || 0;
+      const bodyPad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+      const below = section.getBoundingClientRect().bottom - r.bottom + rootPad + bodyPad;
+      node.style.maxHeight = `${Math.max(200, window.innerHeight - (r.top + window.scrollY) - below - 2)}px`;
+      // Both drawings are scaled to fit; their text is set in screen px
+      // through these scales (and the plant names match the caption's size).
+      const cap = getComputedStyle(caption).fontSize;
+      const rl = node.getBoundingClientRect();
+      node.style.setProperty('--hw-s', String(Math.min(rl.width / W, rl.height / H)));
+      node.style.setProperty('--hw-cap', cap);
+      const tn = svgT.node();
+      const rt = tn.getBoundingClientRect();
+      tn.style.setProperty('--hw-s', String(Math.min(rt.width / WT, rt.height / HT)));
+    };
+    window.addEventListener('resize', fit);
+    requestAnimationFrame(fit);
+    document.fonts?.ready.then(fit); // text reflows once the web fonts arrive
+    // Refit if the left column's text changes height (e.g. the caption switch).
+    const ro = new ResizeObserver(() => (figure.isConnected ? fit() : ro.disconnect()));
+    ro.observe(caption);
 
     // --- one clock drives every view ------------------------------------------
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
@@ -331,7 +356,6 @@ export default {
             tk.cargo.attr('y', 2).attr('height', 26);
           }
         }
-        ln.tally.text(full > 0 ? `${count(full)} full truckload${full === 1 ? '' : 's'}` : '');
       }
 
       // Towers: tonnes so far, stacked by plant in data order, tower after tower.
@@ -353,13 +377,9 @@ export default {
       tonnesC.textContent = count(Math.round(sum));
       trucksC.textContent = one(sum / hw.truck_payload_tonnes);
 
-      caption.textContent = inDay
-        ? `About ${one(trucksPerDay)} truckloads a day, on average: a thin first layer in the tower.`
-        : t < DAY_MS + GAP_MS
-          ? `One day: about ${one(perDay)} tonnes, ${one(trucksPerDay)} truckloads. Now keep it up for a year…`
-          : `The same ${one(trucksPerDay)} truckloads, every day for a year: ${count(Math.round(trucksPerYear))} in all.`;
+      // The day: the daily rhythm; once the year runs, the year's total.
+      caption.textContent = t >= TOTAL_MS ? endText : `The same ${one(trucksPerDay)} truckloads, every day for a year`;
       const done = t >= TOTAL_MS;
-      end.classList.toggle('is-visible', done);
       if (done) {
         timeC.textContent = `day ${hw.days_per_year}`;
         tonnesC.textContent = count(Math.round(combined));
@@ -367,8 +387,8 @@ export default {
       }
     }
 
-    // Hover / tap a fill: the plant, its tonnes, source, and the math.
-    svg
+    // Hover / tap a fill: the plant, its year, and a short source (full one in the notes).
+    svgT
       .selectAll('.hw-band')
       .on('pointerenter pointerdown', (event, p) => {
         const card = document.createElement('div');
@@ -377,8 +397,7 @@ export default {
         title.textContent = p.name;
         const list = document.createElement('dl');
         for (const [k, v] of [
-          ['Tonnes a year', count(p.tonnes_per_year)],
-          ['Eiffel Towers', `${count(p.tonnes_per_year)} ÷ ${count(hw.eiffel_total_tonnes)} ≈ ${one(p.tonnes_per_year / hw.eiffel_total_tonnes)}`],
+          ['Tonnes/year', count(Math.round(p.tonnes_per_year))],
           ['Status', p.status],
         ]) {
           const dt = document.createElement('dt');
@@ -389,10 +408,10 @@ export default {
         }
         const src = document.createElement('p');
         src.className = 'tooltip__note';
-        src.textContent = p.source;
+        src.textContent = `Source: ${p.source_short}`;
         card.append(title, list, src);
         const r = event.currentTarget.getBoundingClientRect();
-        const f = figure.getBoundingClientRect();
+        const f = towerFig.getBoundingClientRect();
         tooltip.show(card, { x: r.left + r.width / 2 - f.left, y: r.top - f.top + 10 });
       })
       .on('pointerleave', () => tooltip.hide());

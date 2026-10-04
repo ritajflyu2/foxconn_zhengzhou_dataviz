@@ -17,9 +17,8 @@ body {
 }
 
 .site-header {
-  padding: 2.5rem 2rem 0;
-  max-width: 68rem;
-  margin: 0 auto;
+  padding: 2.5rem var(--page-gutter) 1.25rem;
+  border-bottom: 1px solid var(--grid);
 }
 
 .eyebrow {
@@ -30,14 +29,14 @@ body {
   color: var(--ink-muted);
 }
 
+/* The page name is in the tabs already; kept for screen readers only. */
 .site-header h1 {
-  font-family: var(--font-title);
-  font-weight: 600;
-  font-size: clamp(2rem, 5vw, 3rem);
-  line-height: 1.1;
-  margin: 0.25rem 0 0;
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid var(--grid);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /* Switches between the Introduction and Labor pages (see main.js's router). */
@@ -70,45 +69,44 @@ body {
   font-weight: 600;
 }
 
-/* Scene navigation: previous / next arrows, fixed at the bottom centre, above
-   the transition overlay so it stays usable while a transition plays. */
+/* Page navigation: Back at the bottom left, Next at the bottom right, fixed
+   to the window. Kept above the transition overlay so it stays usable while a
+   transition plays (the 3 → 4 word cloud waits for Next). */
 body {
-  padding-bottom: 5.5rem;
+  padding-bottom: 4.25rem; /* clears the two buttons */
 }
 
 .scene-arrows {
   position: fixed;
-  left: 50%;
-  bottom: 1.25rem;
-  transform: translateX(-50%);
+  left: var(--page-gutter);
+  right: var(--page-gutter);
+  bottom: 1.1rem;
   z-index: 60;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.35rem;
-  border: 1px solid var(--grid);
-  border-radius: 999px;
-  background: var(--surface-raised);
-  box-shadow: 0 6px 20px rgb(0 0 0 / 0.12);
+  pointer-events: none; /* only the buttons take clicks, not the space between */
 }
 
-/* Each page has its own arrow bar; the inactive one carries [hidden], which
-   the display: flex above would otherwise override. */
+.scene-arrows__btn {
+  pointer-events: auto;
+}
+
 .scene-arrows[hidden] {
   display: none;
 }
 
 .scene-arrows__btn {
   font: inherit;
-  font-size: 1.125rem;
+  font-size: 0.875rem;
   line-height: 1;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
   border: 1px solid var(--ink);
   background: var(--surface);
   color: var(--ink);
   cursor: pointer;
+  white-space: nowrap;
   transition: background 120ms ease, color 120ms ease;
 }
 
@@ -128,12 +126,13 @@ body {
   cursor: default;
 }
 
+/* "Scene n of 5 · …": read out to screen readers, not shown. */
 .scene-arrows__label {
-  margin: 0;
-  min-width: 13rem;
-  text-align: center;
-  font-size: 0.875rem;
-  color: var(--ink-secondary);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
   white-space: nowrap;
 }
 
@@ -1470,36 +1469,87 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 }
 
 /* --- Introduction: Hazardous waste --- */
+/* SVG text is sized in screen px: the drawing publishes its scale (--hw-s)
+   and the caption's size (--hw-cap) from hazardous.js. */
 
 .hw-what {
   max-width: 46rem;
-  margin: -1rem 0 1rem;
+  margin: -0.75rem 0 1rem;
 }
 
-.hw-lane__sub,
-.hw-tower__label {
-  font-size: 12px;
+.hw-caption {
+  font-weight: 600;
+  line-height: 1.2;
+  min-height: 2.4em; /* two lines, so the switch to the year's sentence does not jump */
+}
+
+/* Lanes (with counters and caption) left; towers right, as tall as the left. */
+.hw-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 2rem;
+  align-items: stretch;
+}
+
+.hw-towers {
+  margin: 0;
+  position: relative;
+  min-height: 0;
+}
+
+.hw-towers svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 760px) {
+  .hw-stage {
+    grid-template-columns: 1fr;
+  }
+  .hw-towers {
+    height: 60vh;
+  }
+}
+
+.hw-lane__name {
+  font-family: var(--font-title);
+  font-size: calc(var(--hw-cap, 24px) / var(--hw-s, 1));
+  font-weight: 600;
+  fill: var(--ink);
+}
+
+.hw-lane__sub {
+  font-size: calc(13.5px / var(--hw-s, 1));
   fill: var(--ink-muted);
 }
 
 .hw-tower__label {
-  font-family: var(--font-title);
-  font-size: 17px;
-  font-weight: 600;
-  fill: var(--ink);
+  font-family: var(--font-body);
+  font-size: calc(12px / var(--hw-s, 1));
+  fill: var(--ink-secondary);
 }
 
-.hw-phase {
-  font-family: var(--font-title);
-  font-size: 24px;
-  font-weight: 600;
-  fill: var(--ink);
-}
-
-.hw-lane__tally {
+.hw-tower__weight {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: calc(12.5px / var(--hw-s, 1));
+  fill: var(--ink-muted);
+}
+
+/* Plant key beside the towers: a chart legend. */
+.hw-key__name {
+  font-family: var(--font-body);
+  font-size: calc(12px / var(--hw-s, 1));
+  font-weight: 500;
   fill: var(--ink);
+}
+
+.hw-key__role,
+.hw-key__value {
+  font-family: var(--font-body);
+  font-size: calc(12.5px / var(--hw-s, 1));
+  fill: var(--ink-muted);
 }
 
 /* Drawn over the fill; the fill underneath takes the hover. */
@@ -1526,12 +1576,6 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   stroke-width: 1.5;
 }
 
-.hw-lane__name {
-  font-family: var(--font-title);
-  font-size: 20px;
-  font-weight: 600;
-  fill: var(--ink);
-}
 
 .hw-lane__value {
   font-family: var(--font-mono);
@@ -1575,7 +1619,7 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 
 .hw-ref text {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   fill: var(--ink-secondary);
 }
 
@@ -1668,6 +1712,20 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 
 /* --- Introduction: Size --- */
 
+.size-figure svg {
+  display: block;
+  max-width: 100%;
+}
+
+.size-credit {
+  margin: -1.22rem 0 0; /* up onto the line of the notes link above it */
+  text-align: right;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  pointer-events: none;
+}
+
 .size-figure__credit {
   margin: 0.5rem 0 0;
   font-size: 0.75rem;
@@ -1694,7 +1752,7 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 
 .size-area__ha {
   font-family: var(--font-title);
-  font-size: 30px;
+  font-size: 20px;
   font-weight: 600;
   fill: var(--ink);
 }
@@ -1706,19 +1764,19 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 }
 
 .size-ratio {
-  font-size: 12px;
+  font-size: 13px;
   fill: var(--ink-secondary);
 }
 
 .size-ratio__value {
   font-family: var(--font-title);
-  font-size: 22px;
+  font-size: 19px;
   font-weight: 600;
   fill: var(--ink);
 }
 
 .size-area__note {
-  font-size: 11px;
+  font-size: 12px;
   fill: var(--ink-muted);
 }
 
@@ -1747,6 +1805,11 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   font-size: clamp(1.25rem, 2.6vw, 1.6rem);
   color: var(--ink);
   min-height: 1.5em;
+}
+
+/* The closing sentence, in the weight of the site names on the Size screen. */
+.prod-caption.is-end {
+  font-weight: 600;
 }
 
 .prod-counters {
@@ -2509,4 +2572,16 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   .mgmt-hours.is-shown .mgmt-hours__cell {
     transition: none;
   }
+}
+
+/* Introduction has no floor index: its screens use the full width, like the
+   Labor 3 → 4 transition screen. */
+body[data-page="intro"] .scene-root {
+  max-width: none;
+  padding-left: var(--page-gutter);
+  padding-right: var(--page-gutter);
+}
+
+.player-row[hidden] {
+  display: none;
 }

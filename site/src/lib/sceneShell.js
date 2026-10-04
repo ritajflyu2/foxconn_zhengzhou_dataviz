@@ -20,16 +20,25 @@ export function createScene({ index, title, summary }) {
   return { el, body };
 }
 
+// The data's limits: no longer a block of its own under every chart (it took
+// a screen's worth of room); its text goes into the screen's collapsed notes,
+// so it is still there, in place, one click away.
 export function addCaveat(el, ...parts) {
   const text = parts.filter(Boolean).join(' ');
   if (!text) return;
-
-  const note = document.createElement('p');
-  note.className = 'caveat';
-  const strong = document.createElement('strong');
-  strong.textContent = 'Caveat: ';
-  note.append(strong, document.createTextNode(text));
-  el.append(note);
+  let details = el.querySelector(':scope > details.method');
+  if (!details) {
+    details = document.createElement('details');
+    details.className = 'method';
+    const label = document.createElement('summary');
+    label.textContent = 'Limits of the data';
+    details.append(label);
+    el.append(details);
+  }
+  const p = document.createElement('p');
+  p.className = 'method__limits';
+  p.textContent = text;
+  details.append(p);
 }
 
 // Collapsed by default so the method is available without crowding the chart.

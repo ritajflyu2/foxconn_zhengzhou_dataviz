@@ -68,30 +68,23 @@ export async function createPostWords(parent, data, box) {
   sub.textContent = `The most-used words in the summaries of all ${count(data.total_posts)} hiring posts, ${data.year_range[0]}–${data.year_range[1]}, sized by the share of posts that use them and coloured by the post group above whose posts use them most; each with its Chinese original. Hover a word for its count.`;
   const hint = document.createElement('p');
   hint.className = 'post-words__hint';
-  hint.textContent = 'Use the → arrow below to continue to Scene 4.';
+  hint.textContent = 'Press Next (bottom right) to continue to Scene 4.';
   const how = document.createElement('details');
   how.className = 'post-words__how';
   const howSum = document.createElement('summary');
   howSum.textContent = 'How the words were picked';
   const howText = document.createElement('p');
-  howText.textContent = `${data.method} ${data.color_rule}`;
+  // The data's limits live here too, so the cloud gets the whole space below.
+  howText.textContent = `${data.method} ${data.color_rule} ${data.caveat}`;
   how.append(howSum, howText);
   titles.append(title, sub, hint, how);
   head.append(titles);
 
-  const caveat = document.createElement('p');
-  caveat.className = 'post-words__caveat';
-  // Only the caveat sits under the cloud; the method is one click away, so the
-  // words get the room.
-  caveat.textContent = `Caveat: ${data.caveat}`;
-  Object.assign(caveat.style, { left: `${box.left}px`, width: `${box.width}px` });
-  el.append(head, caveat);
+  el.append(head);
   parent.append(el);
 
   const headH = head.getBoundingClientRect().height + 12;
-  const capH = caveat.getBoundingClientRect().height + 8;
-  caveat.style.top = `${box.top + box.height - capH + 8}px`;
-  const cloudBox = { left: box.left, top: box.top + headH, width: box.width, height: Math.max(120, box.height - headH - capH) };
+  const cloudBox = { left: box.left, top: box.top + headH, width: box.width, height: Math.max(120, box.height - headH) };
 
   // Words wear their group's own colour, exactly as the clusters' dots above.
   const groupColor = Object.fromEntries(data.types.map((t) => [t.key, colorFor(t.key)]));
@@ -162,7 +155,6 @@ export async function createPostWords(parent, data, box) {
       const fade = (node, delay) =>
         node.animate([{ opacity: 0 }, { opacity: 1 }], { duration: reduced ? 0 : 420, delay: reduced ? 0 : delay, easing: 'ease-out', fill: 'forwards' });
       fade(head, 0);
-      fade(caveat, 700);
       texts.each(function (_d, i) {
         fade(this, 250 + i * 30);
       });

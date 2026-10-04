@@ -82,10 +82,10 @@ function loadImage(url) {
 // A simple Fuji silhouette in a 1x1 box (y down), used when the photo at true
 // height would be too wide for its half of the screen.
 const FUJI_BODY = new Path2D(
-  'M0 1 C0.2 0.93 0.35 0.6 0.44 0.03 L0.47 0.05 L0.5 0 L0.53 0.04 L0.56 0.02 C0.65 0.6 0.8 0.93 1 1 Z'
+  'M0 1 C0.2 0.93 0.35 0.6 0.44 0 L0.47 0.035 L0.5 0.012 L0.53 0.035 L0.56 0 C0.65 0.6 0.8 0.93 1 1 Z'
 );
 const FUJI_SNOW = new Path2D(
-  'M0.44 0.03 L0.47 0.05 L0.5 0 L0.53 0.04 L0.56 0.02 C0.58 0.14 0.6 0.24 0.62 0.32 L0.59 0.28 L0.57 0.36 L0.54 0.27 L0.51 0.38 L0.48 0.26 L0.45 0.35 L0.43 0.27 L0.385 0.33 C0.4 0.25 0.42 0.15 0.44 0.03 Z'
+  'M0.44 0 L0.47 0.035 L0.5 0.012 L0.53 0.035 L0.56 0 C0.58 0.14 0.6 0.24 0.62 0.32 L0.59 0.28 L0.57 0.36 L0.54 0.27 L0.51 0.38 L0.48 0.26 L0.45 0.35 L0.43 0.27 L0.385 0.33 C0.4 0.25 0.42 0.15 0.44 0 Z'
 );
 
 export default {
@@ -142,40 +142,11 @@ export default {
     body.append(figure);
     const tooltip = createTooltip(figure);
 
-    const legend = document.createElement('ul');
-    legend.className = 'legend prod-legend';
-    for (const item of [
-      { color: colors.iphone, label: `${D.phone_model} stack, one peak day`, value: `≈ ${fmtHeight(D.stackM)}` },
-      { color: colors.fuji, label: 'Mount Fuji', value: `${count(D.fujiM)} m` },
-      { color: null, label: D.diffM >= 0 ? 'Stack higher by' : 'Stack shorter by', value: `about ${count(roundTo(Math.abs(D.diffM), 10))} m` },
-    ]) {
-      const li = document.createElement('li');
-      li.className = 'legend__item';
-      if (item.color) {
-        const sw = document.createElement('span');
-        sw.className = 'legend__swatch prod-swatch';
-        sw.style.background = item.color;
-        li.append(sw);
-      }
-      const label = document.createElement('span');
-      label.textContent = item.label;
-      const value = document.createElement('span');
-      value.className = 'legend__value';
-      value.textContent = item.value;
-      li.append(label, value);
-      legend.append(li);
-    }
-
-    const endLine = document.createElement('p');
-    endLine.className = 'prod-end';
-    endLine.textContent = `Stacked flat, one day's peak production of ${D.phone_model}s would rise about ${(D.stackM / 1000).toFixed(1)} km — ${
+    // The closing sentence replaces the caption above the chart when the
+    // animation ends (the figures themselves are in the stack's hover card).
+    const endText = `Stacked flat, one day's peak production of ${D.phone_model}s would rise about ${(D.stackM / 1000).toFixed(1)} km — ${
       D.diffM >= 0 ? 'higher than' : 'short of'
     } Mount Fuji (${count(D.fujiM)} m).`;
-
-    const ending = document.createElement('div');
-    ending.className = 'prod-ending';
-    ending.append(endLine, legend);
-    body.append(ending);
 
     const controls = document.createElement('div');
     controls.className = 'player-row';
@@ -190,6 +161,8 @@ export default {
     const playBtn = btn('Pause');
     const skipBtn = btn('Skip');
     const replayBtn = btn('Replay');
+    // No Play / Skip / Replay on screen: the animation plays once in view.
+    controls.hidden = true;
     body.append(controls);
 
     addMethodNote(el, 'Sources and math', [
@@ -203,7 +176,30 @@ export default {
 
     const [backImg, sideImg, fujiImg] = await Promise.all([loadImage(backUrl), loadImage(sideUrl), loadImage(fujiUrl)]);
     const phoneH = PHONE_W * (backImg.height / backImg.width);
-    const fujiAspect = fujiImg.width / fujiImg.height;
+    // The photo's summit is not its top edge (faint sky above it), so find it:
+    // the first row that is clearly opaque, and the rim's span in that row.
+    const fujiPeak = (() => {
+      const c = document.createElement('canvas');
+      c.width = fujiImg.width;
+      c.height = fujiImg.height;
+      const g = c.getContext('2d');
+      g.drawImage(fujiImg, 0, 0);
+      const { data } = g.getImageData(0, 0, c.width, c.height);
+      for (let y = 0; y < c.height; y++) {
+        let l = -1;
+        let r = -1;
+        for (let x = 0; x < c.width; x++) {
+          if (data[(y * c.width + x) * 4 + 3] > 128) {
+            if (l < 0) l = x;
+            r = x;
+          }
+        }
+        if (l >= 0) return { top: y / c.height, rimL: l / c.width, rimR: r / c.width };
+      }
+      return { top: 0, rimL: 0.45, rimR: 0.55 };
+    })();
+    // Width per metre of summit height (the photo is drawn so its summit sits at 3,776 m).
+    const fujiAspect = fujiImg.width / (fujiImg.height * (1 - fujiPeak.top));
 
     // --- layout: depends on the canvas size; N is fixed once playback starts
     let L = null;
@@ -357,7 +353,8 @@ export default {
       ctx.save();
       ctx.globalAlpha = alpha;
       if (L.usePhoto) {
-        ctx.drawImage(fujiImg, x, L.y0 - h, w, h);
+        const imgH = h / (1 - fujiPeak.top); // the sky above the summit rises past 3,776 m
+        ctx.drawImage(fujiImg, x, L.y0 - imgH, w, imgH);
       } else {
         ctx.translate(x, L.y0 - h);
         ctx.scale(w, h);
@@ -367,7 +364,8 @@ export default {
         ctx.fill(FUJI_SNOW);
       }
       ctx.restore();
-      return { cx: x + w / 2 };
+      // The rim's right end (the silhouette's crater spans 0.44–0.56 of its width).
+      return { cx: x + w / 2, rimRight: x + w * (L.usePhoto ? fujiPeak.rimR : 0.56) };
     }
 
     function label(ctx, text, x, y, { color = colors.inkSecondary, size = 12, align = 'center', mono = false, weight = 400 } = {}) {
@@ -432,7 +430,6 @@ export default {
         ctx.stroke();
 
         label(ctx, 'iPhone stack', x, y0 + 20, { color: colors.ink, weight: 600 });
-        label(ctx, 'width not to scale', x, y0 + 36, { color: colors.inkMuted, size: 11 });
         if (fuji && fujiAlpha > 0.2) label(ctx, `Mount Fuji · ${count(D.fujiM)} m`, fuji.cx, y0 + 20, { color: colors.ink, weight: 600 });
 
         // Crossing beat: Fuji's summit line once the stack has passed it.
@@ -445,7 +442,7 @@ export default {
           ctx.strokeStyle = colors.ink;
           ctx.beginPath();
           ctx.moveTo(AXIS_X, py);
-          ctx.lineTo(W - PAD, py);
+          ctx.lineTo(fuji ? fuji.rimRight : W - PAD, py);
           ctx.stroke();
           ctx.restore();
           ctx.globalAlpha = a;
@@ -464,13 +461,15 @@ export default {
         const seconds = Math.max(L.fillS, (stack / D.thicknessM) / D.perSecond);
         current = { phones: Math.max(L.n, Math.round(stack / D.thicknessM)), height: stack, seconds };
         caption.textContent = `…and keep going for ${D.hours_per_day} hours.`;
+        caption.classList.remove('is-end');
       }
 
       clockEl.textContent = fmtClock(current.seconds);
       phonesEl.textContent = count(current.phones);
       const done = t >= total() - 0.01;
-      ending.classList.toggle('is-visible', done);
       if (done) {
+        caption.textContent = endText;
+        caption.classList.add('is-end');
         clockEl.textContent = fmtClock(D.daySeconds);
         phonesEl.textContent = count(D.peak_iphones_per_day);
         current = { phones: D.peak_iphones_per_day, height: D.stackM, seconds: D.daySeconds };
@@ -490,10 +489,28 @@ export default {
       skipBtn.disabled = done;
     }
 
+    // As the phones start to stack, the page scrolls just enough to bring the
+    // bottom of the canvas (the stack's base and its label) into view, so the
+    // counters above stay visible; never past the canvas's top. Once per play.
+    let followed = false;
+    function bringIntoView() {
+      // Down to the notes link under the chart, kept clear of the Back / Next buttons.
+      const last = el.querySelector(':scope > details.method') ?? canvas;
+      const bottom = last.getBoundingClientRect().bottom + window.scrollY;
+      const top = canvas.getBoundingClientRect().top + window.scrollY;
+      const target = Math.min(top - 16, bottom + 64 - window.innerHeight);
+      if (target > window.scrollY + 4) window.scrollTo({ top: target, behavior: 'smooth' });
+    }
+
     function frame(now) {
       if (!canvas.isConnected) return; // scene was replaced
       if (playing) {
+        const before = elapsed;
         elapsed = Math.min(total(), elapsed + (last == null ? 0 : (now - last) / 1000));
+        if (!followed && before < L.fillS && elapsed >= L.fillS) {
+          followed = true;
+          bringIntoView();
+        }
         if (elapsed >= total()) playing = false;
         syncButtons();
       }
@@ -525,6 +542,7 @@ export default {
     });
     replayBtn.addEventListener('click', () => {
       elapsed = 0;
+      followed = false;
       play();
     });
 
@@ -569,10 +587,26 @@ export default {
       const title = document.createElement('p');
       title.className = 'tooltip__title';
       title.textContent = `${D.phone_model} stack`;
-      const math = document.createElement('p');
-      math.className = 'tooltip__single-value';
-      math.textContent = `${count(current.phones)} × ${D.phone_thickness_mm} mm = ${fmtHeight(current.phones * D.thicknessM)}`;
-      card.append(title, math);
+      const dl = document.createElement('dl');
+      const rows = [
+        ['Phones', count(current.phones)],
+        ['Height', fmtHeight(current.phones * D.thicknessM)],
+        ['Fuji', `${count(D.fujiM)} m`],
+      ];
+      const diff = current.phones * D.thicknessM - D.fujiM;
+      if (current.phones * D.thicknessM >= D.fujiM)
+        rows.push(['Higher by', `about ${count(roundTo(Math.abs(diff), 10))} m`]);
+      for (const [k, v] of rows) {
+        const dt = document.createElement('dt');
+        dt.textContent = k;
+        const dd = document.createElement('dd');
+        dd.textContent = v;
+        dl.append(dt, dd);
+      }
+      const note = document.createElement('p');
+      note.className = 'tooltip__note';
+      note.textContent = `${count(current.phones)} × ${D.phone_thickness_mm} mm`;
+      card.append(title, dl, note);
       tooltip.show(card, { x: s.x + s.w / 2, y: Math.max(s.y, py - 10) });
     };
     canvas.addEventListener('pointermove', showMath);

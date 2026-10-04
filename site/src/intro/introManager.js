@@ -23,8 +23,8 @@ function createArrows(nav, getCurrent) {
     b.addEventListener('click', () => go(getCurrent() + (dir === 'next' ? 1 : -1)));
     return b;
   };
-  const prev = arrow('prev', '←');
-  const next = arrow('next', '→');
+  const prev = arrow('prev', '← Back');
+  const next = arrow('next', 'Next →');
   const label = document.createElement('p');
   label.className = 'scene-arrows__label';
   label.setAttribute('aria-live', 'polite');

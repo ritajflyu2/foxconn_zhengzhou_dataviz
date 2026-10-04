@@ -15,6 +15,8 @@ import poolUrl from '../../../assets/intro/olympic_pool.webp';
 const count = format(',');
 const POOLS = Math.round(wastewater.total_m3_per_year / wastewater.olympic_pool_m3);
 const POOL_ASPECT = 2; // 50 m x 25 m
+const TARGET_ROWS = 10; // about this many rows of shapes; each shape stands for UNIT pools
+const NICE_UNITS = [1, 2, 5, 10, 20, 25, 50, 100];
 const PITCH_X = 46; // target px per pool column
 const GAP = 3;
 const TANK_H = 34; // the water tank across the top
@@ -73,11 +75,11 @@ export default {
     const litersEl = counter('Liters of wastewater');
     const poolsEl = counter('Olympic pools filled');
 
+    let legendLabel = null;
     const legend = document.createElement('ul');
     legend.className = 'legend';
     for (const [cls, label] of [
-      ['water-swatch--pool', `1 shape = 1 Olympic pool (${count(w.olympic_pool_m3)} m³)`],
-      ['water-swatch--water', 'Wastewater, one year'],
+      ['water-swatch--pool', ''], // text set once the shape size is known (layout)
     ]) {
       const li = document.createElement('li');
       li.className = 'legend__item';
@@ -87,6 +89,7 @@ export default {
       l.textContent = label;
       li.append(sw, l);
       legend.append(li);
+      legendLabel = l;
     }
     body.append(legend);
 
@@ -125,6 +128,8 @@ export default {
     const playBtn = btn('Pause');
     const skipBtn = btn('Skip');
     const replayBtn = btn('Replay');
+    // No Play / Skip / Replay on screen: the animation plays once in view.
+    controls.hidden = true;
     body.append(controls);
 
     addMethodNote(el, 'Sources and math', [
@@ -144,14 +149,22 @@ export default {
 
     // --- layout: pools in a grid under the tank ------------------------------
     let L = null;
+    let UNIT = null; // pools per shape: set once, from the first layout's column count
+    let SHAPES = POOLS;
     function layout() {
       const W = figure.clientWidth;
       const cols = Math.max(10, Math.floor(W / PITCH_X));
+      if (UNIT == null) {
+        const ideal = POOLS / (cols * TARGET_ROWS);
+        UNIT = NICE_UNITS.reduce((a, b) => (Math.abs(b - ideal) < Math.abs(a - ideal) ? b : a));
+        SHAPES = Math.ceil(POOLS / UNIT);
+        legendLabel.textContent = `1 shape = ${count(UNIT)} Olympic pool${UNIT === 1 ? '' : 's'} (${count(w.olympic_pool_m3)} m³ each)`;
+      }
       const pitchX = W / cols;
       const poolW = pitchX - GAP;
       const poolH = poolW / POOL_ASPECT;
       const pitchY = poolH + GAP;
-      const rows = Math.ceil(POOLS / cols);
+      const rows = Math.ceil(SHAPES / cols);
       const top = STREAM_GAP;
       const H = Math.ceil(top + rows * pitchY + 4);
       const dpr = window.devicePixelRatio || 1;
@@ -182,11 +195,14 @@ export default {
       const empty = sprite('grayscale(1) brightness(1.35) contrast(0.7)');
 
       // When each pool appears, starts filling and is full: ease-in pacing.
-      const ramp = (k) => (k / POOLS) ** (1 / EASE);
-      const pools = Array.from({ length: POOLS }, (_, k) => {
+      const ramp = (k) => (k / SHAPES) ** (1 / EASE);
+      // The last shape holds only the remainder, so it fills part way.
+      const lastShare = (POOLS - (SHAPES - 1) * UNIT) / UNIT;
+      const pools = Array.from({ length: SHAPES }, (_, k) => {
         const fillMs = FILL_EACH_MS[0] + (FILL_EACH_MS[1] - FILL_EACH_MS[0]) * ramp(k);
         const start = ramp(k) * (RUN_MS - fillMs - POUR_MS);
-        return { x: (k % cols) * pitchX + GAP / 2, y: top + Math.floor(k / cols) * pitchY, start, fillMs, phase: (k * 2.39996) % (Math.PI * 2) };
+        const cap = k === SHAPES - 1 ? lastShare : 1;
+        return { x: (k % cols) * pitchX + GAP / 2, y: top + Math.floor(k / cols) * pitchY, start, fillMs, cap, phase: (k * 2.39996) % (Math.PI * 2) };
       });
       L = { W, H, ctx, tctx, cols, rows, pitchX, poolW, poolH, pitchY, top, full, empty, pools };
     }
@@ -228,7 +244,7 @@ export default {
       for (const p of pools) {
         const appear = Math.min(1, (t - p.start + APPEAR_MS) / APPEAR_MS);
         if (appear <= 0) continue;
-        const u = Math.min(1, Math.max(0, (t - p.start - POUR_MS) / p.fillMs));
+        const u = Math.min(p.cap, Math.max(0, (t - p.start - POUR_MS) / p.fillMs));
         if (u >= 1) {
           ctx.globalAlpha = 1;
           ctx.drawImage(full, p.x, p.y, poolW, poolH);
@@ -238,7 +254,7 @@ export default {
         ctx.globalAlpha = appear;
         ctx.drawImage(empty, p.x, p.y, poolW, poolH);
         ctx.globalAlpha = 1;
-        if (t >= p.start) streams.push({ p, u, pour: Math.min(1, (t - p.start) / POUR_MS) });
+        if (t >= p.start && u < p.cap) streams.push({ p, u, pour: Math.min(1, (t - p.start) / POUR_MS) });
         if (u > 0) {
           // Water rises from the bottom with a moving surface; under it, the full pool.
           const level = p.y + poolH * (1 - u);
@@ -286,7 +302,7 @@ export default {
       drawTank(L.tctx, W, wt);
 
       const done = t >= RUN_MS;
-      const shownPools = done ? POOLS : filled;
+      const shownPools = done ? POOLS : Math.min(POOLS, filled * UNIT);
       poolsEl.textContent = count(shownPools);
       litersEl.textContent = done ? liters(w.total_liters_per_year) : liters(shownPools * w.olympic_pool_m3 * 1000);
       end.classList.toggle('is-visible', done);
@@ -406,11 +422,14 @@ export default {
       const y = e.clientY - r.top - L.top;
       const j = Math.floor(x / L.pitchX);
       const i = Math.floor(y / L.pitchY);
-      if (y < 0 || j < 0 || j >= L.cols || i >= L.perCol[j]) return tooltip.hide();
+      const k = i * L.cols + j;
+      if (y < 0 || j < 0 || j >= L.cols || k >= SHAPES) return tooltip.hide();
       const card = document.createElement('div');
       const title = document.createElement('p');
       title.className = 'tooltip__title';
-      title.textContent = `Pool ${count(i * L.cols + j + 1)} of ${count(POOLS)}`;
+      const from = k * UNIT + 1;
+      const to = Math.min(POOLS, (k + 1) * UNIT);
+      title.textContent = UNIT === 1 ? `Pool ${count(from)} of ${count(POOLS)}` : `Pools ${count(from)}–${count(to)} of ${count(POOLS)}`;
       const note = document.createElement('p');
       note.className = 'tooltip__note';
       note.textContent = w.olympic_pool_note;
