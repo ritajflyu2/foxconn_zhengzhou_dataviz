@@ -2967,7 +2967,7 @@ body[data-page="sim"] .sim-host {
   pointer-events: auto;
   z-index: auto;
   height: calc(100dvh - var(--sim-top, 5rem));
-  background: #fdfdfd; /* the simulator's own ground */
+  background: var(--surface); /* the simulator, themed, shares the sand ground */
 }
 .sim-frame {
   display: block;

@@ -1,0 +1,68 @@
+/* Site theme for the simulator, added by sync-simulator.mjs to the copy in
+   public/simulator/ (preview/Factory_Simulator.html itself stays as is).
+   Values follow site/src/styles/tokens.css. */
+:root {
+  --bg: #f2ece0;        /* --surface */
+  --panel: #f8f4ea;     /* --surface-raised */
+  --ink: #1f1d18;
+  --ink2: #4a463c;      /* --ink-secondary */
+  --muted: #7b7566;     /* --ink-muted */
+  --rule: #ddd5c4;      /* --grid */
+  --blue: #1f1d18;      /* the simulator's accent: the site's ink */
+  --water: #2a78d6;
+  --orange: #eb6834;
+  --good: #1b7c61;
+  --bad: #a8431c;       /* red is the site's legal-cap colour only */
+  --hyp: #6754bd;
+  --emp: #1b7c61;
+  --cal: #7b7566;
+  --ph: #c0731f;
+  --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* The building drawing is a white-ground JPEG: multiply drops its white
+   onto the sand ground instead of leaving a white box. */
+#scene { mix-blend-mode: multiply; }
+/* The scaled stage is its own stacking context: give it the ground to blend on. */
+#stage { background: var(--bg); }
+
+/* Titles in the site's serif, like its scene and chart titles. */
+.title h1 { font-family: var(--serif); font-size: 30px !important; font-weight: 600; letter-spacing: 0; line-height: 1.1; }
+.floor .fl b { font-family: var(--serif); font-weight: 600; color: var(--ink); letter-spacing: 0; font-variant-numeric: lining-nums; }
+@keyframes fflash { 0% { color: var(--orange); } 100% { color: var(--ink); } }
+.evcap .et { font-family: var(--serif); font-weight: 600 !important; font-size: 34px !important; letter-spacing: 0 !important; }
+.evcap .now, .evcap .ef, .logi .hd, .card .ch b, #projWrap .sec {
+  font-family: var(--sans); font-size: 12px !important; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+}
+#projWrap .sec { border-top: 1px solid var(--rule); }
+.evcap p { font-family: var(--sans); }
+
+/* Panels and the projection ring on the site's raised sand. */
+.card, .logi { background: var(--panel); border-color: var(--rule); box-shadow: none; }
+#projRing { background: var(--panel); border-width: 2px; box-shadow: none; }
+#projTag, .nav button { background: var(--panel); border-color: var(--rule); color: var(--ink2); }
+
+/* Scenario buttons: the site's tab pills. */
+.presets button, .resetb {
+  background: transparent !important; border: 1px solid var(--rule) !important; color: var(--ink2) !important;
+  font-family: var(--sans) !important; font-size: 15px !important; font-weight: 400 !important;
+}
+.presets button:hover, .resetb:hover { border-color: var(--muted) !important; color: var(--ink) !important; }
+.presets button[aria-pressed="true"] { border-color: var(--ink) !important; color: var(--ink) !important; font-weight: 600 !important; }
+button:focus-visible { outline: 2px solid var(--ink); }
+
+/* Sliders: ink thumb rings on the sand. */
+.ctl input[type=range]::-webkit-slider-thumb { background: var(--panel); }
+.ctl .trk .base { background: var(--panel); }
+.ctl.out .trk .rail { background: var(--rule); }
+.ctl.out .trk .fill { background: #c9c1b0; }
+.ctl.out .trk .fill.better { background: var(--good); }
+.ctl.out .trk .fill.worse { background: var(--bad); }
+.ctl.out .vv.better, .ctl.out .vv.better i { color: var(--good); }
+.ctl.out .vv.worse, .ctl.out .vv.worse i { color: var(--bad); }
+.ctl .vv.up, .ctl .vv.up i { color: var(--water); }
+.ctl .vv.down, .ctl .vv.down i { color: var(--bad); }
+.note3 input { background: var(--panel); }
+#effPanel { border-color: var(--hyp); }
