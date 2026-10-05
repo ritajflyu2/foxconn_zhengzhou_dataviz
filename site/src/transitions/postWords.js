@@ -12,19 +12,22 @@ import { seededRandom } from './common.js';
 // clusters above.
 
 const MIN_FONT = 15;
-const MAX_FONT = 76;
+const MAX_FONT = 80;
 const PAD_PX = 4; // space kept around each word (d3-cloud pads every side; mainly opens up the rows)
 // Inter has no Chinese glyphs: the CJK fallbacks set the Chinese half, and the
 // same stack is used for layout so d3-cloud measures what is drawn.
 const FONT_FAMILY = "Inter, 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans SC', 'Microsoft YaHei', sans-serif";
 const label = (w) => `${w.word} ${w.zh}`;
 const FONT_WEIGHT = 600;
+const SIZE_EXP = 0.7;
 const pct = format('.0%');
 const count = format(',');
 
 function runCloud(words, width, height, scale) {
   const maxShare = Math.max(...words.map((w) => w.share));
-  const size = (w) => Math.max(MIN_FONT, scale * (MIN_FONT / MAX_FONT + (1 - MIN_FONT / MAX_FONT) * Math.sqrt(w.share / maxShare)));
+  // Font size grows with the share, between the square root (too flat) and
+  // straight proportion (too steep); floored so the rarest stay legible.
+  const size = (w) => Math.max(MIN_FONT, scale * (w.share / maxShare) ** SIZE_EXP);
   return new Promise((resolve) => {
     cloud()
       .size([width, height])
@@ -65,7 +68,7 @@ export async function createPostWords(parent, data, box) {
   title.textContent = 'What the hiring posts say';
   const sub = document.createElement('p');
   sub.className = 'post-words__sub';
-  sub.textContent = `The most-used words in the summaries of all ${count(data.total_posts)} hiring posts, ${data.year_range[0]}–${data.year_range[1]}, sized by the share of posts that use them and coloured by the post group above whose posts use them most; each with its Chinese original. Hover a word for its count.`;
+  sub.textContent = `The most-used words in the summaries of all ${count(data.total_posts)} hiring posts from ${data.year_range[0]}–${data.year_range[1]}. Most words carry a sense of urgency and friendliness. Different pay schemes are emphasized. Hover over a word to see its count.`;
   const hint = document.createElement('p');
   hint.className = 'post-words__hint';
   hint.textContent = 'Press Next (bottom right) to continue to the wage calculator.';

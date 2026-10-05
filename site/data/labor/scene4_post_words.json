@@ -7,17 +7,17 @@
  "types": [
   {
    "key": "regular",
-   "label": "Direct hire (stated)",
+   "label": "Direct hire",
    "posts": 7
   },
   {
    "key": "dispatch",
-   "label": "Dispatch (agency)",
+   "label": "Dispatch",
    "posts": 251
   },
   {
    "key": "student",
-   "label": "Student / summer",
+   "label": "Student",
    "posts": 30
   },
   {
@@ -35,7 +35,7 @@
    "share": 0.3118,
    "mentions": 183,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 136,
    "type_total": 251,
    "type_share": 0.5418
@@ -48,7 +48,7 @@
    "share": 0.3073,
    "mentions": 181,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 106,
    "type_total": 251,
    "type_share": 0.4223
@@ -74,7 +74,7 @@
    "share": 0.2383,
    "mentions": 138,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 94,
    "type_total": 251,
    "type_share": 0.3745
@@ -87,7 +87,7 @@
    "share": 0.2049,
    "mentions": 103,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 86,
    "type_total": 251,
    "type_share": 0.3426
@@ -100,7 +100,7 @@
    "share": 0.1604,
    "mentions": 94,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 43,
    "type_total": 251,
    "type_share": 0.1713
@@ -113,7 +113,7 @@
    "share": 0.1537,
    "mentions": 77,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 41,
    "type_total": 251,
    "type_share": 0.1633
@@ -126,7 +126,7 @@
    "share": 0.1514,
    "mentions": 70,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 59,
    "type_total": 251,
    "type_share": 0.2351
@@ -139,7 +139,7 @@
    "share": 0.1381,
    "mentions": 71,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 45,
    "type_total": 251,
    "type_share": 0.1793
@@ -165,7 +165,7 @@
    "share": 0.1269,
    "mentions": 62,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 48,
    "type_total": 251,
    "type_share": 0.1912
@@ -178,7 +178,7 @@
    "share": 0.1225,
    "mentions": 55,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 50,
    "type_total": 251,
    "type_share": 0.1992
@@ -204,7 +204,7 @@
    "share": 0.118,
    "mentions": 58,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 36,
    "type_total": 251,
    "type_share": 0.1434
@@ -230,7 +230,7 @@
    "share": 0.098,
    "mentions": 46,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 35,
    "type_total": 251,
    "type_share": 0.1394
@@ -256,7 +256,7 @@
    "share": 0.0913,
    "mentions": 46,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 28,
    "type_total": 251,
    "type_share": 0.1116
@@ -269,7 +269,7 @@
    "share": 0.0891,
    "mentions": 41,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 28,
    "type_total": 251,
    "type_share": 0.1116
@@ -282,7 +282,7 @@
    "share": 0.0869,
    "mentions": 89,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 39,
    "type_total": 251,
    "type_share": 0.1554
@@ -295,7 +295,7 @@
    "share": 0.0824,
    "mentions": 49,
    "type": "student",
-   "type_label": "Student / summer",
+   "type_label": "Student",
    "type_posts": 13,
    "type_total": 30,
    "type_share": 0.4333
@@ -321,7 +321,7 @@
    "share": 0.0802,
    "mentions": 42,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 21,
    "type_total": 251,
    "type_share": 0.0837
@@ -334,7 +334,7 @@
    "share": 0.0757,
    "mentions": 52,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 30,
    "type_total": 251,
    "type_share": 0.1195
@@ -360,7 +360,7 @@
    "share": 0.0713,
    "mentions": 34,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 18,
    "type_total": 251,
    "type_share": 0.0717
@@ -373,7 +373,7 @@
    "share": 0.0646,
    "mentions": 29,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 26,
    "type_total": 251,
    "type_share": 0.1036
@@ -425,7 +425,7 @@
    "share": 0.0579,
    "mentions": 26,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 23,
    "type_total": 251,
    "type_share": 0.0916
@@ -438,7 +438,7 @@
    "share": 0.0579,
    "mentions": 34,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 20,
    "type_total": 251,
    "type_share": 0.0797
@@ -464,7 +464,7 @@
    "share": 0.0557,
    "mentions": 25,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 24,
    "type_total": 251,
    "type_share": 0.0956
@@ -477,7 +477,7 @@
    "share": 0.0535,
    "mentions": 27,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 15,
    "type_total": 251,
    "type_share": 0.0598
@@ -490,7 +490,7 @@
    "share": 0.0535,
    "mentions": 31,
    "type": "student",
-   "type_label": "Student / summer",
+   "type_label": "Student",
    "type_posts": 8,
    "type_total": 30,
    "type_share": 0.2667
@@ -503,7 +503,7 @@
    "share": 0.049,
    "mentions": 44,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 21,
    "type_total": 251,
    "type_share": 0.0837
@@ -516,7 +516,7 @@
    "share": 0.0468,
    "mentions": 25,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 13,
    "type_total": 251,
    "type_share": 0.0518
@@ -529,7 +529,7 @@
    "share": 0.0445,
    "mentions": 21,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 17,
    "type_total": 251,
    "type_share": 0.0677
@@ -542,7 +542,7 @@
    "share": 0.0423,
    "mentions": 20,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 18,
    "type_total": 251,
    "type_share": 0.0717
@@ -555,7 +555,7 @@
    "share": 0.0423,
    "mentions": 20,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 18,
    "type_total": 251,
    "type_share": 0.0717
@@ -594,7 +594,7 @@
    "share": 0.0379,
    "mentions": 23,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 15,
    "type_total": 251,
    "type_share": 0.0598
@@ -620,7 +620,7 @@
    "share": 0.0356,
    "mentions": 16,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 11,
    "type_total": 251,
    "type_share": 0.0438
@@ -633,7 +633,7 @@
    "share": 0.0356,
    "mentions": 16,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 10,
    "type_total": 251,
    "type_share": 0.0398
@@ -646,7 +646,7 @@
    "share": 0.0356,
    "mentions": 16,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 13,
    "type_total": 251,
    "type_share": 0.0518
@@ -672,7 +672,7 @@
    "share": 0.0356,
    "mentions": 33,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 14,
    "type_total": 251,
    "type_share": 0.0558
@@ -685,7 +685,7 @@
    "share": 0.0356,
    "mentions": 19,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 12,
    "type_total": 251,
    "type_share": 0.0478
@@ -698,7 +698,7 @@
    "share": 0.0334,
    "mentions": 15,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 11,
    "type_total": 251,
    "type_share": 0.0438
@@ -711,7 +711,7 @@
    "share": 0.0312,
    "mentions": 14,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 9,
    "type_total": 251,
    "type_share": 0.0359
@@ -724,7 +724,7 @@
    "share": 0.0312,
    "mentions": 18,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 7,
    "type_total": 251,
    "type_share": 0.0279
@@ -750,7 +750,7 @@
    "share": 0.0267,
    "mentions": 19,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 11,
    "type_total": 251,
    "type_share": 0.0438
@@ -763,7 +763,7 @@
    "share": 0.0267,
    "mentions": 21,
    "type": "dispatch",
-   "type_label": "Dispatch (agency)",
+   "type_label": "Dispatch",
    "type_posts": 12,
    "type_total": 251,
    "type_share": 0.0478

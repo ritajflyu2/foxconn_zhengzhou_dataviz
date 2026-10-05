@@ -85,6 +85,10 @@ function areaFigure(dorm) {
   return svg.node();
 }
 
+// Small counts in running text read as words ("six to a room").
+const SPELLED = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+const spelled = (n) => SPELLED[n] ?? count(n);
+
 export default {
   id: 1,
   navLabel: 'On the line',
@@ -93,14 +97,11 @@ export default {
   async mount(container, data) {
     const { line, dorm } = data;
     const nLines = line.lines.length;
-    const lineTotal = nLines * line.workers_per_line;
 
     const { el, body } = createScene({
       index: 1,
       title: 'On the line: worker density',
-      summary: `One assembly floor and one dorm room, one dot per worker. A production line has about ${count(line.workers_per_line)} workers, so this floor's ${nLines} lines hold about ${count(
-        lineTotal
-      )}. Off shift, six of them share one room. About ${percent(data.insured_share)} are insured staff; the rest are dispatch workers.`,
+      summary: `While there's no public data on worker density, one worker told CLW that her production line has over ${count(line.workers_per_line)} workers. The line never stops: plants run ${spelled(data.shifts_per_day)} ${data.shift_hours}-hour shifts a day, around the clock. After their shift, new workers sleep ${spelled(dorm.people)} to a room. By China's dorm design standard, a room like this gives each person ${dorm.m2_per_person} m².`,
     });
 
     const blue = colorFor('regular');
@@ -110,8 +111,8 @@ export default {
     const legend = document.createElement('ul');
     legend.className = 'legend';
     legend.append(
-      legendItem(blue, 'Insured', `${count(line.per_line.insured)} per line · ${count(dorm.per_room.insured)} per room`),
-      legendItem(orange, 'Dispatch', `${count(line.per_line.dispatch)} per line · ${count(dorm.per_room.dispatch)} per room`),
+      legendItem(blue, 'Insured'),
+      legendItem(orange, 'Dispatched'),
       legendItem(null, '1 dot = 1 worker')
     );
     body.append(legend);
@@ -127,7 +128,7 @@ export default {
     floorFig.className = 'figure scene2-floor';
     const floorHead = document.createElement('p');
     floorHead.className = 'chart-col__head';
-    floorHead.textContent = `The assembly floor: ${nLines} lines × ${count(line.workers_per_line)} workers`;
+    floorHead.textContent = `The assembly floor: ${count(line.workers_per_line)}+ workers per line`;
     floorFig.append(floorHead);
     layout.append(floorFig);
     const [lw, lh] = line.image_px;
@@ -152,7 +153,7 @@ export default {
       .attr('fill', (d) => fillOf[d.kind]);
     const floorNote = document.createElement('p');
     floorNote.className = 'figure__note';
-    floorNote.textContent = `${count(lineDots.length)} dots. ${data.shift_note}`;
+    floorNote.textContent = `${count(lineDots.length)} dots.`;
     floorFig.append(floorNote);
 
     // --- the dorm: one dot per bed, and the space each person gets -----------
@@ -190,7 +191,7 @@ export default {
     areaCol.className = 'scene2-area';
     const areaHead = document.createElement('p');
     areaHead.className = 'chart-col__head';
-    areaHead.textContent = `Side note: about ${dorm.m2_per_person} m² each`;
+    areaHead.textContent = `${dorm.m2_per_person} m² each (design standard)`;
     const areaSub = document.createElement('p');
     areaSub.className = 'figure__note';
     areaSub.textContent = `China's dorm design standard: ${dorm.m2_per_person} m² of floor per person in a ${dorm.people}-person bunk room (${dorm.room_m2} m²).`;

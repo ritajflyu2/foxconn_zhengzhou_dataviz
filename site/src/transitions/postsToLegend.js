@@ -24,6 +24,7 @@ import { createPostWords } from './postWords.js';
 // and the next arrow goes straight to Scene 4.
 
 const DIM_MS = 500;
+const ARROW_BAR_PX = 72; // room kept clear for the fixed Back / Next buttons
 const DIM_TO = 0.12; // Scene 3 stays faintly visible while the clusters are read
 const GATHER_MS = [700, 950];
 const GATHER_SPREAD_MS = 220;
@@ -267,11 +268,14 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
         rowDots.map((el) => [el.dataset.kind, { dot: el, ...pageTarget(el), name: el.parentElement.querySelector('.pay-row__name') }])
       );
 
-      // Follow the clusters down only as far as the last row needs.
-      const lowest = Math.max(...Object.values(targets).map((g) => g.y));
+      // Follow the clusters down until every worker row, bar included, is in
+      // view above the Back / Next bar (but never past the controls' top).
+      const rows = root.querySelector('.pay-rows');
+      const rowsBottom = rows ? rows.getBoundingClientRect().bottom + window.scrollY : Math.max(...Object.values(targets).map((g) => g.y)) + 70;
+      const controlsTop = (root.querySelector('.pay-controls')?.getBoundingClientRect().top ?? 0) + window.scrollY - 16;
       const scroll0 = window.scrollY;
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const scroll1 = Math.min(maxScroll, Math.max(scroll0, lowest + 70 - window.innerHeight));
+      const scroll1 = Math.min(maxScroll, controlsTop, Math.max(scroll0, rowsBottom + ARROW_BAR_PX - window.innerHeight));
 
       descend = { start: t, scroll0, scroll1, targets, total: 0 };
       clusters.forEach((c, i) => {

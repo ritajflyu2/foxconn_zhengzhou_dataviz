@@ -2,15 +2,15 @@
  "categories": [
   {
    "key": "regular",
-   "label": "Direct hire (stated)"
+   "label": "Direct hire"
   },
   {
    "key": "dispatch",
-   "label": "Dispatch (agency)"
+   "label": "Dispatch"
   },
   {
    "key": "student",
-   "label": "Student / summer"
+   "label": "Student"
   },
   {
    "key": "not_stated",

@@ -522,17 +522,29 @@ function playerControls(container, { years, secondsPerYear, onReveal }) {
   return { stop };
 }
 
+const SURGE_BASE = 10; // posts, so a jump from 1 to 6 does not count as the surge
+
 export default {
   id: 2,
   navLabel: 'Over time',
   colorKey: 'student',
 
   mount(container, { workforce, posts }) {
+    // The first year with any dispatch post, and the year they rise most
+    // sharply: the largest year-over-year growth once there are enough posts
+    // to compare (at least SURGE_BASE dispatch posts the year before).
+    const firstDispatchYear = posts.years.find((y) => y.dispatch > 0)?.year;
+    let surgeYear = null;
+    let surgeRatio = 0;
+    posts.years.forEach((y, i) => {
+      const prev = posts.years[i - 1];
+      if (!prev || prev.dispatch < SURGE_BASE) return;
+      if (y.dispatch / prev.dispatch > surgeRatio) [surgeYear, surgeRatio] = [y.year, y.dispatch / prev.dispatch];
+    });
     const { el, body } = createScene({
       index: 2,
       title: 'Over time: who the plants hired',
-      summary:
-        'Insured workers by year next to China Labor Watch’s campus-wide estimate, beside recruitment posts by worker type. Each bar is a cluster of dots — the same unit as the assembly floor\'s workers — revealed year by year, 2016–2025.',
+      summary: `Since ${workforce.years[0].year}, the number of insured workers keeps dropping, while hiring posts that specifically mention "dispatch" and "short-term" start appearing in ${firstDispatchYear} and raised significantly in ${surgeYear}. Fewer insured and more dispatched workers mean less responsibility for workers' social welfare, and the ability to hire more during busy seasons and let go when things slow down.`,
     });
 
     const layout = document.createElement('div');
@@ -549,7 +561,7 @@ export default {
     const leftLegend = document.createElement('ul');
     leftLegend.className = 'legend';
     for (const item of [
-      { kind: 'solid', color: colorFor('regular'), label: 'Insured (measured)' },
+      { kind: 'solid', color: colorFor('regular'), label: 'Insured' },
       { kind: 'ring', color: colorFor('dispatch'), label: 'Gap to CLW total (inferred)' },
       {
         kind: 'dash',

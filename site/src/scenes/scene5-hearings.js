@@ -1,4 +1,4 @@
-import { select } from 'd3';
+import { select, easeCubicInOut } from 'd3';
 import { createScene, addCaveat } from '../lib/sceneShell.js';
 import { createTooltip } from '../lib/tooltip.js';
 import { count, percent } from '../lib/format.js';
@@ -23,16 +23,11 @@ const CELL = 11;
 const GAP = 2;
 const PITCH = CELL + GAP;
 const BLOCK_GAP = 16;
-
-function cubeCenters(n) {
-  const out = [];
-  for (let i = 0; i < n; i++) {
-    const row = Math.floor(i / YEAR_COLS);
-    const col = i % YEAR_COLS;
-    out.push([col * PITCH, -(row + 1) * PITCH]); // bottom-up, relative to the block's baseline
-  }
-  return out;
-}
+const TYPE_COLS = 12; // wider blocks when sorted by case type, so the largest stays low
+const TYPE_GAP = 26;
+const LABEL_ROW = 72; // block labels (case types: two lines plus a count) and room below the cubes
+const SORT_MS = 800;
+const SORT_STAGGER_MS = 250;
 
 function partyLine(p) {
   return `${p.role}: ${p.name}${p.outcome ? ` (${p.outcome})` : ''}`;
@@ -99,14 +94,29 @@ export default {
   colorKey: 'legal-cap',
 
   mount(container, data) {
+    // Where labor disputes take off: the first year with more than twice as
+    // many labor hearings as any year before it; the text says "after" the year before.
+    const laborCat = data.categories[0];
+    const laborByYear = new Map();
+    for (const c of data.cases) if (c.category === laborCat) laborByYear.set(c.year, (laborByYear.get(c.year) ?? 0) + 1);
+    const allYears = [...new Set(data.cases.map((c) => c.year))].sort((a, b) => a - b);
+    let peak = 0;
+    let riseYear = null;
+    for (const y of allYears) {
+      const n = laborByYear.get(y) ?? 0;
+      if (peak && n > 2 * peak) {
+        riseYear = y;
+        break;
+      }
+      peak = Math.max(peak, n);
+    }
     const { el, body } = createScene({
       index: 4,
       title: 'When pay fails: the disputes',
-      summary:
-        'One cube per hearing announcement, 2015–2026, colored by dispute type. Hover a cube for that case; tap to open the same card on a touch device.',
+      summary: `Based on publicly available hearing announcements, labor and employment disputes increase after ${allYears[allYears.indexOf(riseYear) - 1]}. The majority of hearings are about labor & employment dispute. Hover over a cube for more details on the case.`,
     });
 
-    const { labor_share, labor_count, total } = data.headline;
+    const { labor_share, total } = data.headline;
     const headline = document.createElement('div');
     headline.className = 'dispute-headline';
     const headlineValue = document.createElement('p');
@@ -114,7 +124,7 @@ export default {
     headlineValue.textContent = percent(labor_share);
     const headlineNote = document.createElement('p');
     headlineNote.className = 'dispute-headline__note';
-    headlineNote.textContent = `${count(labor_count)} of ${count(total)} hearing announcements are labor & employment disputes.`;
+    headlineNote.textContent = `of hearing announcements are ${laborCat.toLowerCase()} disputes.`;
     headline.append(headlineValue, headlineNote);
     body.append(headline);
 
@@ -122,23 +132,62 @@ export default {
     for (const c of data.cases) categoryCounts[c.category] = (categoryCounts[c.category] ?? 0) + 1;
     body.append(legend(data.categories, categoryCounts));
 
-    // Group cases into year columns, sorted by category within each year so
-    // same-category cubes cluster visually (as in the dot-grid poster ref).
-    const byYear = new Map();
-    for (const c of data.cases) {
-      if (!byYear.has(c.year)) byYear.set(c.year, []);
-      byYear.get(c.year).push(c);
-    }
-    const years = [...byYear.keys()].sort((a, b) => a - b);
-    for (const y of years) {
-      byYear.get(y).sort((a, b) => data.categories.indexOf(a.category) - data.categories.indexOf(b.category));
-    }
+    // Two layouts of the same cubes: by year (a block per year, sorted by
+    // category within it so same-type cubes cluster) or by case type (a block
+    // per category, oldest first). Switching animates every cube to its new place.
+    const catIndex = (c) => data.categories.indexOf(c.category);
+    const groupBy = (keyOf, keys, sortKey) =>
+      keys.map((k) => ({ key: k, cases: data.cases.filter((c) => keyOf(c) === k).sort((a, b) => sortKey(a) - sortKey(b) || a.date.localeCompare(b.date)) }));
+    const years = [...new Set(data.cases.map((c) => c.year))].sort((a, b) => a - b);
+    const LAYOUTS = {
+      year: { cols: YEAR_COLS, gap: BLOCK_GAP, blocks: groupBy((c) => c.year, years, catIndex) },
+      type: { cols: TYPE_COLS, gap: TYPE_GAP, blocks: groupBy((c) => c.category, data.categories, () => 0) },
+    };
+    const blockW = (L) => L.cols * PITCH;
+    const widthOf = (L) => L.blocks.length * (blockW(L) + L.gap) - L.gap;
+    const rowsOf = (L) => Math.max(...L.blocks.map((b) => Math.ceil(b.cases.length / L.cols)));
+    const W = Math.max(...Object.values(LAYOUTS).map(widthOf));
+    const plotHeight = Math.max(...Object.values(LAYOUTS).map(rowsOf)) * PITCH;
+    const H = plotHeight + LABEL_ROW;
 
-    const blockWidth = YEAR_COLS * PITCH;
-    const maxRows = Math.max(...years.map((y) => Math.ceil(byYear.get(y).length / YEAR_COLS)));
-    const plotHeight = maxRows * PITCH;
-    const W = years.length * (blockWidth + BLOCK_GAP) - BLOCK_GAP;
-    const H = plotHeight + 40; // + year-label row
+    // Each case's top-left corner in a layout; blocks centred across the width.
+    const place = (L) => {
+      const pos = new Map();
+      const x0 = (W - widthOf(L)) / 2;
+      L.blocks.forEach((b, bi) => {
+        const bx = x0 + bi * (blockW(L) + L.gap);
+        b.cases.forEach((c, i) => {
+          const row = Math.floor(i / L.cols);
+          pos.set(c, { x: bx + (i % L.cols) * PITCH, y: plotHeight - (row + 1) * PITCH });
+        });
+        b.cx = bx + blockW(L) / 2;
+      });
+      return pos;
+    };
+
+    let mode = 'year';
+    const sortControl = document.createElement('div');
+    sortControl.className = 'control-row control-row--compact dispute-sort';
+    const sortLabel = document.createElement('p');
+    sortLabel.className = 'control-row__label';
+    sortLabel.textContent = 'Sort by';
+    const sortGroup = document.createElement('div');
+    sortGroup.className = 'toggle-group';
+    const sortButtons = Object.entries({ year: 'Year', type: 'Case type' }).map(([key, text]) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'toggle-group__item';
+      b.textContent = text;
+      b.setAttribute('aria-pressed', String(key === mode));
+      b.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setMode(key);
+      });
+      sortGroup.append(b);
+      return [key, b];
+    });
+    sortControl.append(sortLabel, sortGroup);
+    body.append(sortControl);
 
     const figure = document.createElement('figure');
     figure.className = 'figure dispute-figure';
@@ -148,71 +197,92 @@ export default {
       .append('svg')
       .attr('viewBox', `0 0 ${W} ${H}`)
       .attr('role', 'img')
-      .attr('aria-label', `${count(total)} hearing announcements, 2015 to 2026, grouped by year and colored by dispute category`);
+      .attr('aria-label', `${count(total)} hearing announcements, ${years[0]} to ${years[years.length - 1]}, grouped by year and colored by dispute category`);
 
     const tooltip = createTooltip(figure);
-    const scaleAt = (sx, sy) => {
-      const r = figure.getBoundingClientRect();
-      return { x: sx * (r.width / W), y: sy * (r.height / H) };
-    };
-
     let pinned = null;
-    const showCard = (c, anchorX, anchorY) => tooltip.show(detailCard(c), scaleAt(anchorX, anchorY));
+    // Beside the cube, never over it; the figure lets the card overflow.
+    const cardAt = (node, d) => {
+      const r = node.getBoundingClientRect();
+      tooltip.showBeside(detailCard(d), { clientX: r.left + r.width / 2, clientY: r.top + r.height / 2 });
+    };
     const hideCard = () => {
       if (!pinned) tooltip.hide();
     };
 
-    years.forEach((year, yi) => {
-      const cases = byYear.get(year);
-      const x0 = yi * (blockWidth + BLOCK_GAP);
-      const baseline = plotHeight;
-      const centers = cubeCenters(cases.length);
+    let pos = place(LAYOUTS[mode]);
+    svg
+      .append('g')
+      .selectAll('rect')
+      .data(data.cases)
+      .join('rect')
+      .attr('class', 'hearing-cube')
+      .attr('x', (d) => pos.get(d).x)
+      .attr('y', (d) => pos.get(d).y)
+      .attr('width', CELL)
+      .attr('height', CELL)
+      .attr('rx', 1.5)
+      .attr('fill', (d) => DISPUTE_COLORS[d.category])
+      .attr('tabindex', 0)
+      .attr('role', 'img')
+      .attr('aria-label', (d) => `${d.date}: ${d.cause} (${d.category})`)
+      .on('pointerenter', function (event, d) {
+        cardAt(this, d);
+      })
+      .on('pointerleave', hideCard)
+      .on('focus', function (event, d) {
+        cardAt(this, d);
+      })
+      .on('blur', hideCard)
+      .on('click', function (event, d) {
+        event.stopPropagation();
+        if (pinned === d) {
+          pinned = null;
+          tooltip.hide();
+        } else {
+          pinned = d;
+          cardAt(this, d);
+        }
+      });
 
-      const g = svg.append('g').attr('transform', `translate(${x0}, ${baseline})`);
+    // Block labels under each layout's blocks: year numbers, or category names
+    // (wrapped after a slash so they fit their block).
+    const labels = svg.append('g');
+    const drawLabels = () => {
+      const L = LAYOUTS[mode];
+      labels.selectAll('text').remove();
+      for (const b of L.blocks) {
+        const t = labels
+          .append('text')
+          .attr('class', mode === 'type' ? 'dispute-year-label dispute-type-label' : 'dispute-year-label')
+          .attr('x', b.cx)
+          .attr('y', plotHeight + 20)
+          .attr('text-anchor', 'middle');
+        const lines = mode === 'type' ? String(b.key).split(/(?<=\/)\s+/) : [String(b.key)];
+        lines.forEach((line, k) => t.append('tspan').attr('x', b.cx).attr('dy', k ? '1.2em' : 0).text(line));
+        // By case type: the block's count under its name.
+        if (mode === 'type') t.append('tspan').attr('class', 'dispute-type-label__count').attr('x', b.cx).attr('dy', '1.35em').text(count(b.cases.length));
+      }
+    };
+    drawLabels();
 
-      g.selectAll('rect')
-        .data(cases)
-        .join('rect')
-        .attr('class', 'hearing-cube')
-        .attr('x', (d, i) => centers[i][0])
-        .attr('y', (d, i) => centers[i][1])
-        .attr('width', CELL)
-        .attr('height', CELL)
-        .attr('rx', 1.5)
-        .attr('fill', (d) => DISPUTE_COLORS[d.category])
-        .attr('tabindex', 0)
-        .attr('role', 'img')
-        .attr('aria-label', (d) => `${d.date}: ${d.cause} (${d.category})`)
-        .on('pointerenter', function (event, d) {
-          const i = cases.indexOf(d);
-          showCard(d, x0 + centers[i][0] + CELL / 2, baseline + centers[i][1]);
-        })
-        .on('pointerleave', hideCard)
-        .on('focus', function (event, d) {
-          const i = cases.indexOf(d);
-          showCard(d, x0 + centers[i][0] + CELL / 2, baseline + centers[i][1]);
-        })
-        .on('blur', hideCard)
-        .on('click', function (event, d) {
-          event.stopPropagation();
-          const i = cases.indexOf(d);
-          if (pinned === d) {
-            pinned = null;
-            tooltip.hide();
-          } else {
-            pinned = d;
-            showCard(d, x0 + centers[i][0] + CELL / 2, baseline + centers[i][1]);
-          }
-        });
-
-      svg
-        .append('text')
-        .attr('class', 'dispute-year-label')
-        .attr('x', x0 + blockWidth / 2)
-        .attr('y', plotHeight + 20)
-        .attr('text-anchor', 'middle')
-        .text(year);
-    });
+    function setMode(next) {
+      if (next === mode) return;
+      mode = next;
+      for (const [key, b] of sortButtons) b.setAttribute('aria-pressed', String(key === mode));
+      pinned = null;
+      tooltip.hide();
+      pos = place(LAYOUTS[mode]);
+      const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+      const cubes = svg.selectAll('rect.hearing-cube');
+      (reduced ? cubes : cubes.transition().duration(SORT_MS).delay(() => Math.random() * SORT_STAGGER_MS).ease(easeCubicInOut))
+        .attr('x', (d) => pos.get(d).x)
+        .attr('y', (d) => pos.get(d).y);
+      labels.interrupt().attr('opacity', 0);
+      drawLabels();
+      (reduced ? labels : labels.transition().delay(SORT_MS * 0.6).duration(300)).attr('opacity', 1);
+      svg.attr('aria-label', `${count(total)} hearing announcements, grouped by ${mode === 'year' ? 'year' : 'case type'} and colored by dispute category`);
+    }
 
     // Scoped to this scene's own element, not `document` — there's no unmount
     // hook to remove a document-level listener when the scene is switched
@@ -222,17 +292,7 @@ export default {
       tooltip.hide();
     });
 
-    const note = document.createElement('p');
-    note.className = 'dispute-note';
-    note.textContent = data.interaction;
-    figure.append(note);
-
     addCaveat(el, data.caveat);
-
-    const closing = document.createElement('p');
-    closing.className = 'dispute-closing';
-    closing.textContent = 'End of the Labor page.';
-    el.append(closing);
 
     container.replaceChildren(el);
   },

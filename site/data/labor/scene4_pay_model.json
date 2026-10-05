@@ -32,16 +32,11 @@
     "weekday": 1.5,
     "rest_day": 2.0
    },
-   "deduction_monthly": {
-    "cny": 348,
-    "usd": 51.94
-   },
-   "deduction_label": "Social insurance (worker's share)",
    "conditional": null,
    "benefits": [
     "Social insurance",
     "Work injury insurance",
-    "Partial paid sick leave (with medical record)"
+    "Partial paid sick leave"
    ],
    "contract": "Direct labor contract with Foxconn"
   },
@@ -58,10 +53,6 @@
     "rest_day": 2.0
    },
    "ot_note": "Legal overtime rates assumed; the CLW report does not state them.",
-   "deduction_monthly": {
-    "cny": 0,
-    "usd": 0.0
-   },
    "conditional": {
     "type": "rebate",
     "amount": {
@@ -78,13 +69,14 @@
       "usd": 1462.69
      }
     ],
-    "spread_months": 3,
+    "threshold_days": 90,
+    "days_per_month": 30,
     "condition": "days_employed >= 90",
     "condition_label": "Paid only after 90 continuous days",
     "fail": "Leaving before day 90 forfeits the whole rebate."
    },
    "benefits": [
-    "No social insurance",
+    "No insurances",
     "No sick leave"
    ],
    "contract": "Agency contract plus a Rebate Agreement"
@@ -97,10 +89,7 @@
     "usd": 1.79
    },
    "ot_multipliers": null,
-   "deduction_monthly": {
-    "cny": 0,
-    "usd": 0.0
-   },
+   "min_hours_per_week": 60,
    "conditional": {
     "type": "deferred_wage_difference",
     "rate": {
@@ -108,14 +97,13 @@
      "usd": 1.94
     },
     "condition": "employed_on_25th",
-    "condition_label": "Deferred to the following month; paid only if still employed on the 25th",
+    "condition_label": "Deferred portion paid only if still employed on the 25th",
     "fail": "Leaving before the payout month's 25th forfeits the deferred amount. The source estimates $780-900 (¥5,200-6,000) lost across two months."
    },
    "benefits": [
-    "No social insurance",
-    "No work injury insurance",
-    "No paid or unpaid sick leave",
-    "Mandatory overtime (built into the flat rate)"
+    "No insurances",
+    "No sick leave",
+    "Mandatory overtime"
    ],
    "contract": "Agency contract plus a Wage-Difference Confirmation"
   },
@@ -130,13 +118,9 @@
     "weekday": 1.5,
     "rest_day": 2.0
    },
-   "deduction_monthly": {
-    "cny": 0,
-    "usd": 0.0
-   },
    "conditional": null,
    "benefits": [
-    "No social insurance"
+    "No insurances"
    ],
    "contract": "School-partnership labor contract"
   }

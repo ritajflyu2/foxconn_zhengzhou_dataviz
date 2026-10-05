@@ -971,21 +971,6 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   display: block;
 }
 
-.transition-skip {
-  position: fixed;
-  right: 1.5rem;
-  bottom: 1.5rem;
-  pointer-events: auto;
-  font: inherit;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  padding: 0.4rem 0.9rem;
-  border: 1px solid var(--ink);
-  border-radius: 999px;
-  background: var(--surface-raised);
-  color: var(--ink);
-  cursor: pointer;
-}
 
 .player-scrubber {
   flex: 1;
@@ -1006,7 +991,7 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 .pay-controls {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  gap: 1.5rem 3.5rem;
   margin: 0 0 2rem;
 }
 
@@ -1017,10 +1002,8 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 }
 
 .slider-card {
-  padding: 1.25rem 1.5rem 1.5rem;
-  border: 1px solid var(--grid);
-  border-radius: 10px;
-  background: var(--surface-raised);
+  /* No card: the controls sit straight on the page. */
+  padding: 0;
 }
 
 .slider-card__kicker {
@@ -1219,9 +1202,11 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 }
 
 .pay-row__name {
-  font-weight: 600;
+  font-family: var(--font-title);
+  font-weight: 700;
   color: var(--ink);
-  font-size: 0.9375rem;
+  font-size: 1.375rem;
+  line-height: 1.15;
 }
 
 .pay-row__contract {
@@ -1252,14 +1237,26 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 .pay-figure {
   min-width: 9rem;
 }
+/* Hourly column wide enough for its note, so every row's monthly figure lines
+   up; the monthly column takes the rest, so a long note wraps under it. */
+.pay-figure:first-child {
+  flex: 0 0 17rem;
+}
+.pay-figure:last-child {
+  flex: 1 1 0;
+  min-width: 12rem;
+}
+.pay-figure .pay-figure__note {
+  max-width: 34rem;
+}
 
 .pay-figure__value {
-  font-family: var(--font-title);
-  font-size: clamp(1.375rem, 3vw, 1.625rem);
-  font-weight: 600;
+  font-family: var(--font-body);
+  font-size: clamp(0.9375rem, 1.8vw, 1.0625rem);
+  font-weight: 500;
   margin: 0;
   font-variant-numeric: tabular-nums;
-  color: var(--ink);
+  color: var(--ink-secondary);
 }
 
 .pay-figure__note {
@@ -1285,10 +1282,59 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   min-width: 2px;
 }
 
-.pay-bar__segment--conditional {
-  background: none;
-  border: 2px dashed currentColor;
-  box-sizing: border-box;
+.pay-bar__segment--earned {
+  opacity: 0.6;
+}
+
+.pay-rows-wrap {
+  position: relative;
+}
+
+.pay-bar__track:focus {
+  outline: none;
+}
+.pay-bar__track:focus-visible .pay-bar {
+  outline: 2px solid var(--ink-muted);
+  outline-offset: 2px;
+}
+
+.tooltip__calc {
+  margin: 0.25rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+.tooltip__calc--total {
+  margin-top: 0.4rem;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.pay-figure__note--min {
+  font-style: italic;
+}
+
+/* The 25th question, small, inside the hourly-type row. */
+.control-row--compact {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  margin-top: 0.5rem;
+}
+.control-row--compact .control-row__label {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--ink-secondary);
+}
+.control-row--compact .toggle-group {
+  margin-top: 0;
+}
+.control-row--compact .toggle-group__item {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.7rem;
 }
 
 .pay-bar__segment--forfeited {
@@ -1322,6 +1368,10 @@ svg.is-hovering .floor-index__floor.is-hovered image {
    needed here any more. */
 
 .dispute-headline {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
   margin: 0 0 1.5rem;
 }
 
@@ -1336,9 +1386,11 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 }
 
 .dispute-headline__note {
-  margin: 0.5rem 0 0;
-  color: var(--ink-secondary);
-  font-size: 0.9375rem;
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: clamp(1.25rem, 2.4vw, 1.625rem);
+  font-weight: 600;
+  color: var(--ink);
 }
 
 .legend--dark .legend__item {
@@ -1352,8 +1404,19 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 }
 
 .dispute-figure {
-  margin: 1.5rem 0 0;
-  overflow-x: auto;
+  position: relative;
+  margin: 1rem 0 0;
+  padding-bottom: 1.5rem; /* room under the cubes */
+  /* Visible, so a hover card near the edges is never clipped; it draws over the notes. */
+  overflow: visible;
+}
+
+.dispute-figure .tooltip {
+  z-index: 20;
+}
+
+.dispute-sort {
+  margin-top: 1rem;
 }
 
 .hearing-cube {
@@ -1376,19 +1439,17 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   text-anchor: middle;
 }
 
-.dispute-note {
-  margin: 0.75rem 0 0;
-  font-size: 0.75rem;
-  color: var(--ink-muted);
+.dispute-type-label {
+  font-size: 13px;
+  fill: var(--ink-secondary);
 }
 
-.dispute-closing {
-  margin: 2rem 0 0;
-  font-family: var(--font-title);
-  font-size: 1.25rem;
-  color: var(--ink-secondary);
-  text-align: center;
+.dispute-type-label__count {
+  fill: var(--ink);
+  font-weight: 500;
 }
+
+
 
 .hearing-card {
   max-width: 18rem;
@@ -2684,4 +2745,9 @@ body[data-page="intro"] .scene-root {
   text-transform: uppercase;
   fill: var(--ink-muted);
   pointer-events: none;
+}
+
+/* The wage calculator's formula card: one step per line, so let it widen. */
+.tooltip:has(.tooltip__calc) {
+  max-width: none;
 }

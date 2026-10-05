@@ -1,5 +1,5 @@
-// Shared pieces for the scene transitions: a fixed canvas overlay with a skip
-// control, a still of the outgoing page, and the curve maths.
+// Shared pieces for the scene transitions: a fixed canvas overlay (Esc skips),
+// a still of the outgoing page, and the curve maths.
 
 export function seededRandom(seed = 12) {
   let s = seed;
@@ -35,12 +35,13 @@ export function createOverlay(onSkip) {
   const canvas = document.createElement('canvas');
   wrap.append(canvas);
 
-  const skip = document.createElement('button');
-  skip.type = 'button';
-  skip.className = 'transition-skip';
-  skip.textContent = 'Skip animation';
-  skip.addEventListener('click', onSkip);
-  wrap.append(skip);
+  // No on-screen Skip button: Esc skips, and Next (or any navigation) jumps
+  // a running transition to its end state (sceneManager finishes it first).
+  const onKey = (e) => {
+    if (!wrap.isConnected) document.removeEventListener('keydown', onKey);
+    else if (e.key === 'Escape') onSkip();
+  };
+  document.addEventListener('keydown', onKey);
 
   const dpr = window.devicePixelRatio || 1;
   canvas.width = Math.round(window.innerWidth * dpr);

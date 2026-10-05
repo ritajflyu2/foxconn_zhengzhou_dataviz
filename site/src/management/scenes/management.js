@@ -85,7 +85,7 @@ function lineWorkerPay() {
   const avg = (f) => (f(p.rebate_dispatch) + f(p.hourly_dispatch)) / 2;
   return {
     state,
-    full: { paid: p.full_time.monthlyTotal.cny, cond: 0, total: p.full_time.monthlyTotal.cny, deduction: p.full_time.deduction },
+    full: { paid: p.full_time.monthlyTotal.cny, cond: 0, total: p.full_time.monthlyTotal.cny },
     dispatch: {
       paid: avg((d) => d.monthlyPaid.cny),
       cond: avg((d) => d.monthlyConditional?.cny ?? 0),

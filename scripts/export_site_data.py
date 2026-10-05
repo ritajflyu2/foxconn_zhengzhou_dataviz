@@ -250,7 +250,8 @@ write("scene2_floor.json", {
         "caveat": "Size is the Chinese design standard for a 6-person bunk room, not a measured Foxconn room; the room image is illustrative.",
     },
     "by_plant": dot_plants,
-    "shift_note": "Plants run 3 x 8-hour shifts, so roughly one third of the headcount is on the floor at any moment.",
+    # The line never stops: three 8-hour shifts a day (CLW 2025).
+    "shifts_per_day": 3, "shift_hours": 8,
 })
 
 # ---------------------------------------------------------------- floor index
@@ -365,8 +366,8 @@ DISPATCH_TEXT = ["返费", "小时工", "差价", "派遣", "劳务外包", "外
 STUDENT_TEXT = ["学生工", "暑假工", "寒假工", "暑期工", "学生兼职", "大学生", "假期工"]
 DIRECT_TEXT = ["正式工", "直招", "官方直招", "厂方直招", "工厂直招"]
 POST_GROUPS = {  # key -> label; key doubles as the colour key
-    "regular": "Direct hire (stated)", "dispatch": "Dispatch (agency)",
-    "student": "Student / summer", "not_stated": "Not stated"}
+    "regular": "Direct hire", "dispatch": "Dispatch",
+    "student": "Student", "not_stated": "Not stated"}
 c1 = pd.read_csv(LT / "C1_post_type_classification.csv", dtype={"文章ID": str})
 
 
@@ -412,33 +413,34 @@ write("scene4_pay_model.json", {
         "full_time": {"label": "Full-time (insured)", "color_key": "regular",
             "base_monthly": money(2100), "base_hours_monthly": 174,
             "ot_multipliers": {"weekday": 1.5, "rest_day": 2.0},
-            "deduction_monthly": money(348), "deduction_label": "Social insurance (worker's share)",
             "conditional": None,
-            "benefits": ["Social insurance", "Work injury insurance", "Partial paid sick leave (with medical record)"],
+            "benefits": ["Social insurance", "Work injury insurance", "Partial paid sick leave"],
             "contract": "Direct labor contract with Foxconn"},
         "rebate_dispatch": {"label": "Rebate-type dispatch", "color_key": "rebate_dispatch",
             "base_monthly": money(2100), "base_hours_monthly": 174,
             "ot_multipliers": {"weekday": 1.5, "rest_day": 2.0},
             "ot_note": "Legal overtime rates assumed; the CLW report does not state them.",
-            "deduction_monthly": money(0),
+            # One-time rebate after `threshold_days`, averaged over the months
+            # actually worked (days employed / days_per_month); 0 before that.
             "conditional": {"type": "rebate", "amount": money(9800), "amount_range": [money(4800), money(9800)],
-                            "spread_months": 3, "condition": "days_employed >= 90",
+                            "threshold_days": 90, "days_per_month": 30, "condition": "days_employed >= 90",
                             "condition_label": "Paid only after 90 continuous days",
                             "fail": "Leaving before day 90 forfeits the whole rebate."},
-            "benefits": ["No social insurance", "No sick leave"],
+            "benefits": ["No insurances", "No sick leave"],
             "contract": "Agency contract plus a Rebate Agreement"},
         "hourly_dispatch": {"label": "Hourly-type dispatch", "color_key": "hourly_dispatch",
             "rate_paid_monthly": money(12), "ot_multipliers": None,
-            "deduction_monthly": money(0),
+            # Hourly-type workers must work at least this many hours a week (CLW 2025).
+            "min_hours_per_week": 60,
             "conditional": {"type": "deferred_wage_difference", "rate": money(13), "condition": "employed_on_25th",
-                            "condition_label": "Deferred to the following month; paid only if still employed on the 25th",
+                            "condition_label": "Deferred portion paid only if still employed on the 25th",
                             "fail": "Leaving before the payout month's 25th forfeits the deferred amount. The source estimates $780-900 (¥5,200-6,000) lost across two months."},
-            "benefits": ["No social insurance", "No work injury insurance", "No paid or unpaid sick leave", "Mandatory overtime (built into the flat rate)"],
+            "benefits": ["No insurances", "No sick leave", "Mandatory overtime"],
             "contract": "Agency contract plus a Wage-Difference Confirmation"},
         "student": {"label": "Student / summer", "color_key": "student",
             "rate_hourly": money(12), "ot_multipliers": {"weekday": 1.5, "rest_day": 2.0},
-            "deduction_monthly": money(0), "conditional": None,
-            "benefits": ["No social insurance"],
+            "conditional": None,
+            "benefits": ["No insurances"],
             "contract": "School-partnership labor contract"},
     },
     "check_values": {
@@ -630,7 +632,6 @@ write("scene5_hearings.json", {
     "categories": cat_order,
     "headline": {"labor_share": round(n_labor / len(cases), 3), "labor_count": n_labor, "total": len(cases)},
     "cases": sorted(cases, key=lambda c: c["date"]),
-    "interaction": "Hover on desktop; tap to open a detail card on touch devices.",
     "privacy": "Private individuals are shown only as 'Individual'. Companies other than Foxconn entities, Apple and government agencies are shown as 'Other company'.",
     "caveat": "Hearing announcements, not unique lawsuits or rulings; a postponed case can appear twice; scraping completeness is unverified; 2026 is a partial year.",
 }, allow=("source_url",))

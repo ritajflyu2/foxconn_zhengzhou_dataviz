@@ -1,7 +1,8 @@
 import { createScene, addCaveat, addMethodNote } from '../lib/sceneShell.js';
 import { colorFor } from '../lib/colorTokens.js';
 import { count, money } from '../lib/format.js';
-import { computePay } from '../lib/payModel.js';
+import { computePay, splitHours, baseHourlyRate } from '../lib/payModel.js';
+import { createTooltip } from '../lib/tooltip.js';
 
 const WORKER_ORDER = ['full_time', 'rebate_dispatch', 'hourly_dispatch', 'student'];
 
@@ -65,14 +66,14 @@ function sliderControl({ index, title, value, unitLabel, min, max, minLabel, max
 
   const subEl = document.createElement('p');
   subEl.className = 'slider-card__sub';
-  card.append(subEl);
+  if (sub) card.append(subEl);
 
   const setValue = (v) => {
     const clamped = Math.min(max, Math.max(min, v));
     input.value = String(clamped);
     input.style.setProperty('--pct', String(((clamped - min) / (max - min)) * 100));
     valueEl.textContent = count(clamped);
-    subEl.textContent = sub(clamped);
+    if (sub) subEl.textContent = sub(clamped);
     onInput(clamped);
   };
 
@@ -81,14 +82,14 @@ function sliderControl({ index, title, value, unitLabel, min, max, minLabel, max
   input.addEventListener('input', () => setValue(Number(input.value)));
 
   valueEl.textContent = count(value);
-  subEl.textContent = sub(value);
+  if (sub) subEl.textContent = sub(value);
   input.style.setProperty('--pct', String(((value - min) / (max - min)) * 100));
   return card;
 }
 
-function toggleControl({ label, value, onChange }) {
+function toggleControl({ label, value, onChange, compact = false }) {
   const wrap = document.createElement('div');
-  wrap.className = 'control-row';
+  wrap.className = compact ? 'control-row control-row--compact' : 'control-row';
 
   const labelEl = document.createElement('p');
   labelEl.className = 'control-row__label';
@@ -135,8 +136,10 @@ function payBar(pay, colorKey, maxCny) {
     const condSeg = document.createElement('div');
     condSeg.style.flexGrow = String(condCny || 1);
     if (pay.conditionMet) {
-      condSeg.className = 'pay-bar__segment pay-bar__segment--conditional';
-      condSeg.style.borderColor = color;
+      // Conditional pay that is earned (rebate after the threshold, deferred
+      // pay still employed on the 25th): solid, lighter than the base pay.
+      condSeg.className = 'pay-bar__segment pay-bar__segment--earned';
+      condSeg.style.background = color;
     } else {
       condSeg.className = 'pay-bar__segment pay-bar__segment--forfeited';
     }
@@ -147,17 +150,75 @@ function payBar(pay, colorKey, maxCny) {
   return track;
 }
 
+// Step-by-step working for a row's monthly figure, shown on hovering its bar.
+// Intermediate steps are in RMB (the source's unit); the result is USD (RMB).
+const hrs = (h) => `${format(h)} h`;
+const format = (v) => (Number.isInteger(v) ? count(v) : count(Math.round(v * 10) / 10));
+const yuan = (v, digits = 0) => `¥${digits ? v.toFixed(digits) : count(Math.round(v))}`;
+
+function otSteps(worker, hours) {
+  const rate = baseHourlyRate(worker);
+  const { regular, otWeekday, otRestDay } = splitHours(hours);
+  const { weekday, rest_day } = worker.ot_multipliers;
+  const parts = [`${hrs(regular)} × ${yuan(rate, 2)}`];
+  if (otWeekday) parts.push(`${hrs(otWeekday)} × ${yuan(rate, 2)} × ${weekday}`);
+  if (otRestDay) parts.push(`${hrs(otRestDay)} × ${yuan(rate, 2)} × ${rest_day}`);
+  const weekly = regular * rate + otWeekday * rate * weekday + otRestDay * rate * rest_day;
+  return { line: `${parts.join(' + ')} = ${yuan(weekly)}/week`, weekly };
+}
+
+function payFormula(key, worker, pay, data) {
+  const wpm = data.weeks_per_month;
+  const lines = [];
+  if (key === 'hourly_dispatch') {
+    const monthHours = pay.hours * wpm;
+    lines.push(`${hrs(pay.hours)}/week × ${wpm} = ${hrs(monthHours)}/month${pay.atMinimum ? ` (minimum ${hrs(worker.min_hours_per_week)}/week)` : ''}`);
+    lines.push(`${hrs(monthHours)} × ${yuan(worker.rate_paid_monthly.cny)} = ${yuan(pay.monthlyPaid.cny)} paid`);
+    lines.push(`+ ${hrs(monthHours)} × ${yuan(worker.conditional.rate.cny)} = ${yuan(pay.monthlyConditional.cny)} deferred${pay.conditionMet ? '' : ' (forfeited)'}`);
+  } else {
+    const { line, weekly } = otSteps(worker, pay.hours);
+    lines.push(line);
+    lines.push(`${yuan(weekly)}/week × ${wpm} = ${yuan(pay.monthlyPaid.cny)}/month`);
+    if (key === 'rebate_dispatch') {
+      const c = worker.conditional;
+      lines.push(
+        pay.conditionMet
+          ? `+ ${yuan(c.amount.cny)} rebate ÷ (${count(Math.round(pay.rebateMonths * c.days_per_month))} days ÷ ${c.days_per_month}) = ${yuan(pay.monthlyConditional.cny)}/month`
+          : `+ ${yuan(0)} rebate: paid only after ${c.threshold_days} days`
+      );
+    }
+  }
+  const card = document.createElement('div');
+  const title = document.createElement('p');
+  title.className = 'tooltip__title';
+  title.textContent = worker.label;
+  card.append(title);
+  for (const l of lines) {
+    const p = document.createElement('p');
+    p.className = 'tooltip__calc';
+    p.textContent = l;
+    card.append(p);
+  }
+  const total = document.createElement('p');
+  total.className = 'tooltip__calc tooltip__calc--total';
+  total.textContent = `= ${money(pay.monthlyTotal)} / month`;
+  card.append(total);
+  return card;
+}
+
 export default {
   id: 3,
   navLabel: 'How work is paid',
   colorKey: 'hourly-dispatch',
 
   mount(container, data) {
+    const ft = data.workers.full_time;
+    const hd = data.workers.hourly_dispatch;
+    const rebate = data.workers.rebate_dispatch.conditional;
     const { el, body } = createScene({
       index: 3,
       title: 'How work is paid',
-      summary:
-        'Four worker types, four pay structures, side by side. Set the hours worked, the days employed, and whether an hourly-dispatch worker is still there on the 25th — the deferred half of their pay depends on it.',
+      summary: `Four worker types with four different pay structures. An assembly line worker usually works ${data.defaults.hours_per_week} hours a week. Full-time workers get overtime pay (${ft.ot_multipliers.weekday}× on weekdays, ${ft.ot_multipliers.rest_day}× on rest days), while hourly-type dispatch workers have to work at least ${hd.min_hours_per_week} hours a week at one flat rate, with overtime built in.`,
     });
 
     const state = {
@@ -170,7 +231,12 @@ export default {
     controlsSlot.className = 'pay-controls';
     const rowsSlot = document.createElement('div');
     rowsSlot.className = 'pay-rows';
-    body.append(controlsSlot, rowsSlot);
+    // The rows are re-rendered on every input, so the hover card lives beside them.
+    const rowsWrap = document.createElement('div');
+    rowsWrap.className = 'pay-rows-wrap';
+    rowsWrap.append(rowsSlot);
+    body.append(controlsSlot, rowsWrap);
+    const tooltip = createTooltip(rowsWrap);
 
     function renderControls() {
       const hoursCard = sliderControl({
@@ -183,7 +249,6 @@ export default {
         minLabel: `${data.ranges.hours_per_week[0]} h`,
         maxLabel: `${data.ranges.hours_per_week[1]} h`,
         accentColor: colorFor('regular'),
-        sub: (v) => `≈ ${count(Math.round(v * data.weeks_per_month))} hours / month`,
         onInput: (v) => {
           state.hoursPerWeek = v;
           renderRows();
@@ -200,29 +265,21 @@ export default {
         minLabel: `${data.ranges.days_employed[0]} days`,
         maxLabel: `${data.ranges.days_employed[1]} days`,
         accentColor: colorFor('dispatch'),
-        sub: () => '',
         onInput: (v) => {
           state.daysEmployed = v;
           renderRows();
         },
       });
 
-      const toggle = toggleControl({
-        label: "Still employed on the payout month's 25th? (applies to hourly-type dispatch)",
-        value: state.employedOn25th,
-        onChange: (v) => {
-          state.employedOn25th = v;
-          renderRows();
-        },
-      });
-      durationCard.append(toggle);
-
       controlsSlot.replaceChildren(hoursCard, durationCard);
     }
 
     function renderRows() {
+      tooltip.hide();
       const pays = WORKER_ORDER.map((key) => computePay(key, data.workers[key], state, data));
-      const maxCny = Math.max(...pays.map((p) => p.monthlyTotal.cny));
+      // Scaled to each row's full potential (conditional pay included, earned
+      // or not), so the 25th toggle only changes the hourly-type row.
+      const maxCny = Math.max(...pays.map((p) => p.monthlyPaid.cny + (p.monthlyConditional?.cny ?? 0)));
 
       const rows = WORKER_ORDER.map((key, i) => {
         const worker = data.workers[key];
@@ -263,47 +320,64 @@ export default {
         hourlyValue.className = 'pay-figure__value';
         hourlyValue.textContent = `${money(pay.hourlyTotal)} / hour`;
         hourlyBlock.append(hourlyValue);
-        if (pay.hourlyConditional) {
-          const hourlyBreak = document.createElement('p');
-          hourlyBreak.className = 'pay-figure__note';
-          hourlyBreak.textContent = `${money(pay.hourlyPaid)} paid + ${money(pay.hourlyConditional)} conditional`;
-          hourlyBlock.append(hourlyBreak);
-        }
 
         const monthlyBlock = document.createElement('div');
         monthlyBlock.className = 'pay-figure';
         const monthlyValue = document.createElement('p');
         monthlyValue.className = 'pay-figure__value';
         monthlyValue.textContent = `${money(pay.monthlyTotal)} / month`;
-        const monthlyNote = document.createElement('p');
-        monthlyNote.className = 'pay-figure__note';
-        monthlyNote.textContent = pay.hasConditional
-          ? 'before deductions · includes conditional if earned'
-          : pay.deduction
-          ? `before the ${money(pay.deduction)} deduction`
-          : 'before deductions';
-        monthlyBlock.append(monthlyValue, monthlyNote);
+        monthlyBlock.append(monthlyValue);
+        if (pay.atMinimum) {
+          const minNote = document.createElement('p');
+          minNote.className = 'pay-figure__note pay-figure__note--min';
+          minNote.textContent = `minimum ${worker.min_hours_per_week} h for hourly-type`;
+          monthlyBlock.append(minNote);
+        }
 
-        numbers.append(hourlyBlock, monthlyBlock);
-        main.append(numbers, payBar(pay, worker.color_key, maxCny));
-
+        // The condition note sits under the monthly figure it affects. For
+        // hourly-type the paid / deferred split sits under the hourly figure on
+        // the same line, and its note keeps one wording whatever the 25th
+        // answer (the hatched segment shows a forfeit).
+        if (pay.hourlyConditional) {
+          const split = document.createElement('p');
+          split.className = 'pay-figure__note';
+          split.textContent = `${money(pay.hourlyPaid)} paid + ${money(pay.hourlyConditional)} deferred`;
+          hourlyBlock.append(split);
+        }
         if (pay.hasConditional) {
           const condNote = document.createElement('p');
-          condNote.className = 'pay-row__condition';
-          condNote.textContent = pay.conditionMet ? pay.conditionLabel : pay.failNote;
-          main.append(condNote);
-          if (key === 'rebate_dispatch') {
-            const range = document.createElement('p');
-            range.className = 'pay-row__condition';
-            range.textContent = `Range ${money(pay.rebateRange[0])}–${money(pay.rebateRange[1])}; default ${money(pay.rebateFull)} shown divided across the 3-month spread.`;
-            main.append(range);
-          }
+          condNote.className = 'pay-figure__note';
+          condNote.textContent = pay.conditionMet || pay.hourlyConditional ? pay.conditionLabel : pay.failNote;
+          monthlyBlock.append(condNote);
         }
-        if (pay.deduction) {
-          const dedNote = document.createElement('p');
-          dedNote.className = 'pay-row__condition';
-          dedNote.textContent = `${money(pay.deduction)}/month deducted — ${worker.deduction_label}.`;
-          main.append(dedNote);
+        numbers.append(hourlyBlock, monthlyBlock);
+        const bar = payBar(pay, worker.color_key, maxCny);
+        bar.tabIndex = 0;
+        bar.setAttribute('aria-label', `${worker.label}: ${money(pay.monthlyTotal)} per month. Focus or hover for the calculation.`);
+        const card = () => payFormula(key, worker, pay, data);
+        bar.addEventListener('pointerenter', (e) => tooltip.showBeside(card(), e));
+        bar.addEventListener('pointermove', (e) => tooltip.showBeside(card(), e));
+        bar.addEventListener('pointerleave', () => tooltip.hide());
+        bar.addEventListener('focus', () => {
+          const r = bar.getBoundingClientRect();
+          const b = rowsWrap.getBoundingClientRect();
+          tooltip.show(card(), { x: r.left - b.left + r.width / 2, y: r.top - b.top });
+        });
+        bar.addEventListener('blur', () => tooltip.hide());
+        main.append(numbers, bar);
+        // The 25th question only matters to hourly-type dispatch, so it sits in that row.
+        if (key === 'hourly_dispatch') {
+          main.append(
+            toggleControl({
+              label: "Still employed on the payout month's 25th?",
+              value: state.employedOn25th,
+              compact: true,
+              onChange: (v) => {
+                state.employedOn25th = v;
+                renderRows();
+              },
+            })
+          );
         }
 
         row.append(label, main);
@@ -318,7 +392,7 @@ export default {
 
     const fxNote = document.createElement('p');
     fxNote.className = 'pay-fx-note';
-    fxNote.textContent = `FX: ¥${data.fx_cny_per_usd} = $1, used throughout. Bar length is comparable across rows — it's each worker type's monthly total relative to the highest of the four.`;
+    fxNote.textContent = `Current exchange rate: ¥${data.fx_cny_per_usd} = $1`;
     body.append(fxNote);
 
     const defaultHourlyPay = computePay(
@@ -330,7 +404,7 @@ export default {
     addMethodNote(el, 'How pay is calculated', [
       data.hours_rule,
       `Monthly figures use ${data.weeks_per_month} weeks/month (hours/week × ${data.weeks_per_month}). The one worked example in the source tables (hourly-type dispatch at the default 60h/week) comes to $970 (¥6,500)/month using a slightly different rounding of that conversion; this calculator uses the ${data.weeks_per_month} figure consistently across the whole slider range, which puts the default at ${money(defaultHourlyPay.monthlyTotal)}/month — within about half a percent.`,
-      "Benefits and contract text per worker type are in each row's label; the days-employed slider only changes rebate-type dispatch's payout (its 90-day threshold) — the other three types' pay depends only on hours worked.",
+      `Benefits and contract text per worker type are in each row's label; the days-employed slider only changes rebate-type dispatch's payout: nothing before day ${rebate.threshold_days}, then the ${money(data.workers.rebate_dispatch.conditional.amount)} rebate averaged over the months worked (days employed ÷ ${rebate.days_per_month}) — the other three types' pay depends only on hours worked. Hourly-type dispatch is paid for at least ${hd.min_hours_per_week} hours a week. Hover a bar for its calculation.`,
     ]);
 
     addCaveat(el, data.caveat);

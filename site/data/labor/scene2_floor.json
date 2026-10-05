@@ -146,5 +146,6 @@
    "dispatch_dots": 130
   }
  ],
- "shift_note": "Plants run 3 x 8-hour shifts, so roughly one third of the headcount is on the floor at any moment."
+ "shifts_per_day": 3,
+ "shift_hours": 8
 }
