@@ -43,8 +43,7 @@ const fmtHM = (s) => `${Math.floor(s / 3600)} h ${Math.round((s % 3600) / 60)} m
 const roundTo = (v, step) => Math.round(v / step) * step;
 
 // --- timeline (seconds of real time) -------------------------------------
-const FILL_S = 12; // target fill length; always ends on a complete row, never past this
-const FILL_AREA = 0.65; // share of the canvas height the fill grid may use
+const FILL_PHONES = 48; // phones drawn one by one before they stack (an animation length, not data)
 const STACK_S = 2.4;
 const ZOOM_OUT_S = 5; // geometric camera zoom-out
 const RISE_S = 4.5; // camera fixed, stack keeps rising
@@ -216,16 +215,14 @@ export default {
       const ctx = canvas.getContext('2d');
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // Fill capacity: how many fixed-size cells fit in the fill area.
+      // The fill shows FILL_PHONES phones, in complete rows: as many columns
+      // as fit, rounded down to a divisor of FILL_PHONES so no row is half-filled.
       const cellW = PHONE_W + CELL_GAP;
       const cellH = phoneH + CELL_GAP;
-      const cols = Math.max(1, Math.floor((W - 2 * PAD) / cellW));
-      const rows = Math.max(1, Math.floor((H * FILL_AREA - PAD) / cellH));
-      // As many complete rows as fit and can be made within FILL_S at
-      // D.batch a second, so a row is never left half-filled.
-      const rowsInTime = Math.floor((FILL_S * D.batch) / cols);
-      const fullRows = Math.max(1, Math.min(rows, rowsInTime));
-      const n = L && started ? L.n : fullRows * cols;
+      const fitCols = Math.max(1, Math.floor((W - 2 * PAD) / cellW));
+      let cols = Math.min(fitCols, FILL_PHONES);
+      while (FILL_PHONES % cols) cols -= 1;
+      const n = L && started ? L.n : FILL_PHONES;
       const fillS = L && started ? L.fillS : Math.ceil(n / D.batch);
 
       const rng = seeded(31);

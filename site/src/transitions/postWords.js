@@ -69,9 +69,6 @@ export async function createPostWords(parent, data, box) {
   const sub = document.createElement('p');
   sub.className = 'post-words__sub';
   sub.textContent = `The most-used words in the summaries of all ${count(data.total_posts)} hiring posts from ${data.year_range[0]}–${data.year_range[1]}. Most words carry a sense of urgency and friendliness. Different pay schemes are emphasized. Hover over a word to see its count.`;
-  const hint = document.createElement('p');
-  hint.className = 'post-words__hint';
-  hint.textContent = 'Press Next (bottom right) to continue to the wage calculator.';
   const how = document.createElement('details');
   how.className = 'post-words__how';
   const howSum = document.createElement('summary');
@@ -80,14 +77,20 @@ export async function createPostWords(parent, data, box) {
   // The data's limits live here too, so the cloud gets the whole space below.
   howText.textContent = `${data.method} ${data.color_rule} ${data.caveat}`;
   how.append(howSum, howText);
-  titles.append(title, sub, hint, how);
+  titles.append(title, sub);
   head.append(titles);
+  // The method note sits under the cloud (it opens upward, over the words).
+  const foot = document.createElement('div');
+  foot.className = 'post-words__foot';
+  foot.append(how);
 
-  el.append(head);
+  el.append(head, foot);
   parent.append(el);
 
   const headH = head.getBoundingClientRect().height + 12;
-  const cloudBox = { left: box.left, top: box.top + headH, width: box.width, height: Math.max(120, box.height - headH) };
+  const footH = foot.getBoundingClientRect().height + 8;
+  const cloudBox = { left: box.left, top: box.top + headH, width: box.width, height: Math.max(120, box.height - headH - footH) };
+  Object.assign(foot.style, { left: `${box.left}px`, top: `${cloudBox.top + cloudBox.height + 8}px`, width: `${box.width}px` });
 
   // Words wear their group's own colour, exactly as the clusters' dots above.
   const groupColor = Object.fromEntries(data.types.map((t) => [t.key, colorFor(t.key)]));
@@ -158,6 +161,7 @@ export async function createPostWords(parent, data, box) {
       const fade = (node, delay) =>
         node.animate([{ opacity: 0 }, { opacity: 1 }], { duration: reduced ? 0 : 420, delay: reduced ? 0 : delay, easing: 'ease-out', fill: 'forwards' });
       fade(head, 0);
+      fade(foot, 0);
       texts.each(function (_d, i) {
         fade(this, 250 + i * 30);
       });

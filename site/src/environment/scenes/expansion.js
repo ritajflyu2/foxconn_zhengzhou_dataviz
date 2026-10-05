@@ -19,7 +19,7 @@ const mapImages = import.meta.glob('../../../assets/environment/*.webp', { eager
 // year labels and reveal follow Labor Scene 3's charts; each revealed year
 // carries its exact cumulative value.
 const CH_W = 460; // Labor Scene 3's chart width
-const CH_H = 190;
+const CH_H = 140; // short enough that map + charts fit one window
 const CH_M = { top: 30, right: 8, bottom: 26, left: 44 };
 
 function footprintChart(parent, { key, label, color, years }) {
@@ -87,8 +87,8 @@ export default {
     const last = years[years.length - 1];
     const lit = data.zones.filter((z) => z.year_approved != null);
     const { el, head, body } = createScene(1);
-    head.querySelector('h2').textContent = 'Production grew. So did its approved environmental capacity.';
-    head.querySelector('.scene__summary').textContent = `Each assembly project on the campus needed an environmental approval, and each approval set how much NMHC (a measure of volatile air pollutants) and COD (a measure of water pollution) it was designed to emit. From ${first.year} to ${last.year}, ${lit.length} of the map's ${data.zones.length} zones were approved this way, and the approved totals grew to ${two(last.cum_nmhc)} t of NMHC and ${two(last.cum_cod)} t of COD a year.`;
+    head.querySelector('h2').textContent = 'Production and approved environmental capacity grow together.';
+    head.querySelector('.scene__summary').textContent = `Each assembly project on the campus needed an environmental approval, and each approval set how much NMHC (a measure of volatile air pollutants) and COD (a measure of water pollution) it was designed to emit. From ${first.year} to ${last.year}, ${lit.length} of the map's ${data.zones.length} zones were approved this way.`;
 
     const nmhcColor = cssVar('--color-env-nmhc');
     const codColor = cssVar('--color-env-cod');

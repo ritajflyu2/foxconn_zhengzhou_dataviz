@@ -1,4 +1,5 @@
 import { format } from 'd3';
+import { setPlayerIcon } from '../lib/playerIcon.js';
 
 // Pieces shared by the Waste and Water Processing screens.
 
@@ -51,7 +52,7 @@ export function playerControls(container, { years, secondsPerYear, onReveal }) {
     scrubber.value = String(Math.max(0, revealCount - 1));
     scrubber.setAttribute('aria-valuetext', revealCount > 0 ? String(years[revealCount - 1].year) : `Before ${years[0].year}`);
     yearReadout.textContent = revealCount > 0 ? String(years[Math.min(revealCount, years.length) - 1].year) : String(years[0].year);
-    button.textContent = playing ? 'Pause' : revealCount >= years.length ? 'Replay' : 'Play';
+    setPlayerIcon(button, playing ? 'pause' : revealCount >= years.length ? 'replay' : 'play');
     onReveal(revealCount, playing);
   }
 

@@ -6,7 +6,7 @@
  ],
  "unit": "t/year",
  "animation": {
-  "seconds_per_year": 0.8
+  "seconds_per_year": 1.0
  },
  "zones": [
   {

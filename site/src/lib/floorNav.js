@@ -77,9 +77,11 @@ export function mountFloorNav(root) {
       .attr('class', 'floor-index__floor')
       .attr('data-floor', f.id)
       .attr('transform', `translate(${f.x}, ${f.y})`)
-      .attr('tabindex', 0)
-      .attr('role', 'button')
       .attr('aria-label', `${f.id}: ${f.name}`);
+    // Only floors with a page of their own take hover, focus and clicks
+    // (2F, Automation, has none yet: it stays in the stack, inert).
+    if (FLOOR_LINKS[f.id]) g.attr('tabindex', 0).attr('role', 'button');
+    else g.classed('is-inert', true).attr('role', 'img');
     g.append('image').attr('href', imageUrl(f.image)).attr('width', f.image_px[0]).attr('height', f.image_px[1]);
     // Only the floor's own outline takes the pointer, not its transparent box.
     g.append('polygon').attr('class', 'floor-index__hit').attr('points', f.hull.map((p) => p.join(',')).join(' '));
@@ -137,7 +139,8 @@ export function mountFloorNav(root) {
   function setActive(id) {
     for (const f of FLOORS) {
       const on = f.id === id;
-      floorG.get(f.id).classed('is-active', on).attr('aria-pressed', String(on));
+      floorG.get(f.id).classed('is-active', on);
+      if (FLOOR_LINKS[f.id]) floorG.get(f.id).attr('aria-pressed', String(on));
     }
     current.set(FLOORS.find((f) => f.id === id));
     // In front: the active floor is painted last; the rest keep their stacking.
@@ -148,6 +151,7 @@ export function mountFloorNav(root) {
   }
 
   for (const f of FLOORS) {
+    if (!FLOOR_LINKS[f.id]) continue;
     floorG
       .get(f.id)
       .on('pointerenter focus', () => showHover(f))

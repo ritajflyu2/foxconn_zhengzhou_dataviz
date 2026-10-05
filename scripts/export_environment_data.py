@@ -42,6 +42,7 @@ MAP_SRC = ROOT / "design" / "assets" / "foxconn-zone-cropped.png"
 # Play speed is Labor Scene 3's (written by export_site_data.py), so the two
 # year-by-year players run at the same pace.
 LABOR_SCENE3 = ROOT / "site" / "data" / "labor" / "scene3_workforce_by_year.json"
+ENV_PACE = 1.25  # the Waste and Water screens take 1.25× Labor's seconds per year (a little slower)
 DATA_OUT = ROOT / "site" / "data" / "environment"
 ASSET_OUT = ROOT / "site" / "assets" / "environment"
 
@@ -141,7 +142,8 @@ def main():
         "image": "zone_map.webp",
         "image_px": list(img.size),
         "unit": "t/year",
-        "animation": {"seconds_per_year": json.loads(LABOR_SCENE3.read_text())["animation"]["seconds_per_year"]},
+        # Labor's "Over time" pace, a little slower here (ENV_PACE).
+        "animation": {"seconds_per_year": round(json.loads(LABOR_SCENE3.read_text())["animation"]["seconds_per_year"] * ENV_PACE, 2)},
         "zones": zones,
         "years": years,
         "source": "Hongfujin's assembly-project environmental impact assessments (EIAs), 2010-2017, summed in approval order (environment analysis table D4)",

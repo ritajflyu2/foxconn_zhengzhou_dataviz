@@ -9,11 +9,13 @@ import { raw } from '../../lib/dataLoader.js';
 import { lastFloorClick } from '../../lib/floorNav.js';
 import { flowIntoBars, floorDotsOnScreen, circleDots } from '../compareFlow.js';
 import floor3Url from '../../../assets/labor/floor_3f.webp';
+import floor1Url from '../../../assets/labor/floor_1f.webp';
 import lineUrl from '../../../assets/labor/production_line.webp';
 
 // The management floor (3F): white-collar hiring posts by job family, as
-// circles on the floor. "Compare pay" brings the assembly floor (1F, Scene 2's
-// dots) in below it; both floors' dots flow into two bar charts on one RMB
+// circles on the floor, with the assembly floor (1F, the floor index's drawing)
+// peeking out from under it. Clicking it opens screen 2, where 1F becomes Scene
+// 2's floor and dots and both floors' dots flow into two bar charts on one RMB
 // scale (posted white-collar pay vs. the wage calculator's line-worker pay),
 // followed by how few white-collar workers there are next to the workforce.
 
@@ -37,13 +39,15 @@ const SLOTS = [
   [392, 146],
 ];
 const BAR_SPAN = 0.54;
-const HOURS_PER_ROW = 20;
+const ARROW_BAR_PX = 90; // room kept clear above the fixed Back / Next buttons
+const HOURS_ROWS = 2; // every strip has the same number of rows, so a longer week is a longer strip
 
-// The working week as one cell per hour (rows of 20), so 40 and 60 hours read at a glance.
+// The working week as one cell per hour, in two rows: 40 and 60 hours differ in
+// length, like the bars above them.
 function hoursStrip(hours, legal, label) {
   const wrap = el('div', 'mgmt-hours');
   const grid = el('div', 'mgmt-hours__grid');
-  grid.style.setProperty('--cols', String(HOURS_PER_ROW));
+  grid.style.setProperty('--cols', String(Math.ceil(hours / HOURS_ROWS)));
   for (let h = 0; h < hours; h++) {
     const cell = el('span', 'mgmt-hours__cell');
     cell.style.setProperty('--i', String(h)); // fills in hour by hour on "Compare pay"
@@ -96,21 +100,37 @@ function lineWorkerPay() {
   };
 }
 
-export default {
-  id: 1,
-  navLabel: 'Management floor',
+// Screen 1 -> 2: the two floor drawings' screen rects, handed over on the
+// click so screen 2 can move both floors from there into their new places.
+let flip = null;
+const FLIP_MS = 700;
 
-  mount(container) {
+// FLIP: show `node` where `from` was, then let it settle into its own place.
+function flyFrom(node, from, extra = []) {
+  const to = node.getBoundingClientRect();
+  if (!to.width) return null;
+  return node.animate(
+    [
+      { transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${from.width / to.width})`, transformOrigin: '0 0', ...extra[0] },
+      { transform: 'none', transformOrigin: '0 0', ...extra[1] },
+    ],
+    { duration: FLIP_MS, easing: 'cubic-bezier(.3,.7,.2,1)' }
+  );
+}
+
+// Screen 1: the management floor, the floor below peeking out under it.
+// Screen 2: the same scene with the pay comparison run (Back returns to 1).
+function mountMgmt(container, { compared: startCompared }) {
     const section = el('section', 'scene');
     section.id = 'mgmt-scene-1';
     const head = el('div');
     head.append(
       el('p', 'scene__index', 'Management'),
-      el('h2', null, 'Upstairs: who gets hired, and for how much'),
+      el('h2', null, 'Above the line, below the line'),
       el(
         'p',
         'scene__summary',
-        `The management floor, from ${count(mgmt.posts_total)} white-collar hiring posts (${yearsLabel}). Most are for engineers. Compare their posted pay with what a line worker makes on the floor below.`
+        `A smaller factory usually divides work sectors by floor, with each floor having its own pay structure. While we don't know if this is the case for Foxconn, it's safe to assume that office workers aren't in the same area as assembly line workers. From white-collar hiring posts, we compared their posted pay (${payYearsLabel}) with what a line worker makes on the floor below.`
       )
     );
     const body = el('div', 'scene__body');
@@ -136,6 +156,19 @@ export default {
       .attr('viewBox', `0 0 ${fw} ${fh}`)
       .attr('role', 'img')
       .attr('aria-label', `The management floor: ${mgmt.categories.map((c) => `${c.label} ${count(c.posts)} posts`).join(', ')}`);
+    // An opaque backing in the drawing's own shape (its alpha as a mask), under
+    // the faded drawing: on screen 1 the floor below is tucked behind 3F and
+    // must not show through it.
+    const maskId = `mgmt-3f-shape-${startCompared ? 2 : 1}`;
+    svg3
+      .append('mask')
+      .attr('id', maskId)
+      .style('mask-type', 'alpha')
+      .append('image')
+      .attr('href', floor3Url)
+      .attr('width', fw)
+      .attr('height', fh);
+    svg3.append('rect').attr('class', 'mgmt-floor__backing').attr('width', fw).attr('height', fh).attr('mask', `url(#${maskId})`);
     svg3.append('image').attr('class', 'mgmt-floor__image').attr('href', floor3Url).attr('width', fw).attr('height', fh);
     // Floor names are HTML, so both read at the same size whatever each drawing's scale.
     floorFig.prepend(el('p', 'mgmt-floor__name', '3F · Management'));
@@ -209,7 +242,7 @@ export default {
       focus(null);
     });
 
-    // 1F floor (Scene 2's floor and dots), shown once "Compare pay" runs.
+    // 1F floor (Scene 2's floor and dots), shown once the comparison runs.
     const floor1Fig = el('figure', 'figure mgmt-floor mgmt-floor--line');
     floor1Fig.hidden = true;
     floors.append(floor1Fig);
@@ -217,6 +250,7 @@ export default {
     const svg1 = select(floor1Fig).append('svg').attr('viewBox', `0 0 ${lw} ${lh}`).attr('role', 'img').attr('aria-label', 'The assembly floor, one dot per worker');
     svg1.append('image').attr('class', 'mgmt-floor__image mgmt-floor__image--line').attr('href', lineUrl).attr('width', lw).attr('height', lh);
     floor1Fig.prepend(el('p', 'mgmt-floor__name', '1F · Assembly line'));
+
     const lineDots = lineFloorDots(floorData.line, seededRandom(99));
     const fillOf = { insured: colorFor('regular'), dispatch: colorFor('dispatch') };
     const dotLayer = svg1
@@ -229,13 +263,37 @@ export default {
       .attr('r', LINE_DOT_R)
       .attr('fill', (d) => fillOf[d.kind]);
 
-    // --- Side: categories + button, then the charts --------------------------
-    const intro = el('div', 'mgmt-intro');
-    const button = el('button', 'player-btn mgmt-compare', 'Compare pay');
-    button.type = 'button';
-    intro.append(button);
-    side.append(intro);
-
+    // --- Screen 1: the floor below peeks out under 3F; screen 2: the charts ---
+    if (!startCompared) {
+      const [pw, ph] = raw.floor_index.floors.find((f) => f.id === '1F').image_px;
+      const peek = el('figure', 'figure mgmt-peek');
+      peek.tabIndex = 0;
+      peek.setAttribute('role', 'link');
+      peek.setAttribute('aria-label', 'The assembly floor below: open it to compare pay');
+      const img = document.createElement('img');
+      img.src = floor1Url;
+      img.alt = '';
+      img.width = pw;
+      img.height = ph;
+      img.className = 'mgmt-peek__image';
+      const edge = el('div', 'mgmt-peek__edge');
+      edge.append(img);
+      peek.append(edge, el('p', 'mgmt-floor__name mgmt-peek__name', '1F · Assembly line'), el('p', 'mgmt-peek__hint', 'The floor below · click to compare pay ↓'));
+      const open = () => {
+        // Where both floor drawings are now, so screen 2 can move them into place.
+        flip = { f3: svg3.node().getBoundingClientRect(), f1: img.getBoundingClientRect(), at: performance.now() };
+        window.location.hash = 'mgmt-2';
+      };
+      peek.addEventListener('click', open);
+      peek.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          open();
+        }
+      });
+      floors.append(peek);
+      stage.classList.add('is-floor-only');
+    }
     const charts = el('div', 'mgmt-charts');
     charts.hidden = true;
     side.append(charts);
@@ -370,10 +428,13 @@ export default {
     const headcount = el('div', 'mgmt-headcount');
     headcount.hidden = true;
     floors.append(headcount); // under the assembly floor
-    headcount.append(el('p', 'chart-col__head', 'How many white-collar workers?'));
+    headcount.append(el('p', 'mgmt-floor__name', 'Worker composition')); // labelled like the floors ("1F · Assembly line")
     const hcFig = el('figure', 'figure mgmt-hc__fig');
     headcount.append(hcFig);
-    const tipH = createTooltip(hcFig);
+    // Hover card to the right of the figure (beside the labels), never over the circles.
+    const tipH = el('div', 'tooltip mgmt-hc__tip');
+    tipH.hidden = true;
+    hcFig.append(tipH);
     const R = 80; // modest: it only shows the difference in size
     const rOf = (n) => R * Math.sqrt(n / hc.clw_high);
     const S = 2 * R + 8;
@@ -383,12 +444,15 @@ export default {
     const sh = svgH.append('g');
     const shape = (cls, r, label) => sh.append('circle').attr('class', cls).attr('cx', cx).attr('cy', cy + R - r).attr('r', r).attr('data-key', label);
     shape('mgmt-hc__clw-band', rOf(hc.clw_high), 'clw');
-    shape('mgmt-hc__clw-low', rOf(hc.clw_low), 'clw');
+    // Inside CLW's low estimate, everyone not insured: dispatch (and other
+    // uninsured workers), in the dispatch orange as on the Labor page.
+    shape('mgmt-hc__clw-low', rOf(hc.clw_low), 'dispatch').attr('fill', orange);
     shape('mgmt-hc__insured', rOf(hc.insured), 'insured').attr('fill', blue);
-    shape('mgmt-hc__weighted', rOf(hc.revelio_weighted), 'weighted').attr('stroke', shades[0]);
+    shape('mgmt-hc__weighted', rOf(hc.revelio_weighted), 'weighted').attr('stroke', shades[0]); // fill: the same violet, whiter (CSS)
     shape('mgmt-hc__raw', rOf(hc.revelio_raw), 'raw').attr('fill', shades[0]);
     const labels = [
       ['clw', `CLW est. ${count(hc.clw_low)}–${count(hc.clw_high)}`, cy - R + 4],
+      ['dispatch', `Dispatch & other uninsured ${count(hc.clw_low - hc.insured)}–${count(hc.clw_high - hc.insured)}`, cy + R - 2 * rOf(hc.clw_low) + 12],
       ['insured', `Insured ${count(hc.insured)}`, cy + R - 2 * rOf(hc.insured) + 3],
       ['weighted', `Revelio est. ${count(Math.round(hc.revelio_weighted))}`, cy + R - 2 * rOf(hc.revelio_weighted) - 6],
       ['raw', `Revelio profiles ${count(Math.round(hc.revelio_raw))}`, cy + R - rOf(hc.revelio_raw) + 5],
@@ -400,6 +464,7 @@ export default {
     // One sentence per shape, on hover.
     const hcInfo = {
       clw: [`CLW estimate, ${hc.year}`, `China Labor Watch's estimate of everyone working in the airport-zone plants at peak season.`],
+      dispatch: ['Dispatch & other uninsured', `CLW's estimate minus the insured workers: mostly dispatch workers, plus students and others without insurance.`],
       insured: [`Insured, ${hc.year}`, 'Workers with work-injury insurance in the airport-zone plants: the ones on the books.'],
       weighted: ['Revelio weighted estimate', "Revelio's modelled guess at how many white-collar people there really are, scaled up from the profiles it found."],
       raw: ['Revelio raw profile count', 'Actual public career profiles (LinkedIn-type) of people working for Hon Hai in Zhengzhou.'],
@@ -416,11 +481,14 @@ export default {
         highlight(key);
         const r = event.currentTarget.getBoundingClientRect();
         const f = hcFig.getBoundingClientRect();
-        tipH.show(card(hcInfo[key][0], null, hcInfo[key][1]), { x: r.left + r.width / 2 - f.left, y: r.top - f.top });
+        tipH.replaceChildren(card(hcInfo[key][0], null, hcInfo[key][1]));
+        tipH.hidden = false;
+        const top = Math.max(0, Math.min(r.top - f.top, f.height - tipH.offsetHeight));
+        tipH.style.transform = `translate(0, ${top}px)`;
       })
       .on('pointerleave', () => {
         highlight(null);
-        tipH.hide();
+        tipH.hidden = true;
       });
 
     addMethodNote(section, 'Sources and how to read it', [
@@ -458,7 +526,6 @@ export default {
     async function compare() {
       if (compared) return;
       compared = true;
-      button.disabled = true;
       floor1Fig.hidden = false;
       charts.hidden = false;
       stage.classList.add('is-compared');
@@ -473,16 +540,25 @@ export default {
       const alignRo = new ResizeObserver(alignLine);
       alignRo.observe(charts);
       alignRo.observe(floorFig);
-      intro.classList.add('is-done');
       const hourStrips = charts.querySelectorAll('.mgmt-hours');
       if (reducedMotion()) {
+        flip = null;
         Object.keys(bars).forEach(growBar);
         refs.classList.add('is-shown');
         hourStrips.forEach((h) => h.classList.add('is-shown'));
         headcount.hidden = false;
         return;
       }
-      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      // Coming from screen 1: both floors move from where they were there.
+      const handed = flip && performance.now() - flip.at < 2000 ? flip : null;
+      flip = null;
+      if (handed) {
+        flyFrom(svg3.node(), handed.f3);
+        flyFrom(svg1.node(), handed.f1, [{ opacity: 0.5 }, { opacity: 1 }]);
+        await new Promise((r) => setTimeout(r, FLIP_MS));
+      } else {
+        await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      }
       floor1Fig.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       await new Promise((r) => setTimeout(r, 450));
       const sources = [];
@@ -504,7 +580,23 @@ export default {
       circles.select('circle').attr('fill-opacity', null);
       dotLayer.attr('opacity', null);
       headcount.hidden = false;
+      // Bring the worker composition into view as it appears.
+      requestAnimationFrame(() => {
+        const over = headcount.getBoundingClientRect().bottom + ARROW_BAR_PX - window.innerHeight;
+        if (over > 0) window.scrollBy({ top: over, behavior: 'smooth' });
+      });
     }
-    button.addEventListener('click', compare);
-  },
+    if (startCompared) compare();
+}
+
+export const managementFloor = {
+  id: 1,
+  navLabel: 'Management floor',
+  mount: (container) => mountMgmt(container, { compared: false }),
+};
+
+export const payCompared = {
+  id: 2,
+  navLabel: 'Pay compared',
+  mount: (container) => mountMgmt(container, { compared: true }),
 };

@@ -1,9 +1,10 @@
-import { select, max, format } from 'd3';
+import { select, max, format, scalePoint, scaleLinear, line } from 'd3';
 import { addCaveat, addMethodNote } from '../../lib/sceneShell.js';
 import { cssVar } from '../../lib/colorTokens.js';
 import { seededRandom } from '../../transitions/common.js';
 import { two, reducedMotion, createScene, playerControls, counter } from '../shared.js';
 import data from '../../../data/environment/approved_reported.json';
+import city from '../../../data/environment/zhengzhou_city.json';
 
 // Approved and reported: what Hongfujin reported each year (permit execution
 // reports) against the design budget its approvals set. Three forms side by
@@ -14,7 +15,11 @@ import data from '../../../data/environment/approved_reported.json';
 const pct = format('.0%');
 const VB = 300; // each form's viewBox is VB tall; its width fits its own content
 const REM_PER_UNIT = 17 / VB; // drawn size: VB units -> rem, the same scale for all three forms
-const TANK = { w: 54, h: 66, gapX: 14, gapY: 30 };
+const FORM_H = 258; // drawn height: the forms' content ends here (the air circle's foot), so no empty band under them
+const TANK = { w: 54, h: 66, gapX: 20, gapY: 30 };
+const STREAM_GAP_REM = 5; // between the three Hongfujin columns (and the city charts under them)
+const CITY_H = 170; // city chart height, in the forms' VB units
+const ARROW_BAR_PX = 80; // room kept clear above the fixed Back / Next buttons
 const STEP_MS = 450; // level / radius changes, within one year's step
 
 const ratioNote = (s, v) => {
@@ -31,7 +36,7 @@ const WAVE = Array.from({ length: 7 }, () => 'q10 -7 20 0 t20 0').join(' ');
 // The ratio, as in the preview: a big number, a small label under it.
 function ratioLine(svg, x, y) {
   const t = svg.append('text').attr('class', 'env-form__ratio').attr('x', x).attr('y', y).attr('text-anchor', 'middle');
-  const subs = [0, 1].map((i) => svg.append('text').attr('class', 'env-form__tag').attr('x', x).attr('y', y + 18 + i * 13).attr('text-anchor', 'middle'));
+  const subs = [0, 1].map((i) => svg.append('text').attr('class', 'env-form__tag').attr('x', x).attr('y', y + 19 + i * 15).attr('text-anchor', 'middle'));
   return (big, small) => {
     t.text(big);
     // Two short lines (as in the preview), so it fits under a tank.
@@ -117,10 +122,11 @@ function tankForm(svg, s, color) {
 // Air: the dashed circle is the approved budget; the filled circle's area is
 // the reported amount, scattered with one particle per tonne.
 function cloudForm(svg, s, color) {
-  const width = 260;
-  const cx = width / 2;
-  const cy = 152;
   const R = 100;
+  const cx = R + 10;
+  const cy = 152;
+  const RATIO_W = 90; // the ratio sits to the circle's right, not under it
+  const width = cx + R + 14 + RATIO_W;
   const most = Math.ceil(max(s.reported));
   const rnd = seededRandom(7);
   const unit = Array.from({ length: most }, () => {
@@ -140,12 +146,12 @@ function cloudForm(svg, s, color) {
     .attr('fill', color)
     .attr('cx', cx)
     .attr('cy', cy);
-  const setRatio = ratioLine(svg, cx, cy + R + 34);
+  const setRatio = ratioLine(svg, cx + R + 14 + RATIO_W / 2, cy - 4);
   return { width, update: (v) => {
     const r = v / s.approved;
     const rr = R * Math.sqrt(r);
     const n = Math.round(v);
-    setRatio(r >= 1 ? `${r.toFixed(1)}×` : pct(r), r >= 1 ? 'the approved budget' : 'of the approved budget');
+    setRatio(r >= 1 ? `${r.toFixed(1)}×` : pct(r), r >= 1 ? 'the approved budget' : 'approved budget');
     const t = (sel) => (reducedMotion() ? sel : sel.transition().duration(STEP_MS));
     t(fill).attr('r', rr);
     t(dots)
@@ -153,6 +159,145 @@ function cloudForm(svg, s, color) {
       .attr('cy', ([, uy]) => cy + uy * Math.max(0, rr - 3))
       .attr('opacity', (_d, i) => (i < n ? 1 : 0));
   } };
+}
+
+// Zhengzhou citywide context under the Hongfujin forms: a line chart per
+// medium, up = worse like the forms (water: share of river sections NOT rated
+// good; air: PM2.5 against China's standard). Both charts share one year axis (every city year),
+// so a year sits at the same relative place in each. Years up to the player's
+// current year are drawn solid with their values; later ones are faint.
+const CITY_YEARS = [...new Set([...city.air.years, ...city.water.years].map((d) => d.year))].sort((a, b) => a - b);
+const CM = { top: 24, right: 16, bottom: 28, left: 40 };
+// The shared top of both city charts' y axes: the largest value either shows, rounded up.
+const CITY_TOP = scaleLinear()
+  .domain([0, Math.max(...city.water.years.map((d) => d.value), ...city.air.years.map((d) => d.value), city.air.baseline?.value ?? 0)])
+  .nice()
+  .domain()[1];
+const MIN_LABEL_GAP = 40; // VB units between year labels; closer than this, every other year is labelled
+
+function cityChart(parent, medium, series, color, width) {
+  // Titled like the forms' columns ("Water: COD").
+  const head = document.createElement('p');
+  head.className = 'chart-col__head';
+  // Lower-case the label's first letter, but not an acronym (PM2.5).
+  const label = /^[A-Z][a-z]/.test(series.label) ? series.label[0].toLowerCase() + series.label.slice(1) : series.label;
+  head.textContent = `${medium}: ${city.city} ${label} (${series.unit})`;
+  parent.append(head);
+  const fig = document.createElement('figure');
+  fig.className = 'figure chart-col__figure env-city__figure';
+  parent.append(fig);
+  const W = width;
+  const x = scalePoint().domain(CITY_YEARS).range([CM.left, W - CM.right]).padding(0.3);
+  // One y range for both city charts, so their gridlines sit level side by side.
+  const y = scaleLinear().domain([0, CITY_TOP]).range([CITY_H - CM.bottom, CM.top]);
+  const svg = select(fig)
+    .append('svg')
+    .attr('viewBox', `0 0 ${W} ${CITY_H}`)
+    .attr('class', 'env-chart env-city__chart')
+    .style('max-width', `${(W * REM_PER_UNIT).toFixed(2)}rem`)
+    .attr('role', 'img')
+    .attr('aria-label', `${city.city}: ${series.label} (${series.unit}), ${series.years[0].year}–${series.years[series.years.length - 1].year}`);
+  const axisG = svg.append('g').attr('class', 'chart-axis');
+  for (const t of y.ticks(4)) {
+    axisG.append('line').attr('class', 'chart-gridline').attr('x1', CM.left).attr('x2', W - CM.right).attr('y1', y(t)).attr('y2', y(t));
+    axisG.append('text').attr('class', 'chart-axis__label').attr('x', CM.left - 6).attr('y', y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').text(format(',')(t));
+  }
+  const every = x.step() < MIN_LABEL_GAP ? 2 : 1;
+  svg
+    .selectAll('text.year-label')
+    .data(series.years.filter((_d, i) => i % every === 0 || i === series.years.length - 1))
+    .join('text')
+    .attr('class', 'year-label')
+    .attr('x', (d) => x(d.year))
+    .attr('y', CITY_H - 7)
+    .attr('text-anchor', 'middle')
+    .text((d) => d.year);
+  // China's standard (air), as a dashed reference line labelled at its end.
+  if (series.baseline) {
+    const by = y(series.baseline.value);
+    svg.append('line').attr('class', 'env-city__baseline').attr('x1', CM.left).attr('x2', W - CM.right).attr('y1', by).attr('y2', by);
+    svg
+      .append('text')
+      .attr('class', 'env-city__baseline-label')
+      .attr('x', W - CM.right)
+      .attr('y', by + 12)
+      .attr('text-anchor', 'end')
+      .text(`${series.baseline.label}: ${series.baseline.value}`);
+  }
+  const marker = svg.append('line').attr('class', 'env-city__marker').attr('y1', CM.top - 6).attr('y2', CITY_H - CM.bottom);
+  const path = line()
+    .x((d) => x(d.year))
+    .y((d) => y(d.value));
+  svg.append('path').attr('class', 'env-chart__future').attr('d', path(series.years)).attr('stroke', color);
+  const solid = svg.append('path').attr('class', 'env-chart__line').attr('stroke', color);
+  const dots = svg
+    .selectAll('circle.env-city__dot')
+    .data(series.years)
+    .join('circle')
+    .attr('class', 'env-city__dot')
+    .attr('cx', (d) => x(d.year))
+    .attr('cy', (d) => y(d.value))
+    .attr('r', 3.5)
+    .attr('fill', color);
+  const values = svg
+    .selectAll('text.env-chart__value')
+    .data(series.years)
+    .join('text')
+    .attr('class', 'env-chart__value')
+    .attr('x', (d) => x(d.year))
+    .attr('y', (d) => y(d.value) - 8)
+    .attr('text-anchor', 'middle')
+    .text((d) => format(',.1~f')(d.value));
+  // A comparison city (Boston, for PM2.5): its years inside this chart's span,
+  // grey, labelled with its name at its last point; revealed with the year.
+  let compareUpdate = () => {};
+  if (series.compare) {
+    const pts = series.compare.years.filter((d) => CITY_YEARS.includes(d.year));
+    const cPath = line()
+      .x((d) => x(d.year))
+      .y((d) => y(d.value));
+    const cLine = svg.append('path').attr('class', 'env-city__compare-line');
+    const cDots = svg
+      .selectAll('circle.env-city__compare-dot')
+      .data(pts)
+      .join('circle')
+      .attr('class', 'env-city__compare-dot')
+      .attr('cx', (d) => x(d.year))
+      .attr('cy', (d) => y(d.value))
+      .attr('r', 3);
+    const cValues = svg
+      .selectAll('text.env-city__compare-value')
+      .data(pts)
+      .join('text')
+      .attr('class', 'env-chart__value env-city__compare-value')
+      .attr('x', (d) => x(d.year))
+      .attr('y', (d) => y(d.value) - 7)
+      .attr('text-anchor', 'middle')
+      .text((d) => format(',.1~f')(d.value));
+    const cName = svg
+      .append('text')
+      .attr('class', 'env-city__compare-name')
+      .attr('x', x(pts[0].year) - 8)
+      .attr('y', y(pts[0].value))
+      .attr('dy', '0.32em')
+      .attr('text-anchor', 'end')
+      .text(series.compare.city);
+    compareUpdate = (yr) => {
+      const done = pts.filter((d) => d.year <= yr);
+      cLine.attr('d', done.length > 1 ? cPath(done) : null);
+      cDots.attr('opacity', (d) => (d.year <= yr ? 1 : 0));
+      cValues.classed('revealed', (d) => d.year <= yr);
+      cName.attr('opacity', done.length ? 1 : 0);
+    };
+  }
+  return (year) => {
+    compareUpdate(year);
+    const done = series.years.filter((d) => d.year <= year);
+    solid.attr('d', done.length > 1 ? path(done) : null);
+    dots.attr('opacity', (d) => (d.year <= year ? 1 : 0.25));
+    values.classed('revealed', (d) => d.year <= year);
+    marker.attr('x1', x(year) ?? CM.left).attr('x2', x(year) ?? CM.left);
+  };
 }
 
 export default {
@@ -163,9 +308,9 @@ export default {
     const years = data.years;
     const byKey = Object.fromEntries(data.streams.map((s) => [s.key, s]));
     const { el, head, body } = createScene(2);
-    head.querySelector('h2').textContent = 'Over on water. Under on air.';
+    head.querySelector('h2').textContent = 'How do the plants affect the city that sustains them?';
     const last = years.length - 1;
-    head.querySelector('.scene__summary').textContent = `The approvals in Expansion set a design budget for each stream. Here is what Hongfujin reported against it each year, ${years[0]}–${years[last]}: by ${years[last]}, COD was ${ratioNote(byKey.cod, byKey.cod.reported[last])}, ammonia nitrogen ${ratioNote(byKey.nh3, byKey.nh3.reported[last])}, and VOCs ${ratioNote(byKey.voc, byKey.voc.reported[last])}.`;
+    head.querySelector('.scene__summary').textContent = `The approvals in Expansion set a design budget for each stream. Here is what Hongfujin reported against it each year, ${years[0]}–${years[last]}. ${city.city}'s citywide data also shows PM2.5 decreasing since ${city.air.years[0].year}, but water quality getting worse since ${city.water.years[0].year}.`;
 
     const colors = { cod: cssVar('--color-env-cod'), voc: cssVar('--color-env-nmhc'), nh3: cssVar('--color-env-nh3') };
 
@@ -186,9 +331,12 @@ export default {
       const h = document.createElement('p');
       h.className = 'chart-col__head';
       h.textContent = `${s.medium}: ${s.label}`;
+      // The year being shown, after the title ("Water: COD, 2023").
+      h.append(Object.assign(document.createElement('span'), { className: 'env-form__year' }));
       const key = document.createElement('p');
       key.className = 'env-form__key';
-      key.textContent = s.key === 'voc' ? `Dashed circle = the approved ${two(s.approved)} t/year · 1 dot = 1 t reported` : `1 tank = the approved ${two(s.approved)} t/year`;
+      // The approved amount itself is in the counter above, so the key just says what the marks mean.
+      key.textContent = s.key === 'voc' ? 'Dashed circle = the approved budget · 1 dot = 1 t reported' : '1 tank = approved amount';
       const fig = document.createElement('figure');
       fig.className = 'figure chart-col__figure';
       col.append(h, key, fig);
@@ -200,12 +348,40 @@ export default {
         .attr('role', 'img')
         .attr('aria-label', `${s.label}: reported against the approved ${two(s.approved)} t/year, by year`);
       forms[s.key] = s.key === 'voc' ? cloudForm(svg, s, colors[s.key]) : tankForm(svg, s, colors[s.key]);
-      svg.attr('viewBox', `0 0 ${forms[s.key].width} ${VB}`);
+      svg.attr('viewBox', `0 0 ${forms[s.key].width} ${FORM_H}`);
     }
 
     // Each column is as wide as its form at the shared scale, so the gaps
     // between the three are just the grid gap.
-    row.style.gridTemplateColumns = data.streams.map((s) => `minmax(0, ${(forms[s.key].width * REM_PER_UNIT).toFixed(2)}rem)`).join(' ');
+    const columns = data.streams.map((s) => `minmax(0, ${(forms[s.key].width * REM_PER_UNIT).toFixed(2)}rem)`).join(' ');
+    row.style.gridTemplateColumns = columns;
+    row.style.gap = `${STREAM_GAP_REM}rem`;
+    // The three counters sit on the same grid, each over its own column.
+    counters.style.display = 'grid';
+    counters.style.gridTemplateColumns = columns;
+    counters.style.gap = `0 ${STREAM_GAP_REM}rem`;
+    counters.style.justifyContent = 'start';
+
+    // Zhengzhou citywide context, read straight down: water under the two
+    // water columns, air under the air column, on the same grid.
+    // Zhengzhou citywide context: two charts of equal size (the water chart's
+    // span under COD + ammonia nitrogen), side by side.
+    const cityRow = document.createElement('div');
+    cityRow.className = 'env-city';
+    body.append(cityRow);
+    const gapUnits = STREAM_GAP_REM / REM_PER_UNIT;
+    const waterKeys = data.streams.filter((s) => s.medium === 'Water').map((s) => s.key);
+    const airKeys = data.streams.filter((s) => s.medium === 'Air').map((s) => s.key);
+    const cityW = waterKeys.reduce((t, k) => t + forms[k].width, 0) + gapUnits * (waterKeys.length - 1);
+    cityRow.style.gridTemplateColumns = `repeat(2, minmax(0, ${(cityW * REM_PER_UNIT).toFixed(2)}rem))`;
+    cityRow.style.gap = `${STREAM_GAP_REM}rem`;
+    const waterCol = document.createElement('div');
+    const airCol = document.createElement('div');
+    cityRow.append(waterCol, airCol);
+    const cityUpdates = [
+      cityChart(waterCol, 'Water', city.water, colors[waterKeys[0]], cityW),
+      cityChart(airCol, 'Air', city.air, colors[airKeys[0]], cityW),
+    ];
 
     // 3. The year player (Labor Scene 3's), from the first report year.
     const player = playerControls(body, {
@@ -213,6 +389,8 @@ export default {
       secondsPerYear: data.animation.seconds_per_year,
       onReveal(revealCount) {
         const i = Math.max(0, revealCount - 1);
+        for (const y of row.querySelectorAll('.env-form__year')) y.textContent = `, ${years[i]}`;
+        for (const update of cityUpdates) update(years[i]);
         for (const s of data.streams) {
           const v = s.reported[i];
           setters[s.key](v, ratioNote(s, v));
@@ -225,6 +403,9 @@ export default {
       `Source: ${data.source}`,
       'Water and ammonia nitrogen: each tank holds one year of the approved amount. Only tank 1, set apart on the left, is covered by the approvals; reported amounts beyond it fill the tanks on the right. Air: the dashed circle is the approved budget; the filled circle is the reported amount by area, one dot per tonne.',
       data.voc_note,
+      `${city.city} citywide context: ${city.source} ${city.air.label}: ${city.air.baseline.label} is ${city.air.baseline.value} ${city.air.unit} (${city.air.baseline.source}).`,
+      ...city.notes,
+      `${city.air.compare.city} PM2.5: ${city.air.compare.source}; shown for the years inside ${city.city}'s span (${city.air.compare.years.filter((d) => CITY_YEARS.includes(d.year)).map((d) => d.year).join(', ')}).`,
     ]);
     addCaveat(el, data.caveat);
     container.replaceChildren(el);
@@ -235,7 +416,11 @@ export default {
         (entries) => {
           if (entries.some((e) => e.isIntersecting)) {
             io.disconnect();
-            if (row.isConnected) player.play();
+            if (!row.isConnected) return;
+            player.play();
+            // Bring the rest (city charts, player) into view, smoothly, above the Back / Next bar.
+            const over = body.querySelector('.player-row').getBoundingClientRect().bottom + ARROW_BAR_PX - window.innerHeight;
+            if (over > 0) window.scrollBy({ top: over, behavior: 'smooth' });
           }
         },
         { threshold: 0.25 }

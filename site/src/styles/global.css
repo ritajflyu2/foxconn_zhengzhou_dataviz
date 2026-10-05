@@ -17,8 +17,17 @@ body {
 }
 
 .site-header {
-  padding: 2.5rem var(--page-gutter) 1.25rem;
+  /* One row: the tabs on the left, the site name on the right. */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  padding: 1.75rem var(--page-gutter) 1.25rem;
   border-bottom: 1px solid var(--grid);
+}
+.site-header .eyebrow {
+  order: 2;
 }
 
 .eyebrow {
@@ -42,8 +51,9 @@ body {
 /* Switches between the Introduction and Labor pages (see main.js's router). */
 .page-switcher {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
-  margin: 0.6rem 0 0;
+  margin: 0;
 }
 
 .page-switcher button {
@@ -672,6 +682,10 @@ body {
   transition: opacity 180ms ease, filter 180ms ease;
 }
 
+.floor-index__floor.is-inert {
+  pointer-events: none;
+}
+
 .floor-index__hit {
   fill: transparent;
   pointer-events: all;
@@ -787,15 +801,25 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 }
 
 .player-btn {
-  font: inherit;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  padding: 0.4rem 0.9rem;
-  border: 1px solid var(--ink);
-  border-radius: 999px;
-  background: var(--surface-raised);
-  color: var(--ink);
+  /* Play / Pause / Replay: an icon, quiet, so it does not compete with the chart. */
+  /* An icon only (lib/playerIcon.js): no outline or fill at rest. */
+  display: inline-grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-secondary);
   cursor: pointer;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+.player-btn:hover,
+.player-btn:focus-visible {
+  color: var(--ink);
+  border-color: var(--grid);
+  outline: none;
 }
 
 /* --- Scene transitions: a fixed canvas over the page while dots move --- */
@@ -908,13 +932,6 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   color: var(--ink-secondary);
 }
 
-.post-words__hint {
-  margin: 0.35rem 0 0;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--ink-muted);
-}
-
 .post-words__how {
   pointer-events: auto;
   margin-top: 0.3rem;
@@ -928,11 +945,17 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   color: var(--ink-muted);
 }
 
-/* Opens over the cloud rather than pushing it down. */
+.post-words__foot {
+  position: absolute;
+  z-index: 4; /* above the cloud, so the note opens over the words */
+}
+
+/* Opens over the cloud (upward, from under it) rather than pushing anything. */
 .post-words__how p {
   position: absolute;
+  bottom: 100%;
   z-index: 3;
-  margin: 0.3rem 0 0;
+  margin: 0 0 0.3rem;
   max-width: 44rem;
   padding: 0.6rem 0.75rem;
   background: var(--surface-raised);
@@ -1971,7 +1994,7 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   grid-template-columns: auto minmax(0, 1fr);
   gap: 3.5rem; /* room between the map and the charts */
   align-items: start;
-  margin-top: 2.75rem; /* and between the running totals and both */
+  margin-top: 1.5rem; /* and between the running totals and both */
 }
 
 @media (max-width: 760px) {
@@ -1993,8 +2016,9 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 /* Not yet approved (or no record): a sand wash over the plan, which shows
    through faintly. Fills change at Scene 3's reveal pace. */
 .env-zone {
-  fill: var(--surface);
-  fill-opacity: 0.62;
+  /* Not yet approved (or no record): grey, covering the map's blue. */
+  fill: var(--color-env-off);
+  fill-opacity: 0.92;
   stroke: none;
   transition: fill 320ms ease, fill-opacity 320ms ease;
   cursor: default;
@@ -2013,6 +2037,10 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 
 /* Approved this year: an outline pulse (within one year's step), then it
    settles into the fill. */
+:root {
+  --color-env-off: color-mix(in srgb, var(--ink-muted) 35%, var(--surface));
+}
+
 .env-zone.is-new {
   stroke: var(--color-env-nmhc);
   animation: env-zone-pulse 700ms ease-out both;
@@ -2025,7 +2053,10 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 
 .env-legend {
   margin-top: 0.75rem;
-  max-width: 16rem;
+  flex-wrap: nowrap; /* both items on one line */
+}
+.env-legend .legend__item {
+  white-space: nowrap;
 }
 
 .env-legend__swatch {
@@ -2037,7 +2068,7 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 }
 
 .env-legend__swatch--off {
-  background: color-mix(in srgb, #74b4ea 38%, var(--surface));
+  background: var(--color-env-off);
 }
 
 .env-charts {
@@ -2107,7 +2138,7 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   grid-template-columns: repeat(3, minmax(0, 17rem));
   justify-content: start;
   gap: 2.5rem;
-  margin-top: 2.75rem;
+  margin-top: 2.25rem;
 }
 
 @media (max-width: 760px) {
@@ -2116,11 +2147,78 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   }
 }
 
+/* Zhengzhou citywide charts, on the same grid as the forms above. */
+.env-city {
+  display: grid;
+  justify-content: start;
+  margin-top: 1.5rem;
+}
+@media (max-width: 760px) {
+  .env-city {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* City charts: bigger text than the shared chart defaults, so they read at a glance. */
+.env-city__chart .chart-axis__label,
+.env-city__chart .year-label,
+.env-city__chart .env-chart__value {
+  font-size: 14px;
+}
+.env-city__chart .env-city__baseline-label {
+  font-size: 13px;
+}
+
+/* One window per Waste and Water screen: the player and notes sit closer. */
+body[data-page="env"] .player-row {
+  margin-top: 1rem;
+}
+body[data-page="env"] .method {
+  margin-top: 0.75rem;
+}
+.env-city__marker {
+  stroke: var(--ink-muted);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+/* Counter labels on one line, so the three numbers sit level. */
+.env-counters .prod-counter__label {
+  white-space: nowrap;
+}
+
+.env-city__compare-line {
+  fill: none;
+  stroke: var(--ink-muted);
+  stroke-width: 1.5;
+}
+.env-city__compare-dot {
+  fill: var(--ink-muted);
+}
+.env-city__compare-name {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  fill: var(--ink-secondary);
+}
+.env-form__year {
+  font-variant-numeric: tabular-nums;
+}
+
+.env-city__baseline {
+  stroke: var(--ink-secondary);
+  stroke-width: 1;
+  stroke-dasharray: 5 3;
+}
+.env-city__baseline-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  fill: var(--ink-secondary);
+}
+
 .env-form__key {
   margin: 0;
   min-height: 2.8em; /* two lines for every form, so the three drawings start level */
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.8125rem;
   color: var(--ink-muted);
 }
 
@@ -2133,7 +2231,7 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 
 .env-form__tag {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   fill: var(--ink);
@@ -2216,7 +2314,11 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   .env-wave {
     animation: none;
   }
-  .env-zone.is-new {
+  :root {
+  --color-env-off: color-mix(in srgb, var(--ink-muted) 35%, var(--surface));
+}
+
+.env-zone.is-new {
     animation: none;
   }
 }
@@ -2256,6 +2358,10 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   overflow: visible;
 }
 
+.mgmt-floor__backing {
+  fill: var(--surface);
+}
+
 .mgmt-floor__image {
   opacity: 0.4;
 }
@@ -2283,9 +2389,73 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 }
 
 /* The floor's name only appears beside the second floor, after "Compare pay". */
-.mgmt-stage:not(.is-compared) .mgmt-floor__name {
+.mgmt-stage:not(.is-compared) .mgmt-floor .mgmt-floor__name {
   display: none;
 }
+
+/* Screen 1: the floor centred, the floor below (the floor index's 1F drawing)
+   peeking out from under it: only its top shows, fading out, tucked up under
+   3F. Hover lifts it a little into view; click opens the comparison (screen 2). */
+.mgmt-stage.is-floor-only {
+  grid-template-columns: minmax(0, 38rem);
+  justify-content: center;
+}
+.mgmt-stage.is-floor-only .mgmt-side {
+  display: none;
+}
+.mgmt-stage.is-floor-only .mgmt-floor {
+  position: relative;
+  z-index: 1; /* 3F in front: the floor below sits behind it */
+}
+.mgmt-peek {
+  position: relative;
+  z-index: 0;
+  margin: -5rem auto 0;
+  max-width: 30rem;
+  cursor: pointer;
+}
+.mgmt-peek__edge {
+  max-height: 9rem;
+  overflow: hidden;
+  opacity: 0.7;
+  -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 30%, transparent 100%);
+  transition: opacity 250ms ease, transform 250ms ease;
+}
+.mgmt-peek:hover .mgmt-peek__edge,
+.mgmt-peek:focus-visible .mgmt-peek__edge {
+  opacity: 1;
+  transform: translateY(0.6rem);
+}
+.mgmt-peek:focus-visible {
+  outline: none;
+}
+.mgmt-peek .mgmt-floor__name {
+  text-align: center;
+}
+.mgmt-peek__image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.mgmt-peek__name {
+  margin: -0.75rem 0 0;
+  position: relative;
+}
+.mgmt-peek__hint {
+  margin: 0.15rem 0 0;
+  position: relative;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mgmt-peek__edge {
+    transition: none;
+  }
+}
+
 
 /* After "Compare pay" the floor is too small for the circles' labels. */
 .is-compared .mgmt-circle text {
@@ -2561,6 +2731,11 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   position: relative;
 }
 
+.mgmt-hc__tip {
+  left: calc(100% + 1.25rem);
+  width: 16rem;
+}
+
 .mgmt-hc__fig svg {
   display: block;
   width: 100%;
@@ -2586,9 +2761,9 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 }
 
 .mgmt-hc__clw-low {
-  fill: var(--surface);
-  stroke: var(--color-estimate-range);
-  stroke-width: 1;
+  /* fill: the dispatch orange, set in the script */
+  fill-opacity: 0.6;
+  stroke: none;
 }
 
 .mgmt-hc__insured {
@@ -2596,8 +2771,11 @@ svg.is-hovering .floor-index__floor.is-hovered image {
 }
 
 .mgmt-hc__weighted {
-  fill: var(--surface);
-  stroke-width: 1.75;
+  /* An estimate: dashed like CLW's band, filled with the profiles' violet mixed
+     toward white, so it reads against both blues. */
+  fill: color-mix(in srgb, var(--color-mgmt-1) 45%, white);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
 }
 
 .mgmt-hc__leader {

@@ -1,0 +1,125 @@
+{
+ "city": "Zhengzhou",
+ "air": {
+  "label": "PM2.5 annual mean",
+  "unit": "µg/m³",
+  "baseline": {
+   "value": 35,
+   "label": "China's standard",
+   "source": "China's Ambient Air Quality Standards (GB 3095-2012), Grade II annual mean limit for PM2.5"
+  },
+  "years": [
+   {
+    "year": 2017,
+    "value": 70.0,
+    "source": "IQAir"
+   },
+   {
+    "year": 2018,
+    "value": 64.1,
+    "source": "IQAir"
+   },
+   {
+    "year": 2019,
+    "value": 58.0,
+    "source": "Zhengzhou's official environmental bulletins"
+   },
+   {
+    "year": 2020,
+    "value": 51.0,
+    "source": "Zhengzhou's official environmental bulletins"
+   },
+   {
+    "year": 2021,
+    "value": 42.0,
+    "source": "Zhengzhou's official environmental bulletins"
+   },
+   {
+    "year": 2022,
+    "value": 45.0,
+    "source": "Zhengzhou's official environmental bulletins"
+   },
+   {
+    "year": 2023,
+    "value": 43.0,
+    "source": "Zhengzhou's official environmental bulletins"
+   },
+   {
+    "year": 2024,
+    "value": 45.0,
+    "source": "Zhengzhou's official environmental bulletins"
+   },
+   {
+    "year": 2025,
+    "value": 38.0,
+    "source": "Zhengzhou's official environmental bulletins"
+   }
+  ],
+  "compare": {
+   "city": "Boston",
+   "years": [
+    {
+     "year": 2013,
+     "value": 7.96
+    },
+    {
+     "year": 2016,
+     "value": 10.33
+    },
+    {
+     "year": 2020,
+     "value": 6.68
+    },
+    {
+     "year": 2023,
+     "value": 7.08
+    },
+    {
+     "year": 2024,
+     "value": 5.89
+    }
+   ],
+   "source": "Massachusetts DEP annual air quality reports"
+  }
+ },
+ "water": {
+  "label": "River sections not rated good",
+  "unit": "%",
+  "years": [
+   {
+    "year": 2019,
+    "good_pct": 66.7,
+    "value": 33.3,
+    "n_sections": null,
+    "basis": "national control sections only"
+   },
+   {
+    "year": 2021,
+    "good_pct": 58.3,
+    "value": 41.7,
+    "n_sections": 24,
+    "basis": "24 combined national/provincial/city control sections"
+   },
+   {
+    "year": 2023,
+    "good_pct": 50.0,
+    "value": 50.0,
+    "n_sections": 24,
+    "basis": "Yellow River basin (6/8) + Huai River basin (6/16), combined"
+   },
+   {
+    "year": 2025,
+    "good_pct": 44.0,
+    "value": 56.0,
+    "n_sections": 25,
+    "basis": "Yellow River basin (3/8) + Huai River basin (8/17), combined"
+   }
+  ]
+ },
+ "notes": [
+  "PM2.5 2017–2018 from IQAir; 2019–2025 from Zhengzhou's official environmental bulletins.",
+  "Water: 2019 counts national control sections only; 2021–2025 combine 24–25 national, provincial and city sections.",
+  "Citywide figures, shown for context. They are not caused by or measured at Foxconn. PM2.5 and VOCs are different measures."
+ ],
+ "source": "Zhengzhou environmental quality bulletins; IQAir historical city page for PM2.5 before 2019."
+}

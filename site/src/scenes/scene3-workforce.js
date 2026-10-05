@@ -3,6 +3,7 @@ import { createScene, addCaveat, addMethodNote } from '../lib/sceneShell.js';
 import { createTooltip } from '../lib/tooltip.js';
 import { colorFor, cssVar } from '../lib/colorTokens.js';
 import { count } from '../lib/format.js';
+import { setPlayerIcon } from '../lib/playerIcon.js';
 
 const W = 460;
 const H = 280;
@@ -475,7 +476,7 @@ function playerControls(container, { years, secondsPerYear, onReveal }) {
   function sync() {
     scrubber.value = String(Math.max(0, revealCount - 1));
     yearReadout.textContent = revealCount > 0 ? String(years[Math.min(revealCount, years.length) - 1].year) : String(years[0].year);
-    button.textContent = playing ? 'Pause' : revealCount >= years.length ? 'Replay' : 'Play';
+    setPlayerIcon(button, playing ? 'pause' : revealCount >= years.length ? 'replay' : 'play');
     onReveal(revealCount, playing);
   }
 
