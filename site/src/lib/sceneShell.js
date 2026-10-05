@@ -6,7 +6,7 @@ export function createScene({ index, title, summary }) {
 
   const head = document.createElement('div');
   head.innerHTML = `
-    <p class="scene__index">Scene ${index}</p>
+    <p class="scene__index">Assembly Line</p>
     <h2></h2>
     <p class="scene__summary"></p>
   `;

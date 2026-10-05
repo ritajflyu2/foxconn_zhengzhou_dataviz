@@ -4,6 +4,7 @@ import { circlesToDots } from './transitions/circlesToDots.js';
 import { dotsToBars } from './transitions/dotsToBars.js';
 import { postsToLegend } from './transitions/postsToLegend.js';
 import { fireBurn } from './transitions/fireBurn.js';
+import { takeHandoff } from './lib/handoff.js';
 
 // Returns null (not a default scene id) when the hash belongs to another page
 // (e.g. the Introduction page's #intro-N) — only an empty hash or a Labor
@@ -16,16 +17,18 @@ const idFromHash = () => {
   return scenes.some((s) => s.id === id) ? id : scenes[0].id;
 };
 
-// Per spec: the floor nav appears on scenes 3-5, not on 1-2.
-const FLOOR_NAV_SCENES = new Set([3, 4, 5]);
+// The floor nav (Labor = 1F) sits beside every Labor scene.
+const FLOOR_NAV_SCENES = new Set([1, 2, 3, 4]);
 
-// Scene 5 ("When pay fails") is the one dark-ground scene (storyboard: "Two
+// Scene 4 ("When pay fails") is the one dark-ground scene (storyboard: "Two
 // grounds, one switch") — toggled on <body> so the dark ground covers the
 // whole page (header, scene nav, floor nav), not just the scene's content.
-const DARK_SCENES = new Set([5]);
+const DARK_SCENES = new Set([4]);
 
 // Keyed "from>to". Only forward moves animate; anything else just mounts.
-const TRANSITIONS = { '1>2': circlesToDots, '2>3': dotsToBars, '3>4': postsToLegend, '4>5': fireBurn };
+// "plants>1" comes from another page: the Introduction's plant circles
+// (clicking their airport zone) breaking into Scene 1's floor dots.
+const TRANSITIONS = { 'plants>1': circlesToDots, '1>2': dotsToBars, '2>3': postsToLegend, '3>4': fireBurn };
 
 const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 
@@ -33,7 +36,7 @@ const go = (id) => {
   if (scenes.some((s) => s.id === id)) window.location.hash = `scene-${id}`;
 };
 
-// Previous / next arrows with "Scene n of 5 · label" between them. A running
+// Previous / next arrows with "Assembly Line n of N · label" between them. A running
 // transition that holds for the viewer (3 → 4's word cloud) takes the next
 // press itself through its `next()`; otherwise next goes to the next scene.
 function createArrows(nav, getCurrent, getActive) {
@@ -72,7 +75,7 @@ function createArrows(nav, getCurrent, getActive) {
     const scene = scenes.find((s) => s.id === id);
     const before = scenes.find((s) => s.id === id - 1);
     const after = scenes.find((s) => s.id === id + 1);
-    label.textContent = `Scene ${id} of ${scenes.length} · ${scene.navLabel}`;
+    label.textContent = `Assembly Line ${id} of ${scenes.length} · ${scene.navLabel}`;
     prev.disabled = id === first;
     next.disabled = id === last;
     prev.setAttribute('aria-label', before ? `Previous scene: ${before.navLabel}` : 'No previous scene');
@@ -97,13 +100,14 @@ export function createSceneManager({ nav, root, pageGrid }) {
     }
     if (token !== navToken) return;
 
-    const from = currentId;
+    const handoff = takeHandoff();
+    const from = handoff && id === scenes[0].id ? handoff : currentId;
     const scene = scenes.find((s) => s.id === id);
     currentId = id;
     updateArrows(id);
 
     // Mount off-page, then swap in only if this is still the scene asked for:
-    // Scene 2's mount is async, and a late resolve must not overwrite a newer scene.
+    // Scene 1's mount is async, and a late resolve must not overwrite a newer scene.
     // Page chrome switches at the same moment, so the outgoing scene never
     // reflows into the new layout (e.g. the floor-nav column) while it is shown.
     const mountNext = async (onCommit) => {

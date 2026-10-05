@@ -11,13 +11,14 @@ export const raw = Object.fromEntries(
 
 export const files = Object.keys(raw).sort();
 
-// Scene 3 is the only scene backed by two files.
+// Labor's scene ids (the floor is 1). Scene 2 is the only one backed by two files.
 export const bySceneId = {
-  1: raw.scene1_plants,
-  2: raw.scene2_floor,
-  3: { workforce: raw.scene3_workforce_by_year, posts: raw.scene3_posts_by_year },
-  4: raw.scene4_pay_model,
-  5: raw.scene5_hearings,
+  1: raw.scene2_floor,
+  2: { workforce: raw.scene3_workforce_by_year, posts: raw.scene3_posts_by_year },
+  3: raw.scene4_pay_model,
+  4: raw.scene5_hearings,
+  // Not a Labor scene any more: the Introduction's last screen draws it.
+  plants: raw.scene1_plants,
 };
 
 export function assertDataLoaded() {

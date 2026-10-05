@@ -86,7 +86,7 @@ function areaFigure(dorm) {
 }
 
 export default {
-  id: 2,
+  id: 1,
   navLabel: 'On the line',
   colorKey: 'dispatch',
 
@@ -96,7 +96,7 @@ export default {
     const lineTotal = nLines * line.workers_per_line;
 
     const { el, body } = createScene({
-      index: 2,
+      index: 1,
       title: 'On the line: worker density',
       summary: `One assembly floor and one dorm room, one dot per worker. A production line has about ${count(line.workers_per_line)} workers, so this floor's ${nLines} lines hold about ${count(
         lineTotal

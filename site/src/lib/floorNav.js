@@ -7,7 +7,7 @@ const imageUrl = (name) => floorImages[`../../assets/labor/${name}`];
 const PITCH = 0.47; // vertical step between floors, as a share of a floor's height
 const PAGE_FLOOR = '1F'; // the Labor page is the assembly-line floor
 // Floors that open a page of the site: clicking one goes there.
-const FLOOR_LINKS = { '1F': '#scene-3', '3F': '#mgmt-1', '4F': '#env-1' };
+const FLOOR_LINKS = { '1F': '#scene-2', '3F': '#mgmt-1', '4F': '#env-1' };
 const pageOfHash = (hash) => {
   for (const p of ['#env-', '#mgmt-', '#intro-']) if (hash.startsWith(p)) return p;
   return '#scene-';
@@ -54,7 +54,7 @@ export const INDEX_1F = (() => {
 //
 // Every floor is clickable (or Tab + Enter): the clicked floor becomes active,
 // drawn in front with the others faded, and its name sits under the stack.
-// 1F opens Labor (Scene 3), 3F Management and 4F Waste and Water Processing.
+// 1F opens Labor (Scene 2, over time), 3F Management and 4F Waste and Water Processing.
 // Hovering a floor fades everything else further and shows a legend for it
 // on the left (floor number, a leader line, the name), only while hovered.
 export function mountFloorNav(root) {

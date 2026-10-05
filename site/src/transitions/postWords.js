@@ -68,7 +68,7 @@ export async function createPostWords(parent, data, box) {
   sub.textContent = `The most-used words in the summaries of all ${count(data.total_posts)} hiring posts, ${data.year_range[0]}–${data.year_range[1]}, sized by the share of posts that use them and coloured by the post group above whose posts use them most; each with its Chinese original. Hover a word for its count.`;
   const hint = document.createElement('p');
   hint.className = 'post-words__hint';
-  hint.textContent = 'Press Next (bottom right) to continue to Scene 4.';
+  hint.textContent = 'Press Next (bottom right) to continue to the wage calculator.';
   const how = document.createElement('details');
   how.className = 'post-words__how';
   const howSum = document.createElement('summary');

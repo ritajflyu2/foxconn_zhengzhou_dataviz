@@ -2651,6 +2651,30 @@ body[data-page="intro"] .scene-root {
   stroke-width: 1;
   stroke-linejoin: round;
   pointer-events: none;
+  transition: fill 0.2s, stroke-opacity 0.2s;
+}
+
+/* After the split the zone is the way into Labor: the whole outline clicks. */
+.workers-zone.is-live {
+  cursor: pointer;
+}
+.workers-zone.is-live path {
+  pointer-events: fill;
+}
+.workers-zone.is-live:hover path,
+.workers-zone.is-live:focus-visible path {
+  fill: color-mix(in srgb, var(--ink) 9%, transparent);
+  stroke-opacity: 1;
+}
+.workers-zone:focus {
+  outline: none;
+}
+
+.workers-zone__hint {
+  font-size: calc(12px / var(--wk-s, 1));
+  font-style: italic;
+  fill: var(--ink-muted);
+  pointer-events: none;
 }
 
 .workers-zone__label {

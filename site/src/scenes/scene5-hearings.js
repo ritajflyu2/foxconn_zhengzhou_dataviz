@@ -94,13 +94,13 @@ function legend(categories, counts) {
 }
 
 export default {
-  id: 5,
+  id: 4,
   navLabel: 'When pay fails',
   colorKey: 'legal-cap',
 
   mount(container, data) {
     const { el, body } = createScene({
-      index: 5,
+      index: 4,
       title: 'When pay fails: the disputes',
       summary:
         'One cube per hearing announcement, 2015–2026, colored by dispute type. Hover a cube for that case; tap to open the same card on a touch device.',

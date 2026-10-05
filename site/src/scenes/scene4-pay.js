@@ -148,13 +148,13 @@ function payBar(pay, colorKey, maxCny) {
 }
 
 export default {
-  id: 4,
+  id: 3,
   navLabel: 'How work is paid',
   colorKey: 'hourly-dispatch',
 
   mount(container, data) {
     const { el, body } = createScene({
-      index: 4,
+      index: 3,
       title: 'How work is paid',
       summary:
         'Four worker types, four pay structures, side by side. Set the hours worked, the days employed, and whether an hourly-dispatch worker is still there on the 25th — the deferred half of their pay depends on it.',

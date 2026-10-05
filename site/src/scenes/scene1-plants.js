@@ -9,7 +9,6 @@ import {
   forceX,
   forceY,
 } from 'd3';
-import { createScene, addCaveat, addMethodNote } from '../lib/sceneShell.js';
 import { createTooltip } from '../lib/tooltip.js';
 import { colorFor } from '../lib/colorTokens.js';
 import { count, percent } from '../lib/format.js';
@@ -228,9 +227,8 @@ function legend(items) {
   return el;
 }
 
-// Draws the plants figure into `body` (legend, hint, figure). Shared by Labor
-// Scene 1 and the Introduction's last screen; `opts` sets the layout and the
-// few things that differ.
+// Draws the plants figure into `body` (legend, hint, figure) for the
+// Introduction's last screen; `opts` sets the layout.
 export function renderPlants(el, body, data, opts = {}) {
     const G = opts.geometry ?? PORTRAIT;
     const { W, H, GSD } = G;
@@ -369,25 +367,12 @@ export function renderPlants(el, body, data, opts = {}) {
       .attr('class', 'plant')
       .attr('transform', (d) => `translate(${d.x}, ${d.y})`)
       .attr('tabindex', 0)
-      .attr('role', opts.clickable === false ? 'img' : 'button')
-      .attr('aria-label', (d) =>
-        `${d.plant.name}: ${count(d.plant.insured_2025)} insured, ${count(d.plant.est_total_low)} estimated total.${opts.clickable === false ? '' : ' Press Enter to see the workers on the floor.'}`
-      )
-      // Read by the 1 → 2 transition to break each circle into its own dots.
+      .attr('role', 'img')
+      .attr('aria-label', (d) => `${d.plant.name}: ${count(d.plant.insured_2025)} insured, ${count(d.plant.est_total_low)} estimated total.`)
+      // Read by the circles → floor transition to break each circle into its own dots.
       .attr('data-plant-id', (d) => d.plant.id)
       .attr('data-r-insured', (d) => rOf(d.plant.insured_2025))
       .attr('data-r-low', (d) => rOf(d.plant.est_total_low));
-
-    const toFloor = () => {
-      window.location.hash = 'scene-2';
-    };
-    if (opts.clickable !== false)
-      groups.on('click', toFloor).on('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          toFloor();
-        }
-      });
 
     const scaleAt = () => {
       const r = svg.node().getBoundingClientRect();
@@ -581,32 +566,3 @@ export function renderPlants(el, body, data, opts = {}) {
     return { figure, svg, crossCheckText: crossCheck.textContent };
 
 }
-
-export default {
-  id: 1,
-  navLabel: 'Zoom out',
-  colorKey: 'regular',
-
-  mount(container, data) {
-    const { el, body } = createScene({
-      index: 1,
-      title: 'Zoom out: where the workers are',
-      summary:
-        'One circle per plant, sized by estimated total workforce. The solid blue core is the regular workers we can actually count; the solid orange band is the default (low-end) dispatch estimate; the hatched grey band outside it is how much bigger the plant could be at CLW’s high end. The law caps dispatch at 10% of the workforce, so regular workers should reach the red line (90% of the total) — the blue core falls far short, and the wide gap out to the red line is dispatch filling jobs the law reserves for regular staff.',
-    });
-
-    renderPlants(el, body, data);
-
-    addMethodNote(el, 'How we estimated these numbers', [
-      data.method,
-      `Dispatch range: ${data.clw_dispatch_source}`,
-      `FII Precision: no CLW figure, so it borrows the airport zone's low-end dispatch share (${percent(data.fii_precision_dispatch_share)} of the workforce) as an assumption.`,
-      `Legal cap: ${data.legal_cap_source}`,
-      `Placement: ${data.placement} Circles are spaced apart so they do not overlap, so distances on screen are schematic.`,
-      `${data.comparison.label}: ${data.comparison.source}`,
-    ]);
-
-    addCaveat(el, data.caveat);
-    container.replaceChildren(el);
-  },
-};

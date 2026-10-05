@@ -427,7 +427,7 @@ export default {
       `Circles: number of hiring posts per job family, ${yearsLabel} (n = ${count(mgmt.posts_total)}); area is proportional to posts. Hover a circle for its share and specific job titles.`,
       `Hiring posts: ${mgmt.source}; ${count(mgmt.posts_total)} posts with usable pay, ${yearsLabel}. ${mgmt.category_note}`,
       `White-collar pay: ${mgmt.pay_note} Hours: ${mgmt.pay_hours_per_week} h/week is the legal standard week, an assumption, not something the posts state.`,
-      `Line-worker pay: CLW 2025 via the wage calculator (Scene 4), at its default settings, before deductions. Dispatch is the simple average of the rebate-type and hourly-type monthly totals.`,
+      `Line-worker pay: CLW 2025 via the wage calculator (Assembly Line), at its default settings, before deductions. Dispatch is the simple average of the rebate-type and hourly-type monthly totals.`,
       `Periods differ: white-collar pay ${payYearsLabel} (mostly 2021–22 posts); line-worker pay from CLW's 2025 report.`,
       `Headcount: Revelio covers all Hon Hai entities in the Zhengzhou metro area; CLW covers airport-zone plants only. Revelio's series barely changes from 2017 to 2025, so much of it is filled in by the model: read it as how little of the workforce is visible online, not as an exact headcount.`,
     ]);

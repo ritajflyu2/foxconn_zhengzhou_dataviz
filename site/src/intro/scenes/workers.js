@@ -5,6 +5,7 @@ import { renderPlants, layerCard, combinedCard } from '../../scenes/scene1-plant
 import { createTooltip } from '../../lib/tooltip.js';
 import { count, percent } from '../../lib/format.js';
 import { raw } from '../../lib/dataLoader.js';
+import { setHandoff } from '../../lib/handoff.js';
 
 // The Introduction's last screen: Labor Scene 1's plant circles, in the
 // Introduction's style. It opens on one circle for all four plants next to
@@ -346,6 +347,44 @@ export default {
       .attr('dominant-baseline', 'middle')
       .attr('text-anchor', 'middle')
       .text(zoneData[0].plant.zone_label);
+    zone
+      .append('text')
+      .attr('class', 'workers-zone__hint')
+      .attr('x', labelPt[0])
+      .attr('y', labelPt[1])
+      .attr('dy', '1.5em')
+      .attr('transform', `rotate(${labelPt[2]}, ${labelPt[0]}, ${labelPt[1]})`)
+      .attr('dominant-baseline', 'middle')
+      .attr('text-anchor', 'middle')
+      .text('Click the zone to step onto the assembly floor');
+
+    // Once the zone is shown, clicking it (or an airport plant inside it)
+    // opens Labor: the circles break into dots that land on the floor and in
+    // the dorm (sceneManager's "plants>1" transition reads the plants here).
+    const enterFloor = () => {
+      tip.hide();
+      setHandoff('plants');
+      window.location.hash = 'scene-1';
+    };
+    const goLive = () => {
+      zone
+        .classed('is-live', true)
+        .attr('tabindex', 0)
+        .attr('role', 'button')
+        .attr('aria-label', `${zoneData[0].plant.zone_label}: press Enter to step onto the assembly floor`)
+        .on('click', enterFloor)
+        .on('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            enterFloor();
+          }
+        });
+      svg
+        .selectAll('g.plant')
+        .filter((d) => d.plant.zone === 'airport')
+        .style('cursor', 'pointer')
+        .on('click.enter', enterFloor);
+    };
 
     const plants = svg.selectAll('g.plant');
     const extras = svg.selectAll('.annotation');
@@ -356,6 +395,7 @@ export default {
     if (reduced) {
       combo.remove();
       zone.attr('opacity', 1);
+      goLive();
       return;
     }
     // Not drawn at all until the split: their rings use pointer-events: stroke,
@@ -382,7 +422,7 @@ export default {
         .attr('opacity', 1)
 ;
       extras.transition().delay(SPLIT_MS * 0.7).duration(400).attr('opacity', 1);
-      zone.transition().delay(SPLIT_MS * 0.8).duration(600).attr('opacity', 1);
+      zone.transition().delay(SPLIT_MS * 0.8).duration(600).attr('opacity', 1).on('end', goLive);
       // Harvard moves up to the plants' vertical centre.
       const ys = svg.selectAll('g.plant').data().map((d) => d.y);
       const midY = (Math.min(...ys) + Math.max(...ys)) / 2;

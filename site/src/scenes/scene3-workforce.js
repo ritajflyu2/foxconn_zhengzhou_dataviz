@@ -523,16 +523,16 @@ function playerControls(container, { years, secondsPerYear, onReveal }) {
 }
 
 export default {
-  id: 3,
+  id: 2,
   navLabel: 'Over time',
   colorKey: 'student',
 
   mount(container, { workforce, posts }) {
     const { el, body } = createScene({
-      index: 3,
+      index: 2,
       title: 'Over time: who the plants hired',
       summary:
-        'Insured workers by year next to China Labor Watch’s campus-wide estimate, beside recruitment posts by worker type. Each bar is a cluster of dots — the same unit as Scene 2\'s floor — revealed year by year, 2016–2025.',
+        'Insured workers by year next to China Labor Watch’s campus-wide estimate, beside recruitment posts by worker type. Each bar is a cluster of dots — the same unit as the assembly floor\'s workers — revealed year by year, 2016–2025.',
     });
 
     const layout = document.createElement('div');
@@ -609,7 +609,7 @@ export default {
     });
 
     addMethodNote(el, 'Reading the left chart', [
-      `Each dot stands for an equal share of the bar's value — not a fixed headcount like Scene 2's dots, just the same visual unit reused so a bar reads as a cluster, not a block. Solid dots are insured headcount (measured); ring (outline-only) dots are the gap to China Labor Watch's campus-wide estimate (inferred dispatch, student and other uninsured workers). Faint dots are unfilled capacity, for scale. Hover either part of a bar for its own number. Off-season CLW years (no ring dots) get no gap, because the two figures are not comparable (a trough estimate vs. a year-end count); hover the bar for CLW's figure. The red dashed line on each year with a comparable CLW estimate is the legal line: dispatch may be at most ${Math.round(workforce.legal_cap_share * 100)}% of the workforce, so regular workers should reach ${100 - Math.round(workforce.legal_cap_share * 100)}% of CLW's total (for 2025, CLW's high end, the top of the bar).`,
+      `Each dot stands for an equal share of the bar's value — not a fixed headcount like the assembly floor's dots, just the same visual unit reused so a bar reads as a cluster, not a block. Solid dots are insured headcount (measured); ring (outline-only) dots are the gap to China Labor Watch's campus-wide estimate (inferred dispatch, student and other uninsured workers). Faint dots are unfilled capacity, for scale. Hover either part of a bar for its own number. Off-season CLW years (no ring dots) get no gap, because the two figures are not comparable (a trough estimate vs. a year-end count); hover the bar for CLW's figure. The red dashed line on each year with a comparable CLW estimate is the legal line: dispatch may be at most ${Math.round(workforce.legal_cap_share * 100)}% of the workforce, so regular workers should reach ${100 - Math.round(workforce.legal_cap_share * 100)}% of CLW's total (for 2025, CLW's high end, the top of the bar).`,
       'Posts cannot size the workforce (right chart) — early years have as few as 7-9 posts total. The right chart\'s dots are not padded to a fixed capacity, so a bar\'s height is just its own total.',
       `How posts are grouped (right chart): ${posts.rule}`,
     ]);
