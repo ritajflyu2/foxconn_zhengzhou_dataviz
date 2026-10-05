@@ -4,7 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "sync:sim": "node scripts/sync-simulator.mjs",
+    "predev": "npm run sync:sim",
     "dev": "vite",
+    "prebuild": "npm run sync:sim",
     "build": "vite build",
     "preview": "vite preview"
   },

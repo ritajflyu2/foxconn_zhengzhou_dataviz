@@ -2940,3 +2940,77 @@ body[data-page="intro"] .scene-root {
 .tooltip:has(.tooltip__calc) {
   max-width: none;
 }
+
+/* --- Ecosystem Simulator page: the simulator fills the window under the header ---
+   Its iframe lives in #sim-host (outside #scene-root), shown only on this page. */
+.sim-host {
+  /* Off this page the frame stays laid out at full size, just invisible: the
+     simulator sizes its canvases from its window and breaks at 0 × 0. */
+  position: fixed;
+  left: 0;
+  top: var(--sim-top, 5rem);
+  width: 100%;
+  height: calc(100vh - var(--sim-top, 5rem));
+  visibility: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+body[data-page="sim"] {
+  padding-bottom: 0;
+  overflow: hidden; /* the simulator scales itself: no page scroll */
+}
+body[data-page="sim"] .page-grid {
+  display: none;
+}
+body[data-page="sim"] .sim-host {
+  visibility: visible;
+  pointer-events: auto;
+  z-index: auto;
+  height: calc(100dvh - var(--sim-top, 5rem));
+  background: #fdfdfd; /* the simulator's own ground */
+}
+.sim-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* The floors flying from the floor index into the simulator's building. */
+.sim-assemble {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+.sim-assemble img {
+  position: absolute;
+  transform-origin: 0 0;
+}
+
+/* Under the floor stack, as wide as it: the way into the simulator. Styled
+   like the page tabs. */
+.floor-index__explore {
+  display: block;
+  width: 75%;
+  margin: 1rem 0 0 19%;
+  font: inherit;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--grid);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  transition: border-color 120ms ease, color 120ms ease;
+}
+.floor-index__explore:hover {
+  border-color: var(--ink-muted);
+  color: var(--ink);
+}
+.floor-index__explore:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  color: var(--ink);
+}

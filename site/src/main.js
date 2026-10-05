@@ -5,6 +5,7 @@ import { createIntroManager } from './intro/introManager.js';
 import { createEnvManager } from './environment/envManager.js';
 import { createMgmtManager } from './management/mgmtManager.js';
 import { mountFloorNav, setFloorActive } from './lib/floorNav.js';
+import { createSimManager } from './simulator/simManager.js';
 
 const root = document.querySelector('#scene-root');
 const pageGrid = document.querySelector('#page-grid');
@@ -29,9 +30,10 @@ const PAGES = {
   labor: { label: 'Labor', title: 'Behind the Line — Labor' },
   mgmt: { label: 'Management', title: 'Management' },
   env: { label: 'Waste and Water Processing', title: 'Waste and Water Processing' },
+  sim: { label: 'Ecosystem Simulator', title: 'Electronics Manufacturing Ecosystem' },
 };
 const pageOf = (hash) =>
-  hash.startsWith('#intro-') ? 'intro' : hash.startsWith('#env-') ? 'env' : hash.startsWith('#mgmt-') ? 'mgmt' : 'labor';
+  hash.startsWith('#intro-') ? 'intro' : hash.startsWith('#env-') ? 'env' : hash.startsWith('#mgmt-') ? 'mgmt' : hash.startsWith('#sim-') ? 'sim' : 'labor';
 // The floor of the factory each page lives on, in the floor index.
 const PAGE_FLOOR = { labor: '1F', mgmt: '3F', env: '4F' };
 
@@ -61,11 +63,12 @@ try {
   const introManager = createIntroManager({ nav: introArrows, root });
   const envManager = createEnvManager({ nav: envArrows, root });
   const mgmtManager = createMgmtManager({ nav: mgmtArrows, root });
-  const managers = { labor: laborManager, intro: introManager, env: envManager, mgmt: mgmtManager };
+  const simManager = createSimManager({ root });
+  const managers = { labor: laborManager, intro: introManager, env: envManager, mgmt: mgmtManager, sim: simManager };
 
   const setSwitcherCurrent = buildPageSwitcher((key) => {
     window.location.hash =
-      key === 'intro' ? `intro-${introManager.scenes[0].id}` : key === 'env' ? `env-${envManager.scenes[0].id}` : key === 'mgmt' ? `mgmt-${mgmtManager.scenes[0].id}` : 'scene-1';
+      key === 'intro' ? `intro-${introManager.scenes[0].id}` : key === 'env' ? `env-${envManager.scenes[0].id}` : key === 'mgmt' ? `mgmt-${mgmtManager.scenes[0].id}` : key === 'sim' ? 'sim-1' : 'scene-1';
   });
 
   let currentPage = null;
@@ -99,6 +102,7 @@ try {
   introManager.start();
   envManager.start();
   mgmtManager.start();
+  simManager.start();
 
   console.info(`Loaded ${files.length} data files: ${files.join(', ')}`);
 } catch (error) {

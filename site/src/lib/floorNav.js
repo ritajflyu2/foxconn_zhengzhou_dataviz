@@ -1,5 +1,6 @@
 import { select } from 'd3';
 import { raw } from './dataLoader.js';
+import { assembleIntoSimulator } from '../simulator/assemble.js';
 
 const floorImages = import.meta.glob('../../assets/labor/floor_*.webp', { eager: true, query: '?url', import: 'default' });
 const imageUrl = (name) => floorImages[`../../assets/labor/${name}`];
@@ -122,6 +123,21 @@ export function mountFloorNav(root) {
   const current = legend('floor-legend--active');
   current.el.setAttribute('aria-live', 'polite');
   aside.append(current.el);
+
+  // Under the stack: all four floors come together as the simulator's building.
+  const explore = document.createElement('button');
+  explore.type = 'button';
+  explore.className = 'floor-index__explore';
+  explore.textContent = 'Explore the Electronics Manufacturing Ecosystem';
+  explore.addEventListener('click', () => {
+    hideHover();
+    // Top floor first: 4F leads the flight, 1F lands last.
+    const floors = [...FLOORS]
+      .sort((a, b) => b.id.localeCompare(a.id))
+      .map((f) => ({ id: f.id, href: imageUrl(f.image), rect: floorG.get(f.id).select('image').node().getBoundingClientRect() }));
+    assembleIntoSimulator(floors);
+  });
+  aside.append(explore);
 
   const showHover = (f) => {
     hover.set(f);

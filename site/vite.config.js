@@ -4,8 +4,9 @@ import { defineConfig } from 'vite';
 // `npm run dev` keeps serving from /.
 const PAGES_BASE = '/foxconn_zhengzhou_dataviz/';
 
-export default defineConfig(({ command }) => ({
-  base: command === 'build' ? PAGES_BASE : '/',
+// `npm run preview` serves the build, so it uses the same base.
+export default defineConfig(({ command, isPreview }) => ({
+  base: command === 'build' || isPreview ? PAGES_BASE : '/',
   // Allow importing images from design/reference/ (one level above the Vite
   // root). The site still reads all DATA only from site/data/.
   server: { open: true, fs: { allow: ['..'] } },
