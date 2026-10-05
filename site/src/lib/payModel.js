@@ -34,7 +34,7 @@ export function weeklyGrossOT(worker, hoursPerWeek) {
   return regular * rate + otWeekday * rate * weekday + otRestDay * rate * rest_day;
 }
 
-// Hours the row is paid for: hourly-type dispatch has a weekly minimum
+// Hours the row is paid for: dispatch workers have a weekly minimum
 // (`min_hours_per_week`), so fewer hours on the slider still pay that minimum.
 export function paidHours(worker, hoursPerWeek) {
   return Math.max(hoursPerWeek, worker.min_hours_per_week ?? 0);

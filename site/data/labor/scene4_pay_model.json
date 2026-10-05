@@ -53,6 +53,8 @@
     "rest_day": 2.0
    },
    "ot_note": "Legal overtime rates assumed; the CLW report does not state them.",
+   "min_hours_per_week": 60,
+   "min_hours_note": "60-hour weekly minimum assumed, as for hourly-type dispatch; the CLW report states it only for hourly-type.",
    "conditional": {
     "type": "rebate",
     "amount": {

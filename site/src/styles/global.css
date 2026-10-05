@@ -1335,6 +1335,17 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   font-weight: 600;
 }
 
+/* Slider under the dispatch minimum: the row is paid as 60 h, so it greys out. */
+.pay-row.is-at-minimum .pay-bar,
+.pay-row.is-at-minimum .pay-row__dot {
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+.pay-row.is-at-minimum .pay-figure__value,
+.pay-row.is-at-minimum .pay-row__name {
+  color: var(--ink-muted);
+}
+
 .pay-figure__note--min {
   font-style: italic;
 }

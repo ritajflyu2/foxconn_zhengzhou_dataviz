@@ -330,7 +330,7 @@ export default {
         if (pay.atMinimum) {
           const minNote = document.createElement('p');
           minNote.className = 'pay-figure__note pay-figure__note--min';
-          minNote.textContent = `minimum ${worker.min_hours_per_week} h for hourly-type`;
+          minNote.textContent = `minimum ${worker.min_hours_per_week} h for dispatch: paid as ${worker.min_hours_per_week} h`;
           monthlyBlock.append(minNote);
         }
 
@@ -380,6 +380,8 @@ export default {
           );
         }
 
+        // Below the dispatch minimum the slider does not apply to this row: greyed.
+        row.classList.toggle('is-at-minimum', Boolean(pay.atMinimum));
         row.append(label, main);
         return row;
       });
@@ -404,7 +406,7 @@ export default {
     addMethodNote(el, 'How pay is calculated', [
       data.hours_rule,
       `Monthly figures use ${data.weeks_per_month} weeks/month (hours/week × ${data.weeks_per_month}). The one worked example in the source tables (hourly-type dispatch at the default 60h/week) comes to $970 (¥6,500)/month using a slightly different rounding of that conversion; this calculator uses the ${data.weeks_per_month} figure consistently across the whole slider range, which puts the default at ${money(defaultHourlyPay.monthlyTotal)}/month — within about half a percent.`,
-      `Benefits and contract text per worker type are in each row's label; the days-employed slider only changes rebate-type dispatch's payout: nothing before day ${rebate.threshold_days}, then the ${money(data.workers.rebate_dispatch.conditional.amount)} rebate averaged over the months worked (days employed ÷ ${rebate.days_per_month}) — the other three types' pay depends only on hours worked. Hourly-type dispatch is paid for at least ${hd.min_hours_per_week} hours a week. Hover a bar for its calculation.`,
+      `Benefits and contract text per worker type are in each row's label; the days-employed slider only changes rebate-type dispatch's payout: nothing before day ${rebate.threshold_days}, then the ${money(data.workers.rebate_dispatch.conditional.amount)} rebate averaged over the months worked (days employed ÷ ${rebate.days_per_month}) — the other three types' pay depends only on hours worked. Both dispatch types are paid for at least ${hd.min_hours_per_week} hours a week (greyed when the slider is lower). ${data.workers.rebate_dispatch.min_hours_note} Hover a bar for its calculation.`,
     ]);
 
     addCaveat(el, data.caveat);

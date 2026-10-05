@@ -420,6 +420,9 @@ write("scene4_pay_model.json", {
             "base_monthly": money(2100), "base_hours_monthly": 174,
             "ot_multipliers": {"weekday": 1.5, "rest_day": 2.0},
             "ot_note": "Legal overtime rates assumed; the CLW report does not state them.",
+            # Assumed like hourly-type dispatch's (CLW states it only for hourly-type).
+            "min_hours_per_week": 60,
+            "min_hours_note": "60-hour weekly minimum assumed, as for hourly-type dispatch; the CLW report states it only for hourly-type.",
             # One-time rebate after `threshold_days`, averaged over the months
             # actually worked (days employed / days_per_month); 0 before that.
             "conditional": {"type": "rebate", "amount": money(9800), "amount_range": [money(4800), money(9800)],
