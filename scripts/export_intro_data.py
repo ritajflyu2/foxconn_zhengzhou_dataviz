@@ -159,6 +159,19 @@ def hazardous_waste():
     }
 
 
+# The airport-zone campus outline (the Size screen's traced Google Earth
+# polygon), as lon/lat, for the workers screen's zone backdrop.
+ZONE_KML = REF / "foxconn zhengzhou google earth.kml"
+
+
+def airport_zone_outline():
+    import re
+    text = ZONE_KML.read_text(encoding="utf-8")
+    coords = re.search(r"<coordinates>\s*(.*?)\s*</coordinates>", text, re.S).group(1).split()
+    ring = [[round(float(c.split(",")[0]), 6), round(float(c.split(",")[1]), 6)] for c in coords]
+    return {"ring": ring, "source": "Traced in Google Earth (foxconn zhengzhou google earth.kml), the same outline as the Size screen"}
+
+
 def main():
     DATA_OUT.mkdir(parents=True, exist_ok=True)
     ASSET_OUT.mkdir(parents=True, exist_ok=True)
@@ -170,6 +183,9 @@ def main():
     print(f"wrote {path.relative_to(ROOT)}")
     path = DATA_OUT / "wastewater.json"
     path.write_text(json.dumps(wastewater(), indent=2) + "\n")
+    print(f"wrote {path.relative_to(ROOT)}")
+    path = DATA_OUT / "airport_zone_outline.json"
+    path.write_text(json.dumps(airport_zone_outline(), indent=1) + "\n")
     print(f"wrote {path.relative_to(ROOT)}")
     path = DATA_OUT / "hazardous_waste.json"
     path.write_text(json.dumps(hazardous_waste(), indent=2) + "\n")

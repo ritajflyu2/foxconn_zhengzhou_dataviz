@@ -15,12 +15,11 @@ import { colorFor } from '../lib/colorTokens.js';
 import { count, percent } from '../lib/format.js';
 import { raw } from '../lib/dataLoader.js';
 
-const W = 1060;
-const H = 940;
+// Labor Scene 1's portrait layout (north up). The Introduction reuses this
+// drawing in a landscape layout, turned so it fits one window (see intro).
+const PORTRAIT = { W: 1060, H: 940, BOX: { x0: 200, x1: 740, y0: 210, y1: 740 }, GSD: { x: 952, y: 824 }, angle: 0, compass: [988, 150] };
 const MAX_R = 150;
 const PAD = 36; // room for the two label lines that sit above each circle
-const BOX = { x0: 200, x1: 740, y0: 210, y1: 740 };
-const GSD = { x: 952, y: 824 };
 const EARTH_KM = 6371;
 const CAP_HIT_WIDTH = 16; // generous invisible hit-stroke so the thin red ring is easy to hover
 
@@ -44,8 +43,11 @@ function outerRadius(plant, rOf) {
   return rOf(plant.est_total_high ?? plant.est_total_low);
 }
 
-function layout(plants, rOf, gsdR) {
-  const projection = geoMercator().fitExtent(
+function layout(plants, rOf, gsdR, G) {
+  const { W, H, BOX, GSD } = G;
+  const projection = geoMercator()
+    .angle(G.angle) // turned in the Introduction so the far plant sits beside, not above
+    .fitExtent(
     [
       [BOX.x0, BOX.y0],
       [BOX.x1, BOX.y1],
@@ -92,10 +94,30 @@ function layout(plants, rOf, gsdR) {
     .tick(600);
 
   clamp();
+  // Optional: a page can re-place the circles itself (the Introduction puts
+  // the airport plants inside the zone's outline).
+  if (G.afterLayout) {
+    G.afterLayout(nodes);
+    return nodes;
+  }
+  // Optional: push the plant outside the airport zone further out, so it reads
+  // as a separate site (its direction is kept; the distance is schematic).
+  if (G.farShift) {
+    const air = nodes.filter((d) => d.plant.zone === 'airport');
+    const ax = air.reduce((s, d) => s + d.x, 0) / air.length;
+    const ay = air.reduce((s, d) => s + d.y, 0) / air.length;
+    for (const d of nodes) {
+      if (d.plant.zone === 'airport') continue;
+      const len = Math.hypot(d.x - ax, d.y - ay) || 1;
+      d.x += ((d.x - ax) / len) * G.farShift;
+      d.y += ((d.y - ay) / len) * G.farShift;
+      d.y = Math.min(Math.max(d.y, d.r + PAD + 8), H - d.r - 40);
+    }
+  }
   return nodes;
 }
 
-function layerCard(plantName, label, value, note) {
+export function layerCard(plantName, label, value, note, source) {
   const wrap = document.createElement('div');
   const title = document.createElement('p');
   title.className = 'tooltip__title';
@@ -113,10 +135,16 @@ function layerCard(plantName, label, value, note) {
     n.textContent = note;
     wrap.append(n);
   }
+  if (source) {
+    const src = document.createElement('p');
+    src.className = 'tooltip__note tooltip__source';
+    src.textContent = source;
+    wrap.append(src);
+  }
   return wrap;
 }
 
-function combinedCard(plant) {
+export function combinedCard(plant) {
   const wrap = document.createElement('div');
 
   const title = document.createElement('p');
@@ -133,27 +161,13 @@ function combinedCard(plant) {
 
   const list = document.createElement('dl');
   const rows = [
-    ['Insured (measured)', count(plant.insured_2025)],
-    [
-      hasRange ? 'Estimated dispatch (low–high)' : 'Estimated dispatch',
-      range(plant.est_dispatch_low, plant.est_dispatch_high, count),
-    ],
-    [
-      hasRange ? 'Estimated total (low–high)' : 'Estimated total',
-      range(plant.est_total_low, plant.est_total_high, count),
-    ],
-    [
-      hasRange ? 'Dispatch share of this plant (low–high)' : 'Dispatch share of this plant',
-      range(plant.dispatch_share_of_plant_low, plant.dispatch_share_of_plant_high, percent),
-    ],
-    [
-      hasRange ? 'Legal max dispatch — 10% (low–high)' : 'Legal max dispatch — 10%',
-      range(plant.legal_max_dispatch_low, plant.legal_max_dispatch_high, count),
-    ],
-    [
-      hasRange ? 'Dispatch over the legal cap (low–high)' : 'Dispatch over the legal cap',
-      range(plant.dispatch_over_cap_low, plant.dispatch_over_cap_high, count),
-    ],
+    // Short labels so each row is one line; ranges read low–high.
+    ['Insured', count(plant.insured_2025)],
+    ['Dispatch (est.)', range(plant.est_dispatch_low, plant.est_dispatch_high, count)],
+    ['Total (est.)', range(plant.est_total_low, plant.est_total_high, count)],
+    ['Dispatch share', range(plant.dispatch_share_of_plant_low, plant.dispatch_share_of_plant_high, percent)],
+    ['Legal max (10%)', range(plant.legal_max_dispatch_low, plant.legal_max_dispatch_high, count)],
+    ['Over the cap', range(plant.dispatch_over_cap_low, plant.dispatch_over_cap_high, count)],
   ];
   for (const [label, value] of rows) {
     const dt = document.createElement('dt');
@@ -169,7 +183,8 @@ function combinedCard(plant) {
     const note = document.createElement('p');
     note.className = 'tooltip__note';
     note.textContent = [
-      plant.note,
+      // Short form of the plant's note (the full one is in the method note).
+      plant.note ? 'Outside CLW\'s survey area; dispatch share assumed.' : null,
       plant.location_approximate ? 'Location approximate.' : null,
     ]
       .filter(Boolean)
@@ -213,40 +228,34 @@ function legend(items) {
   return el;
 }
 
-export default {
-  id: 1,
-  navLabel: 'Zoom out',
-  colorKey: 'regular',
-
-  mount(container, data) {
-    const { el, body } = createScene({
-      index: 1,
-      title: 'Zoom out: where the workers are',
-      summary:
-        'One circle per plant, sized by estimated total workforce. The solid blue core is the regular workers we can actually count; the solid orange band is the default (low-end) dispatch estimate; the hatched grey band outside it is how much bigger the plant could be at CLW’s high end. The law caps dispatch at 10% of the workforce, so regular workers should reach the red line (90% of the total) — the blue core falls far short, and the wide gap out to the red line is dispatch filling jobs the law reserves for regular staff.',
-    });
-
+// Draws the plants figure into `body` (legend, hint, figure). Shared by Labor
+// Scene 1 and the Introduction's last screen; `opts` sets the layout and the
+// few things that differ.
+export function renderPlants(el, body, data, opts = {}) {
+    const G = opts.geometry ?? PORTRAIT;
+    const { W, H, GSD } = G;
     const blue = colorFor('regular');
     const orange = colorFor('dispatch');
     const red = colorFor('legal-cap');
     const green = colorFor('comparison');
     const grey = colorFor('estimate-range');
 
-    body.append(
-      legend([
+    const legendEl = legend(
+      opts.legendItems ? opts.legendItems({ blue, orange, red, green, grey }) : [
         { kind: 'solid', color: blue, opacity: 0.6, label: 'Insured (measured)' },
         { kind: 'solid', color: orange, opacity: 0.6, label: `Dispatch — low end (default, ${count(data.clw_dispatch_range.low)} campus-wide)` },
         { kind: 'hatch', color: grey, label: `Dispatch — high-end extra (up to ${count(data.clw_dispatch_range.high)} campus-wide)` },
         { kind: 'ring', color: red, label: 'Legal line — regular ≥ 90% (dispatch ≤ 10%)' },
         { kind: 'solid', color: green, label: data.comparison.label, value: count(data.comparison.value) },
-      ])
+      ]
     );
+    if (!opts.legendBelow) body.append(legendEl);
 
     const hint = document.createElement('p');
     hint.className = 'figure__hint';
     hint.textContent =
       'Hover a ring for that value alone; hover the plant name for the full breakdown. Click a plant to break it into workers on the floor.';
-    body.append(hint);
+    if (opts.hint !== false) body.append(hint);
 
     const figure = document.createElement('figure');
     figure.className = 'figure';
@@ -255,6 +264,7 @@ export default {
     const svg = select(figure)
       .append('svg')
       .attr('viewBox', `0 0 ${W} ${H}`)
+      .attr('preserveAspectRatio', 'xMinYMin meet')
       .attr('role', 'img')
       .attr('aria-label', 'Four Foxconn Zhengzhou plants drawn as nested circles sized by estimated workforce');
 
@@ -282,7 +292,7 @@ export default {
       .domain([0, max(data.plants, (d) => d.est_total_high ?? d.est_total_low)])
       .range([0, MAX_R]);
 
-    const nodes = layout(data.plants, rOf, rOf(data.comparison.value));
+    const nodes = layout(data.plants, rOf, rOf(data.comparison.value), G);
     const tooltip = createTooltip(figure);
 
     // Distance annotation: the one geographic fact the relaxed layout loses.
@@ -299,7 +309,7 @@ export default {
       const angle = Math.atan2(cy - away.y, cx - away.x);
       const span = Math.hypot(cx - away.x, cy - away.y);
       const from = away.r + 12;
-      const to = Math.max(from + 40, span - 215); // stop clear of the cluster's labels
+      const to = Math.max(from + 40, span - (G.annotStop ?? 215)); // stop clear of the cluster's labels
       const at = (d) => [away.x + Math.cos(angle) * d, away.y + Math.sin(angle) * d];
       const [x1, y1] = at(from);
       const [x2, y2] = at(to);
@@ -317,15 +327,21 @@ export default {
         .attr('stroke-dasharray', '3 5');
       annot
         .append('text')
-        .attr('x', tx + 10)
-        .attr('y', ty)
+        .attr('x', tx + (G.annotDx ?? 10))
+        .attr('y', ty + (G.annotDy ?? 0))
+        .attr('text-anchor', G.annotAnchor ?? 'start')
         .attr('dominant-baseline', 'middle')
+        .attr('transform', G.annotAlong ? `rotate(${(angle * 180) / Math.PI + (Math.abs(angle) > Math.PI / 2 ? 180 : 0)}, ${tx + (G.annotDx ?? 10)}, ${ty + (G.annotDy ?? 0)})` : null)
         .attr('class', 'annotation__text')
         .text(`≈ ${Math.round(km)} km ${compassDirection(origin, away.plant)}`);
     }
 
     // North reference, since the circles are placed by direction.
-    const compass = svg.append('g').attr('class', 'annotation').attr('transform', 'translate(988, 150)');
+    // (turned with the layout, so it still points to true north)
+    // 'left': just left of the leftmost circle.
+    const compassX = G.compass[0] === 'left' ? Math.min(...nodes.map((n) => n.x - n.r)) - 46 : G.compass[0];
+    const compassAt = svg.append('g').attr('class', 'annotation').attr('transform', `translate(${compassX}, ${G.compass[1]})`);
+    const compass = compassAt.append('g').attr('transform', `rotate(${-G.angle})`);
     compass
       .append('line')
       .attr('y1', 26)
@@ -336,10 +352,13 @@ export default {
       .append('path')
       .attr('d', 'M -4 2 L 0 -8 L 4 2 Z')
       .attr('fill', 'currentColor');
-    compass
+    const nRad = ((-G.angle - 90) * Math.PI) / 180; // where the arrow points
+    compassAt
       .append('text')
-      .attr('y', 42)
+      .attr('x', G.angle ? Math.cos(nRad) * 22 : 0)
+      .attr('y', G.angle ? Math.sin(nRad) * 22 : 42)
       .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', G.angle ? 'middle' : 'auto')
       .attr('class', 'annotation__text')
       .text('N');
 
@@ -350,9 +369,9 @@ export default {
       .attr('class', 'plant')
       .attr('transform', (d) => `translate(${d.x}, ${d.y})`)
       .attr('tabindex', 0)
-      .attr('role', 'button')
+      .attr('role', opts.clickable === false ? 'img' : 'button')
       .attr('aria-label', (d) =>
-        `${d.plant.name}: ${count(d.plant.insured_2025)} insured, ${count(d.plant.est_total_low)} estimated total. Press Enter to see the workers on the floor.`
+        `${d.plant.name}: ${count(d.plant.insured_2025)} insured, ${count(d.plant.est_total_low)} estimated total.${opts.clickable === false ? '' : ' Press Enter to see the workers on the floor.'}`
       )
       // Read by the 1 → 2 transition to break each circle into its own dots.
       .attr('data-plant-id', (d) => d.plant.id)
@@ -362,14 +381,18 @@ export default {
     const toFloor = () => {
       window.location.hash = 'scene-2';
     };
-    groups.on('click', toFloor).on('keydown', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        toFloor();
-      }
-    });
+    if (opts.clickable !== false)
+      groups.on('click', toFloor).on('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          toFloor();
+        }
+      });
 
-    const scaleAt = () => figure.getBoundingClientRect().width / W;
+    const scaleAt = () => {
+      const r = svg.node().getBoundingClientRect();
+      return Math.min(r.width / W, r.height / H);
+    };
     const showAt = (x, y) => ({ x: x * scaleAt(), y: y * scaleAt() });
 
     // A worker band is the ring between two radii — dispatch is literally the
@@ -412,11 +435,8 @@ export default {
               p.name,
               'Dispatch — high end',
               count(p.est_dispatch_high),
-              `At CLW's high end, dispatch rises to ${count(p.est_dispatch_high)} (${percent(
-                p.dispatch_share_of_plant_high
-              )} of the workforce). This grey band is the ${count(
-                extra
-              )} extra dispatch workers above the low estimate, out to a ${count(p.est_total_high)} total.`
+              `${percent(p.dispatch_share_of_plant_high)} of the workforce; ${count(extra)} more than the low end.`,
+              data.sources_short.dispatch
             ),
           rHigh
         );
@@ -431,16 +451,9 @@ export default {
             'Dispatch — low end (default)',
             count(p.est_dispatch_low),
             p.clw_share_of_airport_dispatch != null
-              ? `The band between the insured core and the low-end total (${count(
-                  p.est_total_low
-                )}): ${count(p.est_dispatch_low)} dispatch, ${percent(
-                  p.dispatch_share_of_plant_low
-                )} of the workforce. (This plant's slice of CLW's campus-wide ${count(data.clw_dispatch_range.low)} estimate.)`
-              : `The band between the insured core and the total (${count(p.est_total_low)}): ${count(
-                  p.est_dispatch_low
-                )} dispatch, ${percent(
-                  p.dispatch_share_of_plant_low
-                )} of the workforce — the airport zone's low-end share, applied here as an assumption.`
+              ? `${percent(p.dispatch_share_of_plant_low)} of the workforce.`
+              : `${percent(p.dispatch_share_of_plant_low)} of the workforce (assumed, airport-zone share).`,
+            data.sources_short.dispatch
           ),
         rLow
       );
@@ -468,11 +481,8 @@ export default {
             p.name,
             'Legal line — regular workers needed',
             count(p.legal_regular_floor_low),
-            `For dispatch to stay within the 10% cap, regular workers must reach 90% of the total — ${count(
-              p.legal_regular_floor_low
-            )} here. Only ${count(p.insured_2025)} are insured, so ${count(
-              p.dispatch_over_cap_low
-            )} dispatch workers are over the legal cap (everything between the blue core and this line).`
+            `Needed for dispatch ≤ 10%. ${count(p.dispatch_over_cap_low)} dispatch over the cap.`,
+            data.sources_short.legal_cap
           ),
         rCap,
         capHit
@@ -481,10 +491,12 @@ export default {
       addLayer(
         'insured',
         g.append('circle').attr('r', rInsured).attr('fill', blue),
-        () => layerCard(p.name, 'Insured (measured)', count(p.insured_2025), 'Work-injury insurance headcount, 2025.'),
+        () => layerCard(p.name, 'Insured (measured)', count(p.insured_2025), null, data.sources_short.insured),
         rInsured
       );
 
+      // The plant's outermost ring: hover cards sit outside it.
+      const outerEl = layers[0].vis.node();
       const applyFocus = (focusKey) => {
         for (const L of layers) {
           const op = focusKey == null ? BASE_OPACITY[L.key] : L.key === focusKey ? EMPH_OPACITY[L.key] : FADED_OPACITY;
@@ -495,10 +507,11 @@ export default {
 
       for (const L of layers) {
         L.hit
-          .on('pointerenter', () => {
+          .on('pointerenter', (event) => {
             applyFocus(L.key);
-            tooltip.show(L.card(), showAt(d.x, d.y - L.anchorR));
+            tooltip.showOutside(L.card(), event, outerEl);
           })
+          .on('pointermove', (event) => tooltip.showOutside(L.card(), event, outerEl))
           .on('pointerleave', () => {
             applyFocus(null);
             tooltip.hide();
@@ -509,7 +522,10 @@ export default {
     const nameLabel = groups
       .append('text')
       .attr('class', 'plant__name')
-      .attr('y', (d) => -d.r - 24)
+      // Above the value line by its own height, so the pair never overlaps
+      // whatever size the page sets the text at.
+      .attr('y', (d) => -d.r - 8)
+      .attr('dy', '-1.25em')
       .attr('text-anchor', 'middle')
       .text((d) => d.plant.name);
     const valueLabel = groups
@@ -520,8 +536,9 @@ export default {
       .text((d) => `${count(d.plant.est_total_low)} est.`);
 
     const showCombined = (d) => tooltip.show(combinedCard(d.plant), showAt(d.x, d.y - d.r));
-    nameLabel.on('pointerenter', (_e, d) => showCombined(d)).on('pointerleave', () => tooltip.hide());
-    valueLabel.on('pointerenter', (_e, d) => showCombined(d)).on('pointerleave', () => tooltip.hide());
+    const showCombinedBeside = (event, d) => tooltip.showBeside(combinedCard(d.plant), event);
+    nameLabel.on('pointerenter', showCombinedBeside).on('pointerleave', () => tooltip.hide());
+    valueLabel.on('pointerenter', showCombinedBeside).on('pointerleave', () => tooltip.hide());
     groups
       .on('focus', (_e, d) => showCombined(d))
       .on('blur', () => tooltip.hide());
@@ -534,7 +551,8 @@ export default {
     gsd
       .append('text')
       .attr('class', 'plant__name')
-      .attr('y', -rOf(data.comparison.value) - 24)
+      .attr('y', -rOf(data.comparison.value) - 8)
+      .attr('dy', '-1.25em')
       .attr('text-anchor', 'middle')
       .text(comparisonName);
     gsd
@@ -558,7 +576,26 @@ export default {
           clw.season_label
         } estimate is ${count(clw.low)}–${count(clw.high)}.`
       : `Cross-check: the three airport-zone plants come to ${count(airportLow)}–${count(airportHigh)} estimated workers in ${data.year}.`;
-    figure.append(crossCheck);
+    if (opts.crossCheck !== false) figure.append(crossCheck);
+    if (opts.legendBelow) figure.append(legendEl);
+    return { figure, svg, crossCheckText: crossCheck.textContent };
+
+}
+
+export default {
+  id: 1,
+  navLabel: 'Zoom out',
+  colorKey: 'regular',
+
+  mount(container, data) {
+    const { el, body } = createScene({
+      index: 1,
+      title: 'Zoom out: where the workers are',
+      summary:
+        'One circle per plant, sized by estimated total workforce. The solid blue core is the regular workers we can actually count; the solid orange band is the default (low-end) dispatch estimate; the hatched grey band outside it is how much bigger the plant could be at CLW’s high end. The law caps dispatch at 10% of the workforce, so regular workers should reach the red line (90% of the total) — the blue core falls far short, and the wide gap out to the red line is dispatch filling jobs the law reserves for regular staff.',
+    });
+
+    renderPlants(el, body, data);
 
     addMethodNote(el, 'How we estimated these numbers', [
       data.method,

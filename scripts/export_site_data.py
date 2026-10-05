@@ -173,6 +173,12 @@ write("scene1_plants.json", {
     "clw_dispatch_source": "China Labor Watch's 2025 airport-zone estimate: about 80,000-110,000 dispatch workers at peak, campus-wide. Split across the three airport plants in proportion to each plant's insured headcount.",
     "fii_precision_dispatch_share": round(FII_PRECISION_SHARE, 4),
     "legal_cap_share": LEGAL_CAP,
+    # One-line sources for the hover cards (full versions above and in the notes).
+    "sources_short": {
+        "insured": "Source: each plant's 2025 annual report to regulators (work-injury insurance).",
+        "dispatch": "Source: China Labor Watch, 2025 (80,000–110,000 dispatch, split by insured share).",
+        "legal_cap": "Source: Interim Provisions on Labor Dispatch, 2014 (dispatch ≤ 10%).",
+    },
     "legal_cap_source": "Interim Provisions on Labor Dispatch (2014): dispatch workers may not exceed 10% of a company's TOTAL workforce. So regular workers must be at least 90% of the total; the red legal line marks that 90% level, drawn against the default (low) total estimate.",
     "method": "Airport-zone plants: estimated dispatch = CLW's campus-wide 80,000-110,000 range, allocated to each plant in proportion to its insured headcount. FII Precision: no CLW figure, so it borrows the airport zone's low-end dispatch share. Legal line = 90% of each plant's total workforce (the regular-worker floor at which dispatch would be exactly 10%).",
     "placement": "Loose, roughly geographic: use lat/lon for relative position only (no basemap in v1). FII Precision sits about 20 km north-west of the airport-zone cluster.",

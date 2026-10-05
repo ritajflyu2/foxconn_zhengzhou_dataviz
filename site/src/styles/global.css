@@ -2585,3 +2585,79 @@ body[data-page="intro"] .scene-root {
 .player-row[hidden] {
   display: none;
 }
+
+/* --- Introduction: Workers (Labor Scene 1's circles) ---------------------- */
+.workers-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+  max-width: 72rem;
+}
+
+.workers-summary .scene__summary {
+  margin: 0;
+  max-width: none;
+}
+
+@media (max-width: 760px) {
+  .workers-summary {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Drawing text in screen px (the drawing publishes its scale as --wk-s). */
+.workers-figure .plant__name {
+  font-size: calc(14px / max(var(--wk-s, 1), 0.6));
+}
+
+.workers-figure .plant__value,
+.workers-figure .annotation__text {
+  font-size: calc(12px / max(var(--wk-s, 1), 0.6));
+}
+
+.workers-figure {
+  margin-top: 2rem; /* clear of the summary when the zone outline appears */
+}
+
+/* The drawing sits centred in the page width. */
+.workers-figure > svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.workers-figure .legend {
+  margin-top: 0.75rem;
+}
+
+/* A one-line source under a hover card's note. */
+.tooltip__note + .tooltip__source {
+  margin-top: 0.25rem;
+  padding-top: 0;
+  border-top: none;
+}
+
+/* No focus box when the circle is clicked; keyboard focus still shows. */
+.workers-combined:focus:not(:focus-visible),
+.workers-figure g.plant:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* The airport zone, roughly traced, behind its three plants. */
+.workers-zone path {
+  fill: color-mix(in srgb, var(--ink) 4%, transparent);
+  stroke: var(--ink-muted);
+  stroke-opacity: 0.6;
+  stroke-width: 1;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.workers-zone__label {
+  font-family: var(--font-mono);
+  font-size: calc(11px / var(--wk-s, 1));
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  fill: var(--ink-muted);
+  pointer-events: none;
+}
