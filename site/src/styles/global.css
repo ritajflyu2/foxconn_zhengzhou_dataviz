@@ -3158,3 +3158,16 @@ body[data-page="sim"] .sim-host {
   position: absolute;
   transform-origin: 0 0;
 }
+/* TEMPORARY (screen recording): scene titles and summaries hidden on Labor,
+   Management and Waste and Water. Delete this block to bring them back. */
+body[data-page="labor"] .scene__index,
+body[data-page="labor"] .scene h2,
+body[data-page="labor"] .scene__summary,
+body[data-page="mgmt"] .scene__index,
+body[data-page="mgmt"] .scene h2,
+body[data-page="mgmt"] .scene__summary,
+body[data-page="env"] .scene__index,
+body[data-page="env"] .scene h2,
+body[data-page="env"] .scene__summary {
+  display: none;
+}
