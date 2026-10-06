@@ -135,8 +135,8 @@ export function postsToLegend({ root, toData, mountNext, reduced = false }) {
     veil.className = 'transition-veil';
     ghost.after(veil);
     const wordsData = raw.scene4_post_words;
-    // Fully solid while the word cloud is up, so nothing of the charts shows through.
-    const veilTo = wordsData ? 1 : 1 - DIM_TO;
+    // Deeper while the word cloud is up, so Scene 3's charts don't read through it.
+    const veilTo = 1 - (wordsData ? DIM_TO / 2.5 : DIM_TO);
     anims.push(veil.animate([{ opacity: 0 }, { opacity: veilTo }], { duration: reduced ? 0 : DIM_MS, easing: 'ease-out', fill: 'forwards' }));
 
     const clusterY = window.innerHeight * (wordsData ? CLUSTER_Y_WORDS : CLUSTER_Y);
