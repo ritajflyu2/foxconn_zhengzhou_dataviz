@@ -151,10 +151,6 @@ export default {
       .attr('r', LINE_DOT_R)
       .attr('data-kind', (d) => d.kind)
       .attr('fill', (d) => fillOf[d.kind]);
-    const floorNote = document.createElement('p');
-    floorNote.className = 'figure__note';
-    floorNote.textContent = `${count(lineDots.length)} dots.`;
-    floorFig.append(floorNote);
 
     // --- the dorm: one dot per bed, and the space each person gets -----------
     const dormCol = document.createElement('div');
