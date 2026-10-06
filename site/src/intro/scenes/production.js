@@ -44,7 +44,9 @@ const roundTo = (v, step) => Math.round(v / step) * step;
 
 // --- timeline (seconds of real time) -------------------------------------
 const FILL_PHONES = 48; // phones drawn one by one before they stack (an animation length, not data)
-const PLAY_SPEED = 1.6; // the whole animation plays this much faster than its timeline (the clock still shows peak-pace time)
+const BELOW_CANVAS_PX = 150; // closing line, notes link and the Back / Next buttons under the canvas
+const MIN_H = 220; // short laptop windows still fit the whole screen
+const PLAY_SPEED = 1.6; // after the real-time phone fill, the stack and zoom play this much faster
 const STACK_S = 2.4;
 const ZOOM_OUT_S = 5; // geometric camera zoom-out
 const RISE_S = 4.5; // camera fixed, stack keeps rising
@@ -207,7 +209,19 @@ export default {
 
     function layout() {
       const W = figure.clientWidth;
-      const H = Math.round(Math.min(640, Math.max(420, W * 0.62)));
+      // Tall enough for the stack, but short enough that the whole screen
+      // (counters, canvas, closing line, notes) fits one window: no scrolling.
+      // The caption is tallest with the closing sentence: size it for that now,
+      // so the chart never moves when the sentence appears.
+      const was = [caption.textContent, caption.className];
+      caption.textContent = endText;
+      caption.classList.add('is-end');
+      caption.style.minHeight = '';
+      caption.style.minHeight = `${caption.offsetHeight}px`;
+      [caption.textContent, caption.className] = was;
+      const canvasTop = canvas.getBoundingClientRect().top + window.scrollY;
+      const fitH = window.innerHeight - canvasTop - BELOW_CANVAS_PX;
+      const H = Math.round(Math.max(MIN_H, Math.min(640, W * 0.62, fitH)));
       const dpr = window.devicePixelRatio || 1;
       canvas.width = Math.round(W * dpr);
       canvas.height = Math.round(H * dpr);
@@ -487,28 +501,14 @@ export default {
       skipBtn.disabled = done;
     }
 
-    // As the phones start to stack, the page scrolls just enough to bring the
-    // bottom of the canvas (the stack's base and its label) into view, so the
-    // counters above stay visible; never past the canvas's top. Once per play.
-    let followed = false;
-    function bringIntoView() {
-      // Down to the notes link under the chart, kept clear of the Back / Next buttons.
-      const last = el.querySelector(':scope > details.method') ?? canvas;
-      const bottom = last.getBoundingClientRect().bottom + window.scrollY;
-      const top = canvas.getBoundingClientRect().top + window.scrollY;
-      const target = Math.min(top - 16, bottom + 64 - window.innerHeight);
-      if (target > window.scrollY + 4) window.scrollTo({ top: target, behavior: 'smooth' });
-    }
-
     function frame(now) {
       if (!canvas.isConnected) return; // scene was replaced
       if (playing) {
         const before = elapsed;
-        elapsed = Math.min(total(), elapsed + (last == null ? 0 : ((now - last) / 1000) * PLAY_SPEED));
-        if (!followed && before < L.fillS && elapsed >= L.fillS) {
-          followed = true;
-          bringIntoView();
-        }
+        // The phone fill runs in real time (about 6 a second, literally); only the
+        // stacking and zoom after it play faster.
+        const dt = last == null ? 0 : (now - last) / 1000;
+        elapsed = Math.min(total(), elapsed + (elapsed < L.fillS ? dt : dt * PLAY_SPEED));
         if (elapsed >= total()) playing = false;
         syncButtons();
       }
@@ -540,7 +540,6 @@ export default {
     });
     replayBtn.addEventListener('click', () => {
       elapsed = 0;
-      followed = false;
       play();
     });
 

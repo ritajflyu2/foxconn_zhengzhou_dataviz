@@ -39,7 +39,13 @@ const SLOTS = [
   [392, 146],
 ];
 const BAR_SPAN = 0.54;
-const ARROW_BAR_PX = 90; // room kept clear above the fixed Back / Next buttons
+const SCROLL_TO_HEADCOUNT = false; // TEMPORARY
+const ARROW_BAR_PX = 90;
+const HC_GAP_PX = 72;
+const HC_EDGE_PX = 24; // kept clear at the window's right edge // between the line workers' chart and the worker composition
+const TIP_CLEAR_PX = 56; // room kept for the Back / Next buttons under the hover card
+const HC_MAX_W = 176; // worker composition width (px): its full size
+const HC_MIN_W = 96; // …and the smallest it shrinks to near the page edge // room kept clear above the fixed Back / Next buttons
 const HOURS_ROWS = 2; // every strip has the same number of rows, so a longer week is a longer strip
 
 // The working week as one cell per hour, in two rows: 40 and 60 hours differ in
@@ -427,11 +433,57 @@ function mountMgmt(container, { compared: startCompared }) {
     const hc = mgmt.headcount;
     const headcount = el('div', 'mgmt-headcount');
     headcount.hidden = true;
-    floors.append(headcount); // under the assembly floor
+    chartB.append(headcount); // in the empty space right of the line workers' bars
+    // Just right of the line workers' bars and their values, sitting above the
+    // hours strip; a little smaller only if the page edge is close.
+    const placeHeadcount = () => {
+      if (!headcount.isConnected) return hcRo.disconnect();
+      const b = chartB.getBoundingClientRect();
+      let right = 0;
+      for (const n of chartB.querySelectorAll('.mgmt-bar__value, .mgmt-bar__fill')) right = Math.max(right, n.getBoundingClientRect().right - b.left);
+      // …and clear of the white-collar chart's hours line just above it.
+      const aboveLabel = chartA.querySelector('.mgmt-hours__label');
+      if (aboveLabel) right = Math.max(right, aboveLabel.getBoundingClientRect().right - b.left - HC_GAP_PX + 56);
+      let barsRight = 0;
+      for (const n of chartB.querySelectorAll('.mgmt-bar__value, .mgmt-bar__fill')) barsRight = Math.max(barsRight, n.getBoundingClientRect().right - b.left);
+      const pageRight = window.innerWidth - HC_EDGE_PX - b.left; // may use the page's right margin
+      // Never past the window edge, never onto the bars.
+      const left = Math.round(Math.max(barsRight + 8, Math.min(right + HC_GAP_PX, pageRight - HC_MAX_W)));
+      // The circles' foot sits level with the chart's foot (its hours strip),
+      // so the outer circle's bottom must clear the strip's label: in the
+      // strip's band the circle is only a chord, centred under it.
+      // The largest size (down to HC_MIN_W) whose circle clears the label and
+      // still fits before the window edge.
+      const stripLabel = chartB.querySelector('.mgmt-hours__label');
+      const sl = stripLabel?.getBoundingClientRect();
+      const placeAt = (w) => {
+        if (!sl) return left;
+        const band = b.bottom - sl.top; // height of the strip's band
+        const r = (w / 2) * (R / (S / 2)); // outer circle radius on screen
+        const chord = Math.sqrt(Math.max(0, r * r - Math.max(0, r - band) ** 2));
+        return Math.max(left, sl.right - b.left + 10 + chord - w / 2);
+      };
+      let w = HC_MAX_W;
+      while (w > HC_MIN_W && placeAt(w) + w > pageRight) w -= 2;
+      let l = placeAt(w);
+      let bottom = 0;
+      if (l + w > pageRight) {
+        // A narrow window: no room beside the hours label, so the circles sit
+        // just above the hours strip instead, beside the bars.
+        bottom = sl ? b.bottom - sl.top + 8 : 0;
+        w = Math.max(HC_MIN_W, Math.min(HC_MAX_W, pageRight - left));
+        l = Math.min(left, pageRight - w);
+      }
+      headcount.style.left = `${Math.round(l)}px`;
+      headcount.style.width = `${Math.round(w)}px`;
+      headcount.style.bottom = `${Math.round(bottom)}px`;
+    };
+    const hcRo = new ResizeObserver(placeHeadcount);
+    hcRo.observe(chartB);
     headcount.append(el('p', 'mgmt-floor__name', 'Worker composition')); // labelled like the floors ("1F · Assembly line")
     const hcFig = el('figure', 'figure mgmt-hc__fig');
     headcount.append(hcFig);
-    // Hover card to the right of the figure (beside the labels), never over the circles.
+    // Hover card above the circles, never over them or the pay charts.
     const tipH = el('div', 'tooltip mgmt-hc__tip');
     tipH.hidden = true;
     hcFig.append(tipH);
@@ -440,7 +492,7 @@ function mountMgmt(container, { compared: startCompared }) {
     const S = 2 * R + 8;
     const cx = S / 2;
     const cy = S / 2;
-    const svgH = select(hcFig).append('svg').attr('viewBox', `0 0 ${S + 132} ${S}`).attr('role', 'img').attr('aria-label', 'Nested circles comparing workforce counts');
+    const svgH = select(hcFig).append('svg').attr('viewBox', `0 0 ${S} ${S}`).attr('role', 'img').attr('aria-label', 'Nested circles comparing workforce counts');
     const sh = svgH.append('g');
     const shape = (cls, r, label) => sh.append('circle').attr('class', cls).attr('cx', cx).attr('cy', cy + R - r).attr('r', r).attr('data-key', label);
     shape('mgmt-hc__clw-band', rOf(hc.clw_high), 'clw');
@@ -450,24 +502,13 @@ function mountMgmt(container, { compared: startCompared }) {
     shape('mgmt-hc__insured', rOf(hc.insured), 'insured').attr('fill', blue);
     shape('mgmt-hc__weighted', rOf(hc.revelio_weighted), 'weighted').attr('stroke', shades[0]); // fill: the same violet, whiter (CSS)
     shape('mgmt-hc__raw', rOf(hc.revelio_raw), 'raw').attr('fill', shades[0]);
-    const labels = [
-      ['clw', `CLW est. ${count(hc.clw_low)}–${count(hc.clw_high)}`, cy - R + 4],
-      ['dispatch', `Dispatch & other uninsured ${count(hc.clw_low - hc.insured)}–${count(hc.clw_high - hc.insured)}`, cy + R - 2 * rOf(hc.clw_low) + 12],
-      ['insured', `Insured ${count(hc.insured)}`, cy + R - 2 * rOf(hc.insured) + 3],
-      ['weighted', `Revelio est. ${count(Math.round(hc.revelio_weighted))}`, cy + R - 2 * rOf(hc.revelio_weighted) - 6],
-      ['raw', `Revelio profiles ${count(Math.round(hc.revelio_raw))}`, cy + R - rOf(hc.revelio_raw) + 5],
-    ];
-    for (const [key, text, y] of labels) {
-      sh.append('line').attr('class', 'mgmt-hc__leader').attr('x1', cx + 4).attr('x2', S + 4).attr('y1', y).attr('y2', y);
-      sh.append('text').attr('class', 'mgmt-hc__label').attr('data-key', key).attr('x', S + 8).attr('y', y).attr('dy', '0.32em').text(text);
-    }
-    // One sentence per shape, on hover.
+    // No labels beside the circles: each one's name and count is in its hover card.
     const hcInfo = {
-      clw: [`CLW estimate, ${hc.year}`, `China Labor Watch's estimate of everyone working in the airport-zone plants at peak season.`],
-      dispatch: ['Dispatch & other uninsured', `CLW's estimate minus the insured workers: mostly dispatch workers, plus students and others without insurance.`],
-      insured: [`Insured, ${hc.year}`, 'Workers with work-injury insurance in the airport-zone plants: the ones on the books.'],
-      weighted: ['Revelio weighted estimate', "Revelio's modelled guess at how many white-collar people there really are, scaled up from the profiles it found."],
-      raw: ['Revelio raw profile count', 'Actual public career profiles (LinkedIn-type) of people working for Hon Hai in Zhengzhou.'],
+      clw: [`CLW estimate, ${hc.year}: ${count(hc.clw_low)}–${count(hc.clw_high)}`, `China Labor Watch's estimate of everyone working in the airport-zone plants at peak season.`],
+      dispatch: [`Dispatch & other uninsured: ${count(hc.clw_low - hc.insured)}–${count(hc.clw_high - hc.insured)}`, `CLW's estimate minus the insured workers: mostly dispatch workers, plus students and others without insurance.`],
+      insured: [`Insured, ${hc.year}: ${count(hc.insured)}`, 'Workers with work-injury insurance in the airport-zone plants: the ones on the books.'],
+      weighted: [`Revelio weighted estimate: ${count(Math.round(hc.revelio_weighted))}`, "Revelio's modelled guess at how many white-collar people there really are, scaled up from the profiles it found."],
+      raw: [`Revelio raw profile count: ${count(Math.round(hc.revelio_raw))}`, 'Actual public career profiles (LinkedIn-type) of people working for Hon Hai in Zhengzhou.'],
     };
     const highlight = (key) => {
       svgH.selectAll('[data-key]').classed('is-dim', function () {
@@ -475,16 +516,15 @@ function mountMgmt(container, { compared: startCompared }) {
       });
     };
     svgH
-      .selectAll('circle[data-key], text[data-key]')
+      .selectAll('circle[data-key]')
       .on('pointerenter', (event) => {
         const key = event.currentTarget.dataset.key;
         highlight(key);
-        const r = event.currentTarget.getBoundingClientRect();
-        const f = hcFig.getBoundingClientRect();
         tipH.replaceChildren(card(hcInfo[key][0], null, hcInfo[key][1]));
         tipH.hidden = false;
-        const top = Math.max(0, Math.min(r.top - f.top, f.height - tipH.offsetHeight));
-        tipH.style.transform = `translate(0, ${top}px)`;
+        // Under the circles if it clears the Back / Next buttons, otherwise to their left.
+        const f = hcFig.getBoundingClientRect();
+        tipH.classList.toggle('is-left', f.bottom + 12 + tipH.offsetHeight > window.innerHeight - TIP_CLEAR_PX);
       })
       .on('pointerleave', () => {
         highlight(null);
@@ -547,6 +587,8 @@ function mountMgmt(container, { compared: startCompared }) {
         refs.classList.add('is-shown');
         hourStrips.forEach((h) => h.classList.add('is-shown'));
         headcount.hidden = false;
+      placeHeadcount();
+      setTimeout(placeHeadcount, 800); // after the bars finish growing
         return;
       }
       // Coming from screen 1: both floors move from where they were there.
@@ -580,11 +622,15 @@ function mountMgmt(container, { compared: startCompared }) {
       circles.select('circle').attr('fill-opacity', null);
       dotLayer.attr('opacity', null);
       headcount.hidden = false;
+      placeHeadcount();
+      setTimeout(placeHeadcount, 800); // after the bars finish growing
       // Bring the worker composition into view as it appears.
-      requestAnimationFrame(() => {
-        const over = headcount.getBoundingClientRect().bottom + ARROW_BAR_PX - window.innerHeight;
-        if (over > 0) window.scrollBy({ top: over, behavior: 'smooth' });
-      });
+      // TEMPORARY: auto-scroll off for now. Set SCROLL_TO_HEADCOUNT to true to restore.
+      if (SCROLL_TO_HEADCOUNT)
+        requestAnimationFrame(() => {
+          const over = headcount.getBoundingClientRect().bottom + ARROW_BAR_PX - window.innerHeight;
+          if (over > 0) window.scrollBy({ top: over, behavior: 'smooth' });
+        });
     }
     if (startCompared) compare();
 }

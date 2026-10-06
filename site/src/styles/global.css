@@ -2534,6 +2534,10 @@ body[data-page="env"] .method {
 }
 
 .mgmt-charts[hidden],
+.mgmt-chart {
+  position: relative; /* the worker composition sits in the line workers' chart */
+}
+
 .mgmt-headcount[hidden] {
   display: none;
 }
@@ -2726,9 +2730,12 @@ body[data-page="env"] .method {
 /* Under the assembly floor; wider than its narrow column (the space to its
    right, under the charts, is empty). */
 .mgmt-headcount {
-  width: 23rem;
-  max-width: calc(100vw - 2rem);
-  margin-top: 2rem;
+  /* Bottom right of the line workers' chart, in the space its short bars
+     leave; out of the flow, so the charts keep their size. */
+  position: absolute;
+  bottom: 0; /* left: set beside the chart's widest line (management.js) */
+  width: 11rem;
+  margin-top: 0;
   animation: mgmt-fade-in 500ms ease both;
 }
 
@@ -2742,9 +2749,23 @@ body[data-page="env"] .method {
   position: relative;
 }
 
+.mgmt-headcount .mgmt-floor__name {
+  white-space: nowrap;
+  /* centred over the circles, even when wider than them */
+  display: flex;
+  justify-content: center;
+}
+
 .mgmt-hc__tip {
-  left: calc(100% + 1.25rem);
-  width: 16rem;
+  top: calc(100% + 0.75rem); /* under the circles, right-aligned with them */
+  left: auto;
+  right: 0;
+  width: 15rem;
+}
+.mgmt-hc__tip.is-left {
+  top: auto;
+  bottom: 0;
+  right: calc(100% + 0.75rem); /* to the left of the circles, level with their foot */
 }
 
 .mgmt-hc__fig svg {
