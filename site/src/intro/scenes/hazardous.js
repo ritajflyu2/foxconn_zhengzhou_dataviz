@@ -20,9 +20,9 @@ const W = 480; // lanes
 const H = 236;
 const WT = 510; // towers + their key
 const HT = 410;
-const DAY_MS = 2600; // one day of loading
-const GAP_MS = 1800; // a short, smooth pause between the day and the year
-const YEAR_MS = 7500; // 365 days
+const DAY_MS = 1800; // one day of loading
+const GAP_MS = 1100; // a short, smooth pause between the day and the year
+const YEAR_MS = 4500; // 365 days
 const YEAR_EASE = 2.2; // >1: the year starts slowly (day 2, day 3 ...) then speeds up
 const TOTAL_MS = DAY_MS + GAP_MS + YEAR_MS;
 

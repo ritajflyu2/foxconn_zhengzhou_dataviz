@@ -15,15 +15,15 @@ import poolUrl from '../../../assets/intro/olympic_pool.webp';
 const count = format(',');
 const POOLS = Math.round(wastewater.total_m3_per_year / wastewater.olympic_pool_m3);
 const POOL_ASPECT = 2; // 50 m x 25 m
-const TARGET_ROWS = 10; // about this many rows of shapes; each shape stands for UNIT pools
+const TARGET_ROWS = 6; // about this many rows of shapes; each shape stands for UNIT pools
 const NICE_UNITS = [1, 2, 5, 10, 20, 25, 50, 100];
 const PITCH_X = 46; // target px per pool column
 const GAP = 3;
 const TANK_H = 34; // the water tank across the top
 const STREAM_GAP = 30; // space between the tank and the first row of pools
-const RUN_MS = 18000; // first pool appears at 0, last finishes filling at RUN_MS
+const RUN_MS = 10000; // first pool appears at 0, last finishes filling at RUN_MS
 const POUR_MS = 260; // stream falls from the tank into a new pool
-const FILL_EACH_MS = [1500, 650]; // a pool's fill time: slow for the first, quick by the end
+const FILL_EACH_MS = [1000, 450]; // a pool's fill time: slow for the first, quick by the end
 const EASE = 2.6; // >1: pools come slowly at first, then faster
 const APPEAR_MS = 220; // a pool fades in before its stream arrives
 

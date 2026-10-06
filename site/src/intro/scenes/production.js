@@ -44,6 +44,7 @@ const roundTo = (v, step) => Math.round(v / step) * step;
 
 // --- timeline (seconds of real time) -------------------------------------
 const FILL_PHONES = 48; // phones drawn one by one before they stack (an animation length, not data)
+const PLAY_SPEED = 1.6; // the whole animation plays this much faster than its timeline (the clock still shows peak-pace time)
 const STACK_S = 2.4;
 const ZOOM_OUT_S = 5; // geometric camera zoom-out
 const RISE_S = 4.5; // camera fixed, stack keeps rising
@@ -503,7 +504,7 @@ export default {
       if (!canvas.isConnected) return; // scene was replaced
       if (playing) {
         const before = elapsed;
-        elapsed = Math.min(total(), elapsed + (last == null ? 0 : (now - last) / 1000));
+        elapsed = Math.min(total(), elapsed + (last == null ? 0 : ((now - last) / 1000) * PLAY_SPEED));
         if (!followed && before < L.fillS && elapsed >= L.fillS) {
           followed = true;
           bringIntoView();
