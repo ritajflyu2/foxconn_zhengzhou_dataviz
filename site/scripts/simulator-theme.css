@@ -66,3 +66,6 @@ button:focus-visible { outline: 2px solid var(--ink); }
 .ctl .vv.down, .ctl .vv.down i { color: var(--bad); }
 .note3 input { background: var(--panel); }
 #effPanel { border-color: var(--hyp); }
+
+/* No shipping-distance control: its Logistics box is empty, so it goes. */
+.logi { display: none; }

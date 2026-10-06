@@ -19,7 +19,7 @@
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--sans);overflow:hidden}
 #wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
 #stage{position:relative;width:1920px;height:1080px;flex:none;transform-origin:center center}
-#scene{position:absolute;left:410px;top:150px;width:670.8px;height:918.5px;user-select:none}
+#scene{position:absolute;left:410px;top:90px;width:670.8px;height:918.5px;user-select:none}
 canvas.layer{position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none}
 
 /* ---------- title ---------- */
@@ -210,6 +210,9 @@ button:focus-visible { outline: 2px solid var(--ink); }
 .ctl .vv.down, .ctl .vv.down i { color: var(--bad); }
 .note3 input { background: var(--panel); }
 #effPanel { border-color: var(--hyp); }
+
+/* No shipping-distance control: its Logistics box is empty, so it goes. */
+.logi { display: none; }
 </style>
 </head>
 <body>
@@ -315,7 +318,7 @@ const INPUTS=[
  {id:'hourly_wage',floor:1,name:'Hourly wage',min:.70,max:1.50,conf:'placeholder',fmt:'x'},
  {id:'work_hours',floor:1,name:'Work hours',min:.70,max:1.30,conf:'placeholder',fmt:'x'},
  {id:'material_availability',floor:1,name:'Material availability',min:.50,max:1.20,conf:'placeholder',fmt:'x'},
- {id:'shipping_distance',floor:0,name:'Shipping distance',min:.50,max:2.00,conf:'calibrated',fmt:'x'},
+ {id:'shipping_distance',floor:0,hidden:true,name:'Shipping distance',min:.50,max:2.00,conf:'calibrated',fmt:'x'},
  {id:'tariff',floor:0,hidden:true,name:'Tariff',min:0,max:.40,conf:'placeholder',fmt:'pct'},
 ];
 const IN=Object.fromEntries(INPUTS.map(i=>[i.id,i]));
@@ -396,7 +399,7 @@ let floorFlash={1:0,2:0,3:0,4:0};
 /* =====================================================================
    4. GEOMETRY  (image coords → stage coords; image is cropped at x=345 and placed at stage (370,6))
    ===================================================================== */
-const SZ=0.86,OX=410,OY=150;
+const SZ=0.86,OX=410,OY=90;
 const I=(x,y)=>[OX+(x-345)*SZ,OY+y*SZ];
 const FLOOR_POLY={ // approximate top plates, image coords
  4:[[367,222],[742,74],[1110,222],[745,346]],
@@ -405,7 +408,7 @@ const FLOOR_POLY={ // approximate top plates, image coords
  1:[[367,880],[737,742],[1110,882],[745,1032]]};
 const FLOOR_RIGHT={4:I(1110,222),3:I(1110,455),2:I(1110,668),1:I(1110,882)};
 const FLOOR_LABEL_Y={4:215,3:423,2:625,1:822};
-const CARD_Y={4:-999,3:350,2:590,1:800};
+const CARD_Y={4:-999,3:290,2:530,1:740};
 const FLOOR_NAME={4:['4F','Gas / Water Processing, Emission Equipments'],3:['3F','Management'],2:['2F','Automation Equipments'],1:['1F','Manual Labor Assembly Line']};
 
 /* =====================================================================
@@ -630,7 +633,6 @@ const PRESETS=[   // one change per scenario, so each cause can be seen on its o
  {name:'More complex phone',set:{manufacturing_complexity:1.15},tip:'Manufacturing complexity ×1.15'},
  {name:'Drought',set:{water_availability:.75},tip:'Water availability ×0.75'},
  {name:'Parts shortage',set:{material_availability:.70},tip:'Material availability ×0.70'},
- {name:'Longer shipping route',set:{shipping_distance:1.50},tip:'Shipping distance ×1.50'},
  {name:'Stricter emission rules',set:{environmental_regulation:.20},tip:'Regulation target 20%'},
 ];
 const presetsEl=document.getElementById('presets');
@@ -931,9 +933,9 @@ function drawFx(t,dt){
     c.font=MONO(9.5);c.fillStyle=rgb(INK);c.textAlign='center';c.fillText('shift '+X.work_hours.toFixed(2)+'×',x,y+r+12);}
   // logistics route: length ∝ shipping distance; tariff gate
   {const [sx,sy]=I(356,912),L=(35+50*D_in('shipping_distance')),ex=sx-L*.55,ey=sy+L*.83;
-    c.setLineDash([5,5]);c.lineDashOffset=-t/60;c.strokeStyle=rgb(BLUE,.7);c.lineWidth=2;c.beginPath();c.moveTo(sx,sy);c.lineTo(ex,ey);c.stroke();c.setLineDash([]);
-    c.fillStyle='#fff';c.strokeStyle=rgb(BLUE);c.lineWidth=2;c.beginPath();c.arc(ex,ey,5,0,7);c.fill();c.stroke();
-    c.font=SANS(500,9.5);c.fillStyle=rgb(BLUE);c.textAlign='right';c.fillText('supplier · ×'+X.shipping_distance.toFixed(2),ex-8,ey+4);
+    
+    
+    c.font=SANS(500,9.5);c.fillStyle=rgb(BLUE);c.textAlign='right';
     if(X.tariff>0.001){const mx=(sx+ex)/2,my=(sy+ey)/2;c.strokeStyle=rgb(ORANGE);c.lineWidth=3;c.beginPath();c.moveTo(mx-6,my-10);c.lineTo(mx+6,my+10);c.stroke();
       c.fillStyle=rgb(ORANGE);c.textAlign='left';c.fillText('tariff '+Math.round(X.tariff*100)+'%',mx+8,my-2);}}
   /* ---------- 2F ---------- */

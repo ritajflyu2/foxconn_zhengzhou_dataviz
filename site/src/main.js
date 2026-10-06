@@ -35,7 +35,7 @@ const PAGES = {
 const pageOf = (hash) =>
   hash.startsWith('#intro-') ? 'intro' : hash.startsWith('#env-') ? 'env' : hash.startsWith('#mgmt-') ? 'mgmt' : hash.startsWith('#sim-') ? 'sim' : 'labor';
 // The floor of the factory each page lives on, in the floor index.
-const PAGE_FLOOR = { labor: '1F', mgmt: '3F', env: '4F' };
+const PAGE_FLOOR = { labor: '1F', mgmt: '3F', env: '4F', sim: 'SIM' };
 
 function buildPageSwitcher(onSelect) {
   const buttons = new Map();

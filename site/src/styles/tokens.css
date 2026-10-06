@@ -45,6 +45,9 @@
      below the hard floor of 15. This one clears every check. */
   --color-legal-cap: #c8102e;
 
+  /* The elevator panel's lit key, number and arrow (the site orange). */
+  --color-elevator-lit: #eb6834;
+
   /* Comparison marks only (Harvard GSD), never a worker type. Always carries a
      direct label, which is what its ΔE 7.6 against orange requires. */
   --color-comparison: #006b3c;

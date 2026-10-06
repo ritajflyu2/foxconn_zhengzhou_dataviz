@@ -33,7 +33,19 @@ const HEX = {
   '#c9ced8': '#cfc6b4',
 };
 // Canvas colours set as RGB triples, and the projection's white-ground image.
+const SHIFT_UP = 60; // the building moves up this much (stage px), to sit centred on the screen
 const PATCHES = [
+  // Layout: the building (and its right-hand cards) up, so it sits in the middle.
+  ['const SZ=0.86,OX=410,OY=150;', `const SZ=0.86,OX=410,OY=${150 - SHIFT_UP};`],
+  ['const CARD_Y={4:-999,3:350,2:590,1:800};', `const CARD_Y={4:-999,3:${350 - SHIFT_UP},2:${590 - SHIFT_UP},1:${800 - SHIFT_UP}};`],
+  ['#scene{position:absolute;left:410px;top:150px;', `#scene{position:absolute;left:410px;top:${150 - SHIFT_UP}px;`],
+  // No shipping distance: its slider (the Logistics box), preset and route label go.
+  ["{id:'shipping_distance',floor:0,name:'Shipping distance'", "{id:'shipping_distance',floor:0,hidden:true,name:'Shipping distance'"],
+  [" {name:'Longer shipping route',set:{shipping_distance:1.50},tip:'Shipping distance ×1.50'},\n", ''],
+  ["c.fillText('supplier · ×'+X.shipping_distance.toFixed(2),ex-8,ey+4);", ''],
+  // …and the dashed supplier route it stretched (the coins to the supplier keep their path).
+  ["c.setLineDash([5,5]);c.lineDashOffset=-t/60;c.strokeStyle=rgb(BLUE,.7);c.lineWidth=2;c.beginPath();c.moveTo(sx,sy);c.lineTo(ex,ey);c.stroke();c.setLineDash([]);", ''],
+  ["c.fillStyle='#fff';c.strokeStyle=rgb(BLUE);c.lineWidth=2;c.beginPath();c.arc(ex,ey,5,0,7);c.fill();c.stroke();", ''],
   ['const BLUE=[31,79,224],WATER=[42,134,216],ORANGE=[240,122,26],GOOD=[22,134,107],BAD=[212,70,60],INK=[29,35,48],AMBER=[214,140,40];',
    'const BLUE=[74,70,60],WATER=[42,120,214],ORANGE=[235,104,52],GOOD=[27,124,97],BAD=[168,67,28],INK=[31,29,24],AMBER=[192,115,31];'],
   ["const CONFCOL={empirical:[22,134,107],calibrated:[120,128,142],placeholder:[226,110,30],output:[160,166,178],hypothesis:[124,58,237]};",

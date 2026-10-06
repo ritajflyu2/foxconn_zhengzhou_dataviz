@@ -26,7 +26,7 @@ const SIM_FLOOR_BOX = {
 const SIM_IMG = { w: 780, h: 1068 };
 // Before the simulator has loaded, its layout is known from its own CSS: the
 // 1920 × 1080 stage, scaled to fit and centred, with #scene at (410, 150), 0.86×.
-const STAGE = { w: 1920, h: 1080, x: 410, y: 150, k: 0.86 };
+const STAGE = { w: 1920, h: 1080, x: 410, y: 90, k: 0.86 }; // y: the site's copy moves the building up (sync-simulator.mjs)
 
 const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 const nextFrame = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
