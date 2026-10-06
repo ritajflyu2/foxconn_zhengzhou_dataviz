@@ -5,7 +5,8 @@
 //
 // The iframe lives in its own fixed host outside #scene-root and is created
 // once: leaving the page only hides it, so its sliders keep their settings.
-export const SIM_URL = `${import.meta.env.BASE_URL}simulator/index.html`;
+// ?v= changes whenever the simulator does (vite.config.js), so no stale cached copy.
+export const SIM_URL = `${import.meta.env.BASE_URL}simulator/index.html?v=${__SIM_VERSION__}`;
 
 let host = null;
 let frame = null;
