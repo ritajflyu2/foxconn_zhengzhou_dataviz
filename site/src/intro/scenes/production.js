@@ -43,7 +43,7 @@ const fmtHM = (s) => `${Math.floor(s / 3600)} h ${Math.round((s % 3600) / 60)} m
 const roundTo = (v, step) => Math.round(v / step) * step;
 
 // --- timeline (seconds of real time) -------------------------------------
-const FILL_PHONES = 48; // phones drawn one by one before they stack (an animation length, not data)
+const FILL_PHONES = 18; // phones drawn before they stack: 3 s at the peak pace of ~6 a second (an animation length, not data)
 const BELOW_CANVAS_PX = 150; // closing line, notes link and the Back / Next buttons under the canvas
 const MIN_H = 220; // short laptop windows still fit the whole screen
 const PLAY_SPEED = 1.6; // after the real-time phone fill, the stack and zoom play this much faster
@@ -230,8 +230,8 @@ export default {
       const ctx = canvas.getContext('2d');
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // The fill shows FILL_PHONES phones, in complete rows: as many columns
-      // as fit, rounded down to a divisor of FILL_PHONES so no row is half-filled.
+      // The fill shows FILL_PHONES phones in one row, centred on the canvas
+      // (more rows only if one would not fit the width).
       const cellW = PHONE_W + CELL_GAP;
       const cellH = phoneH + CELL_GAP;
       const fitCols = Math.max(1, Math.floor((W - 2 * PAD) / cellW));
@@ -244,7 +244,7 @@ export default {
       const gx0 = (W - cols * cellW) / 2 + cellW / 2;
       const cells = Array.from({ length: n }, (_, i) => ({
         x: gx0 + (i % cols) * cellW + (rng() - 0.5) * 8,
-        y: PAD + cellH / 2 + Math.floor(i / cols) * cellH + (rng() - 0.5) * 8,
+        y: H / 2 - ((Math.ceil(n / cols) - 1) * cellH) / 2 + Math.floor(i / cols) * cellH + (rng() - 0.5) * 8,
         rot: (rng() - 0.5) * 0.22,
         appear: Math.floor(i / D.batch),
         delay: (i / n) * 0.9,

@@ -926,6 +926,21 @@ svg.is-hovering .floor-index__floor.is-hovered image {
   box-shadow: 0 0 0 1px var(--lit);
 }
 
+/* Dark ground (Labor's disputes scene): the same plate in dark metal. */
+body.theme-dark .elevator {
+  --plate: #23221f;
+  --plate-line: #4a4740;
+  --window: #161614;
+  --window-line: #3a3833;
+  --key: #2c2a26;
+  --key-ink: #cfccc1;
+  --plate-ink: #cfccc1;
+}
+body.theme-dark .elevator__key:hover:not(:disabled):not([aria-pressed='true']) {
+  border-color: #8f8b7e;
+  color: #f0efe9;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .elevator__arrow,
   .elevator__readout,
@@ -3157,17 +3172,4 @@ body[data-page="sim"] .sim-host {
 .sim-assemble img {
   position: absolute;
   transform-origin: 0 0;
-}
-/* TEMPORARY (screen recording): scene titles and summaries hidden on Labor,
-   Management and Waste and Water. Delete this block to bring them back. */
-body[data-page="labor"] .scene__index,
-body[data-page="labor"] .scene h2,
-body[data-page="labor"] .scene__summary,
-body[data-page="mgmt"] .scene__index,
-body[data-page="mgmt"] .scene h2,
-body[data-page="mgmt"] .scene__summary,
-body[data-page="env"] .scene__index,
-body[data-page="env"] .scene h2,
-body[data-page="env"] .scene__summary {
-  display: none;
 }
